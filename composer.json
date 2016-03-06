@@ -1,0 +1,19 @@
+{
+    "require": {
+        "twig/twig": "^1.24",
+        "torophp/torophp": "dev-master",
+        "robmorgan/phinx": "^0.5.1"
+    },
+    "require-dev": {
+        "phploc/phploc": "^3.0",
+        "squizlabs/php_codesniffer": "^2.5",
+        "pdepend/pdepend": "^2.2",
+        "symfony/console": "v3.0.2 as v2.8.2",
+        "symfony/config": "v3.0.2 as v2.8.2",
+        "phpmetrics/phpmetrics": "^1.8",
+        "phpmd/phpmd": "^2.3",
+        "sebastian/phpcpd": "^2.0",
+        "phpunit/phpunit": "^5.2",
+        "theseer/phpdox": "0.8.1.1"
+    }
+}

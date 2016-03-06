@@ -1,0 +1,41 @@
+<?php
+namespace DevpeakIT\PWDSafe\Callbacks;
+
+use DevpeakIT\PWDSafe\GUI\Graphics;
+use DevpeakIT\PWDSafe\Session;
+use DevpeakIT\PWDSafe\DB;
+
+class PreLogonFirstPageCallback
+{
+        /**
+         * @brief Show login page
+         */
+        public function get()
+        {
+                $graphics = new Graphics();
+                $graphics->showLogin();
+        }
+
+        /**
+         * @brief Authenticate user by email and password
+         */
+        public function post()
+        {
+                if (!isset($_POST['inputEmail'])) {
+                        return;
+                }
+
+                $graphics = new Graphics();
+                $session = new Session();
+
+                $res = $session->authenticate(DB::getInstance(), $_POST['inputEmail'], $_POST['inputPassword']);
+                if ($res) {
+                        $_SESSION['id'] = $res['id'];
+                        $_SESSION['user'] = $res['email'];
+                        $_SESSION['pass'] = $res['password'];
+                        header("Location: ?");
+                } else {
+                        $graphics->showLogin(true);
+                }
+        }
+}

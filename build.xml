@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="pwdsafe" default="build">
+ <target name="build" depends="prepare,lint,phploc-ci,phpcs-ci,pdepend,phpmd-ci,phpcpd-ci,phpmetrics-ci,phpunit,phpdox"/>
+ <target name="build-parallel" depends="prepare,lint,tools-parallel,phpunit,phpdox"/>
+ <target name="tools-parallel" description="Run tools in parallel">
+  <parallel threadCount="2">
+   <sequential>
+    <antcall target="pdepend"/>
+    <antcall target="phpmd-ci"/>
+   </sequential>
+   <antcall target="phpcpd-ci"/>
+   <antcall target="phpcs-ci"/>
+   <antcall target="phploc-ci"/>
+   <antcall target="phpmetrics-ci"/>
+  </parallel>
+ </target>
+
+ <target name="composer" description="Install dependencies with Composer">
+  <tstamp>
+   <format property="thirty.days.ago" pattern="MM/dd/yyyy hh:mm aa" locale="en,GB" offset="-30" unit="day"/>
+  </tstamp>
+  <delete>
+   <fileset dir="${basedir}">
+    <include name="composer.phar" />
+    <date datetime="${thirty.days.ago}" when="before"/>
+   </fileset>
+  </delete>
+
+  <get src="https://getcomposer.org/composer.phar" dest="${basedir}/composer.phar" skipexisting="true"/>
+
+  <exec executable="php">
+   <arg value="composer.phar"/>
+   <arg value="install"/>
+  </exec>
+ </target>
+
+ <target name="clean" description="Cleanup build artifacts">
+  <delete dir="${basedir}/build/docs"/>
+  <delete dir="${basedir}/build/coverage"/>
+  <delete dir="${basedir}/build/logs"/>
+  <delete dir="${basedir}/build/pdepend"/>
+  <delete dir="${basedir}/build/phpdox"/>
+  <property name="clean.done" value="true"/>
+ </target>
+
+ <target name="prepare" unless="prepare.done" depends="clean" description="Prepare for build">
+  <mkdir dir="${basedir}/build/coverage"/>
+  <mkdir dir="${basedir}/build/logs"/>
+  <mkdir dir="${basedir}/build/pdepend"/>
+  <mkdir dir="${basedir}/build/phpdox"/>
+  <antcall target="composer"/>
+  <property name="prepare.done" value="true"/>
+ </target>
+
+ <target name="lint" description="Perform syntax check of sourcecode files">
+  <apply executable="php" failonerror="true">
+   <arg value="-l" />
+   <fileset dir="${basedir}">
+    <include name="**/*.php" />
+	<exclude name="**/vendor/**" />
+	<exclude name="**/provider/**" />
+    <modified />
+   </fileset>
+  </apply>
+ </target>
+ 
+ <target name="phploc" description="Measure project size using PHPLOC and print human readable output. Intended for usage on the command line.">
+ 	<exec executable="${basedir}/vendor/bin/phploc">
+                <arg value="--exclude" />
+		<arg value="provider"/>
+                <arg value="--exclude" />
+		<arg value="vendor"/>
+		<arg value="--count-tests"/>
+		<arg path="${basedir}/public"/>
+		<arg path="${basedir}/DevpeakIT"/>
+		<arg path="${basedir}/tests"/>
+	</exec>
+</target>
+
+ <target name="phploc-ci" depends="prepare" description="Measure project size using PHPLOC">
+  <exec executable="${basedir}/vendor/bin/phploc">
+   <arg value="--exclude" />
+   <arg value="provider" />
+   <arg value="--exclude" />
+   <arg value="vendor" />
+   <arg value="--count-tests" />
+   <arg value="--log-csv" />
+   <arg path="${basedir}/build/logs/phploc.csv" />
+   <arg value="--log-xml" />
+   <arg path="${basedir}/build/logs/phploc.xml" />
+   <arg path="${basedir}" />
+  </exec>
+ </target>
+
+ <target name="phpmetrics-ci" depends="prepare" description="Various maintainability checks">
+   <exec executable="${basedir}/vendor/bin/phpmetrics">
+     <arg value="--report-html=build/phpmetrics.html" />
+     <arg value="--report-xml=build/phpmetrics.xml" />
+     <arg value="--violations-xml=build/violations.xml" />
+     <arg value="--chart-bubbles=build/chart.svg" />
+     <arg value="--extensions=php" />
+     <arg value="--excluded-dirs=vendor" />
+     <arg path="${basedir}" />
+   </exec>
+ </target>
+
+ <target name="pdepend" depends="prepare" description="Calculate software metrics using PHP_Depend">
+  <exec executable="${basedir}/vendor/bin/pdepend">
+   <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
+   <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
+   <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
+   <arg value="--ignore=*/provider/*"/>
+   <arg value="--ignore=*/vendor/*"/>
+   <arg path="${basedir}" />
+  </exec>
+ </target>
+
+ <target name="phpmd" description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
+  <exec executable="${basedir}/vendor/bin/phpmd">
+   <arg path="${basedir}" />
+   <arg value="text" />
+   <arg value="unusedcode,codesize" />
+   <arg value="--exclude" />
+   <arg value="provider" />
+   <arg value="--exclude" />
+   <arg value="vendor" />
+  </exec>
+ </target>
+
+ <target name="phpmd-ci" depends="prepare" description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
+  <exec executable="${basedir}/vendor/bin/phpmd">
+   <arg path="${basedir}" />
+   <arg value="xml" />
+   <arg value="unusedcode,codesize" />
+   <arg value="--reportfile" />
+   <arg value="${basedir}/build/logs/pmd.xml" />
+   <arg value="--exclude" />
+   <arg value="provider/*" />
+   <arg value="--exclude" />
+   <arg value="vendor/*" />
+  </exec>
+ </target>
+
+ <target name="phpcs" description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
+  <exec executable="${basedir}/vendor/bin/phpcs">
+   <arg value="--standard=PSR2" />
+   <arg value="--extensions=php" />
+   <arg value="--ignore=*/vendor/*"/>
+   <arg value="--ignore=*/provider/*"/>
+   <arg path="${basedir}" />
+  </exec>
+ </target>
+
+ <target name="phpcs-ci" depends="prepare" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
+  <exec executable="${basedir}/vendor/bin/phpcs" output="/dev/null">
+   <arg value="--report=checkstyle" />
+   <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
+   <arg value="--standard=${basedir}/ruleset.xml" />
+   <arg value="--extensions=php"/>
+   <arg value="--ignore=*/provider/*"/>
+   <arg value="--ignore=*/vendor/*"/>
+   <arg path="${basedir}" />
+  </exec>
+ </target>
+
+ <target name="phpcpd" description="Find duplicate code using PHPCPD and print human readable output. Intended for usage on the command line before committing.">
+ 	<exec executable="${basedir}/vendor/bin/phpcpd">
+		<arg value="--exclude"/>
+		<arg value="provider"/>
+		<arg value="--exclude"/>
+		<arg value="vendor"/>
+		<arg path="${basedir}"/>
+	</exec>
+ </target>
+
+ <target name="phpcpd-ci" depends="prepare" description="Find duplicate code using PHPCPD">
+  <exec executable="${basedir}/vendor/bin/phpcpd">
+   <arg value="--log-pmd" />
+   <arg value="${basedir}/build/logs/pmd-cpd.xml" />
+   <arg value="--exclude"/>
+   <arg value="provider"/>
+   <arg value="--exclude"/>
+   <arg value="vendor"/>
+   <arg path="${basedir}" />
+  </exec>
+ </target>
+
+ <target name="phpunit" depends="prepare" description="Run unit tests with PHPUnit">
+ 	<exec executable="${basedir}/vendor/bin/phpunit" failonerror="true">
+		<arg value="--configuration"/>
+		<arg path="${basedir}/phpunit.xml"/>
+	</exec>
+ </target>
+
+ <target name="phpdox" depends="phploc-ci,phpcs-ci,phpmd-ci" description="Generate API documentation using phpDox">
+  <exec executable="${basedir}/vendor/bin/phpdox" dir="${basedir}"/>
+ </target>
+</project>

@@ -1,0 +1,8 @@
+.idea
+build
+docs
+vendor
+cache.properties
+composer.phar
+config.inc.php
+phinx.yml

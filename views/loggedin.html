@@ -1,0 +1,30 @@
+{% extends "base.html" %} 
+{% block content %}
+<div class="container">
+        {% if data|length > 0 %}
+        <table class="table table-bordered">
+                <thead>
+                        <th>Site</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                </thead>
+                <tbody>
+                        {% for row in data %}
+                                <tr>
+                                        <td>{{ row.site }}</td>
+                                        <td>{{ row.username }}</td>
+                                        <td><a class="btn btn-primary showPass" data-id="{{ row.id }}" href="#">Show</a></td>
+                                </tr>
+                        {% endfor %}
+                </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info" role="alert">
+                <strong>No credentials!</strong> You can add some below if you'd like.
+        </div>
+        {% endif %}
+        <a id="addCred" class="btn btn-primary">Add credentials</a>
+        {% include "modaladdCred.html" %}
+        {% include "modalshowCred.html" %}
+</div>
+{% endblock %}

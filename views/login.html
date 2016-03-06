@@ -1,0 +1,26 @@
+{% extends "base.html" %} 
+{% block content %}
+<link rel="stylesheet" type="text/css" href="css/login.css">
+<div class="container">
+        <div class="card card-container">
+                <div class="login-img-header">
+                <span class="lock-login glyphicon glyphicon-lock"></span>
+                </div>
+            <p id="profile-name" class="profile-name-card"></p>
+            <form class="form-signin" method="post">
+                <span id="reauth-email" class="reauth-email"></span>
+                {% if error %}
+                <div class="form-group has-error" id="loginForm">
+                {% else %}
+                <div class="form-group" id="loginForm">
+                {% endif %}
+                <input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+                    <button class="btn btn-lg btn-primary btn-block btn-reg" type="button">Register</button>
+            </form><!-- /form -->
+        </div><!-- /card-container -->
+    </div><!-- /container -->
+
+{% endblock %}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpdox xmlns="http://xml.phpdox.net/config" silent="false">
+        <bootstrap />
+        <project name="pwdsafe" source="${basedir}" workdir="build/phpdox/xml">
+                <collector publiconly="false" backend="parser" encoding="auto">
+                        <include mask="*.php" />
+                        <exclude mask="**vendor**" />
+                        <exclude mask="**provider**" />
+
+                        <inheritance resolve="true">
+                        </inheritance>
+                </collector>
+                
+                <generator output="${basedir}/build/docs">
+                        <enrich base="${basedir}/build/logs">
+                                <source type="build" />
+                                <source type="git" />
+                                <source type="phploc" />
+                                <source type="checkstyle" />
+                                <source type="pmd" />
+                                <source type="phpunit" />
+                        </enrich>
+
+                        <build engine="html" enabled="true" output="api">
+                                <file extension="xhtml" />
+                        </build>
+                </generator>
+        </project>
+</phpdox>

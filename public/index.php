@@ -22,7 +22,6 @@ if ($session->isLoggedIn()) {
                 "/pwdfor/:number" => "\DevpeakIT\PWDSafe\Callbacks\PasswordForCallback",
                 "/cred/:number/remove" => "\DevpeakIT\PWDSafe\Callbacks\CredRemoveCallback",
                 "/cred/add" => "\DevpeakIT\PWDSafe\Callbacks\CredAddCallback",
-                "/manufacturer/:string" => "ManufacturerHandler"
         ];
 } else {
         // Routes for public users

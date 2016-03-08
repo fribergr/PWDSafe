@@ -1,7 +1,7 @@
 PWDSafe
 =======
 
-Prerquisite
+Prerequisite
 -----------
 * Webserver with support for PHP
 * Access to a MySQL-database

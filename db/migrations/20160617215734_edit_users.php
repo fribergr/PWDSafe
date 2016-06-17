@@ -1,6 +1,5 @@
 <?php
-
-use Phinx\Migration\AbstractMigration;
+namespace DevpeakIT\PWDSafe\Migrations;
 
 use Phinx\Migration\AbstractMigration;
 

@@ -42,6 +42,9 @@ class Session
                 if ($stmt->rowCount() > 0) {
                         $row = $stmt->fetch();
                         if (password_verify($pass, $row['password'])) {
+                                $sql = "UPDATE users SET lastlogin = NOW() WHERE email = :email";
+								$stmt = $db->prepare($sql);
+								$stmt->execute(['email' => $user]);
                                 return $row;
                         } else {
                                 return false;

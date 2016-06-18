@@ -1,5 +1,6 @@
 PWDSafe
 =======
+[![Build Status](https://travis-ci.org/PWDSafe/PWDSafe.svg?branch=master)](https://travis-ci.org/PWDSafe/PWDSafe)
 
 Prerequisite
 -----------

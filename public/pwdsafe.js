@@ -2,7 +2,7 @@ $(document).ready(function() {
         $('.btn-reg').click(function() {
                 var user = $('#inputEmail').val();
                 var pass = $('#inputPassword').val();
-                $.post('/reg/', {
+                $.post('/reg', {
                         user: user,
                         pass: pass
                 }, function (data) {

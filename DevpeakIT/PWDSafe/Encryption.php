@@ -7,7 +7,21 @@ namespace DevpeakIT\PWDSafe;
  */
 class Encryption
 {
-        /**
+    public static function genNewKeys()
+    {
+        $config = array(
+            "digest_alg" => "sha512",
+            "private_key_bits" => 4096,
+            "private_key_type" => OPENSSL_KEYTYPE_RSA,
+        );
+        $res = openssl_pkey_new($config);
+        openssl_pkey_export($res, $privKey);
+        $pubKey = openssl_pkey_get_details($res);
+        $pubKey = $pubKey["key"];
+        return [$privKey, $pubKey];
+    }
+
+    /**
          * @param $data string to encrypt
          * @param $pwd string to use as key for the encryption
          * @return string
@@ -29,5 +43,17 @@ class Encryption
                 list($data, $biniv) = explode(":", $data);
                 $iv = hex2bin($biniv);
                 return openssl_decrypt($data, "aes256", $pwd, 0, $iv);
+        }
+
+        public function encWithPub($data, $pubkey)
+        {
+            openssl_public_encrypt($data, $encrypted, $pubkey);
+            return $encrypted;
+        }
+
+        public function decWithPriv($data, $privkey)
+        {
+            openssl_private_decrypt($data, $decrypted, $privkey);
+            return $decrypted;
         }
 }

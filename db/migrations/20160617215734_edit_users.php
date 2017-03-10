@@ -1,6 +1,4 @@
 <?php
-namespace DevpeakIT\PWDSafe\Migrations;
-
 use Phinx\Migration\AbstractMigration;
 
 class EditUsers extends AbstractMigration

@@ -20,8 +20,9 @@ class PasswordForcallback
 
                 $user = $pwd['user'];
                 $site = $pwd['site'];
-                $pwd = $pwd['pass'];
-                $pwd = $encryption->dec($pwd, $_SESSION['pass']);
+                $pwd = base64_decode($pwd['pass']);
+
+                $pwd = $encryption->decWithPriv($pwd, $encryption->dec($_SESSION['privkey'], $_SESSION['pass']));
                 echo json_encode([
                         'status' => 'OK',
                         'pwd' => $pwd,

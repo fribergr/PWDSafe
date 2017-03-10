@@ -23,8 +23,8 @@ class CredAddCallback
                 $encryption = new Encryption();
                 $credentials = new Credentials();
                 $credentials->setDB(DB::getInstance());
-                
-                $pwd = $encryption->enc($_POST['credp'], $_SESSION['pass']);
+
+                $pwd = base64_encode($encryption->encWithPub($_POST['credp'], $_SESSION['pubkey']));
                 $credentials->add($_POST['creds'], $_POST['credu'], $pwd, "", $_SESSION['id']);
                 echo json_encode(['status' => 'OK']);
                 die();

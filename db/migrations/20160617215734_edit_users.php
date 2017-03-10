@@ -27,7 +27,7 @@ class EditUsers extends AbstractMigration
     public function change()
     {
 		$table = $this->table('users');
-		$table->changeColumn('lastlogin', 'datetime', array('default' => '0000-00-00 00:00:00'))
+		$table->changeColumn('lastlogin', 'datetime', array('null' => true))
 		->update();
     }
 }

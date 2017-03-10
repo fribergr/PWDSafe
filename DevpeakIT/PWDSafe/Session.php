@@ -45,6 +45,7 @@ class Session
                                 $sql = "UPDATE users SET lastlogin = NOW() WHERE email = :email";
                                 $stmt = $db->prepare($sql);
                                 $stmt->execute(['email' => $user]);
+                                $row['password'] = $pass;
                                 return $row;
                         } else {
                                 return false;

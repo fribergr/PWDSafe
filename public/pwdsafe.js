@@ -60,4 +60,24 @@ $(document).ready(function() {
                         'json'
                 );
         });
+
+        $('#changePwd').click(function() {
+                $.post(
+                    '/changepwd',
+                    {
+                        'oldpwd': $('#oldpwd').val(),
+                        'newpwd1': $('#newpwd1').val(),
+                        'newpwd2': $('#newpwd2').val()
+                    },
+                    function(data) {
+                        if (data.status == 'OK') {
+                                $('input').val('');
+                                $('<div class="alert alert-success"><strong>Password changed!</strong> Your password has been changed successfully.</div>').insertBefore('form');
+                        } else {
+                                $('.form-group').not('.has-error').addClass('has-error');
+                        }
+                    },
+                    'json'
+                );
+        });
 });

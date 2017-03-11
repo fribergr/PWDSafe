@@ -28,4 +28,9 @@ class Graphics
         {
                 echo $this->twig->render('login.html', ['error' => $error]);
         }
+
+        public function showChangePwd()
+        {
+                echo $this->twig->render('changepwd.html', ['loggedin' => true]);
+        }
 }

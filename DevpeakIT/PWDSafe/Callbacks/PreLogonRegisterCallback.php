@@ -19,10 +19,27 @@ class PreLogonRegisterCallback
 
 
                         $p = password_hash($_POST['pass'], PASSWORD_BCRYPT);
-                        $sql = "INSERT INTO users(email, password, pubkey, privkey)
-                                VALUES (:email, :password, :pubkey, :privkey)";
+
+                        $sql = "INSERT INTO groups (name) VALUE (:email)";
                         $stmt = DB::getInstance()->prepare($sql);
-                        $stmt->execute(['email' => $_POST['user'], 'password' => $p, 'pubkey' => $pubKey, 'privkey' => $privKey]);
+                        $stmt->execute(['email' => $_POST['user']]);
+                        $groupid = DB::getInstance()->lastInsertId();
+
+                        $sql = "INSERT INTO users(email, password, pubkey, privkey, primarygroup)
+                                VALUES (:email, :password, :pubkey, :privkey, :primarygroup)";
+                        $stmt = DB::getInstance()->prepare($sql);
+                        $stmt->execute([
+                            'email' => $_POST['user'],
+                            'password' => $p,
+                            'pubkey' => $pubKey,
+                            'privkey' => $privKey,
+                            'primarygroup' => $groupid
+                        ]);
+                        $userid = DB::getInstance()->lastInsertId();
+
+                        $sql = "INSERT INTO usergroups (userid, groupid) VALUES (:userid, :groupid)";
+                        $stmt = DB::getInstance()->prepare($sql);
+                        $stmt->execute(['userid' => $userid, 'groupid' => $groupid]);
                         echo json_encode(['status' => 'OK']);
                 } else {
                     echo json_encode(['status' => 'ERROR']);

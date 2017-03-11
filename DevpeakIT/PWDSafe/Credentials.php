@@ -25,7 +25,12 @@ class Credentials
          */
         public function getPwdFor($userid, $pwdid)
         {
-                $sql = "SELECT username, site, password FROM credentials WHERE id = :id AND userid = :userid";
+                $sql = "SELECT username, site, encryptedcredentials.data FROM credentials
+                        INNER JOIN groups ON groups.id = credentials.groupid
+                        INNER JOIN usergroups ON groups.id = usergroups.groupid
+                        INNER JOIN users ON users.id = usergroups.userid
+                        INNER JOIN encryptedcredentials ON credentials.id = encryptedcredentials.credentialid
+                        WHERE credentials.id = :id AND users.id = :userid";
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute([
                         'id' => $pwdid,
@@ -39,7 +44,7 @@ class Credentials
                         return [
                                 'user' => $res['username'],
                                 'site' => $res['site'],
-                                'pass' => $res['password']
+                                'pass' => $res['data']
                         ];
                 }
         }
@@ -70,19 +75,40 @@ class Credentials
          * @param $username string
          * @param $password string
          * @param $notes string
-         * @param $userid int
+         * @param $groupid null|integer
          */
-        public function add($site, $username, $password, $notes, $userid)
+        public function add($site, $username, $password, $notes, $groupid = null)
         {
-                $sql = "INSERT INTO credentials(userid, site, username, password, notes)
-                        VALUES(:userid, :site, :username, :password, :notes)";
+                if (is_null($groupid)) {
+                        $groupid = $_SESSION['primarygroup'];
+                }
+
+                $enc = new Encryption();
+
+                $sql = "INSERT INTO credentials(groupid, site, username, notes)
+                        VALUES(:groupid, :site, :username, :notes)";
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute([
-                        'userid' => $userid,
-                        'site' => $site,
-                        'username' => $username,
-                        'password' => $password,
-                        'notes' => $notes
+                    'groupid' => $groupid,
+                    'site' => $site,
+                    'username' => $username,
+                    'notes' => $notes
                 ]);
+                $credentialid = $this->db->lastInsertId();
+
+                $sql = "SELECT userid, pubkey FROM usergroups INNER JOIN users ON users.id = usergroups.userid
+                        WHERE usergroups.groupid = :groupid";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute(['groupid' => $groupid]);
+
+                $sql_insert = "INSERT INTO encryptedcredentials(credentialid, userid, data) VALUES (:credentialid, :userid, :data)";
+                $stmt_insert = $this->db->prepare($sql_insert);
+                while ($row = $stmt->fetch()) {
+                        $stmt_insert->execute([
+                            'credentialid' => $credentialid,
+                            'userid' => $row['userid'],
+                            'data' => base64_encode($enc->encWithPub($password, $row['pubkey']))
+                        ]);
+                }
         }
 }

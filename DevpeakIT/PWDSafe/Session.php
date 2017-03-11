@@ -35,7 +35,7 @@ class Session
          */
         public function authenticate(\PDO $db, $user, $pass)
         {
-                $sql = "SELECT id, email, password, pubkey, privkey FROM users WHERE email = :email";
+                $sql = "SELECT id, email, password, pubkey, privkey, primarygroup FROM users WHERE email = :email";
                 $stmt = $db->prepare($sql);
                 $stmt->execute(['email' => $user]);
 

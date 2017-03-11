@@ -27,7 +27,7 @@ class CreateCredentials extends AbstractMigration
         public function change()
         {
                 $table = $this->table('credentials');
-                $table->addColumn('userid', 'integer')
+                $table->addColumn('groupid', 'integer')
                     ->addColumn('site', 'string')
                     ->addColumn('username', 'string')
                     ->addColumn('password', 'text')

@@ -35,6 +35,7 @@ class PreLogonFirstPageCallback
                         $_SESSION['pass'] = $res['password'];
                         $_SESSION['pubkey'] = $res['pubkey'];
                         $_SESSION['privkey'] = $res['privkey'];
+                        $_SESSION['primarygroup'] = $res['primarygroup'];
                         header("Location: ?");
                 } else {
                         $graphics->showLogin(true);

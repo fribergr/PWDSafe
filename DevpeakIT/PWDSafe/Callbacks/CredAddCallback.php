@@ -4,6 +4,7 @@ namespace DevpeakIT\PWDSafe\Callbacks;
 use DevpeakIT\PWDSafe\Encryption;
 use DevpeakIT\PWDSafe\Credentials;
 use DevpeakIT\PWDSafe\DB;
+use DevpeakIT\PWDSafe\FormChecker;
 
 class CredAddCallback
 {
@@ -18,7 +19,7 @@ class CredAddCallback
 
                 // Save new credentials
                 $reqfields = ['creds', 'credu', 'credp'];
-                $this->checkRequiredFields($reqfields);
+                FormChecker::checkRequiredFields($reqfields);
 
                 $encryption = new Encryption();
                 $credentials = new Credentials();
@@ -28,21 +29,5 @@ class CredAddCallback
                 $credentials->add($_POST['creds'], $_POST['credu'], $pwd, "", $_SESSION['id']);
                 echo json_encode(['status' => 'OK']);
                 die();
-        }
-
-        /**
-         * @param $reqfields array with POST-fields we require for saving credentials
-         */
-        private function checkRequiredFields($reqfields)
-        {
-                foreach ($reqfields as $fld) {
-                        if (!isset($_POST[$fld])) {
-                                echo json_encode([
-                                    'status' => 'Fail',
-                                    'reason' => "Field '" . $fld . "' required but not set."
-                                ]);
-                                die();
-                        }
-                }
         }
 }

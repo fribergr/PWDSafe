@@ -3,6 +3,7 @@ namespace DevpeakIT\PWDSafe\Callbacks;
 
 use DevpeakIT\PWDSafe\DB;
 use DevpeakIT\PWDSafe\Encryption;
+use DevpeakIT\PWDSafe\FormChecker;
 
 class PreLogonRegisterCallback
 {
@@ -11,39 +12,47 @@ class PreLogonRegisterCallback
          */
         public function post()
         {
-                if (isset($_POST['user']) && isset($_POST['pass'])) {
+                FormChecker::checkRequiredFields(['user', 'pass']);
 
-                    list($privKey, $pubKey) = Encryption::genNewKeys();
-                    $enc = new Encryption();
-                    $privKey = $enc->enc($privKey, $_POST['pass']);
+                $sql = "SELECT id FROM users WHERE email = :email";
+                $stmt = DB::getInstance()->prepare($sql);
+                $stmt->execute(['email' => $_POST['user']]);
 
-
-                        $p = password_hash($_POST['pass'], PASSWORD_BCRYPT);
-
-                        $sql = "INSERT INTO groups (name) VALUE (:email)";
-                        $stmt = DB::getInstance()->prepare($sql);
-                        $stmt->execute(['email' => $_POST['user']]);
-                        $groupid = DB::getInstance()->lastInsertId();
-
-                        $sql = "INSERT INTO users(email, password, pubkey, privkey, primarygroup)
-                                VALUES (:email, :password, :pubkey, :privkey, :primarygroup)";
-                        $stmt = DB::getInstance()->prepare($sql);
-                        $stmt->execute([
-                            'email' => $_POST['user'],
-                            'password' => $p,
-                            'pubkey' => $pubKey,
-                            'privkey' => $privKey,
-                            'primarygroup' => $groupid
+                if ($stmt->rowCount() > 0) {
+                        echo json_encode([
+                            'status' => 'Fail',
+                            'reason' => 'Account already exists'
                         ]);
-                        $userid = DB::getInstance()->lastInsertId();
-
-                        $sql = "INSERT INTO usergroups (userid, groupid) VALUES (:userid, :groupid)";
-                        $stmt = DB::getInstance()->prepare($sql);
-                        $stmt->execute(['userid' => $userid, 'groupid' => $groupid]);
-                        echo json_encode(['status' => 'OK']);
-                } else {
-                    echo json_encode(['status' => 'ERROR']);
+                        die();
                 }
-                die();
+
+                list($privKey, $pubKey) = Encryption::genNewKeys();
+                $enc = new Encryption();
+                $privKey = $enc->enc($privKey, $_POST['pass']);
+
+
+                $p = password_hash($_POST['pass'], PASSWORD_BCRYPT);
+
+                $sql = "INSERT INTO groups (name) VALUE (:email)";
+                $stmt = DB::getInstance()->prepare($sql);
+                $stmt->execute(['email' => $_POST['user']]);
+                $groupid = DB::getInstance()->lastInsertId();
+
+                $sql = "INSERT INTO users(email, password, pubkey, privkey, primarygroup)
+                        VALUES (:email, :password, :pubkey, :privkey, :primarygroup)";
+                $stmt = DB::getInstance()->prepare($sql);
+                $stmt->execute([
+                    'email' => $_POST['user'],
+                    'password' => $p,
+                    'pubkey' => $pubKey,
+                    'privkey' => $privKey,
+                    'primarygroup' => $groupid
+                ]);
+                $userid = DB::getInstance()->lastInsertId();
+
+                $sql = "INSERT INTO usergroups (userid, groupid) VALUES (:userid, :groupid)";
+                $stmt = DB::getInstance()->prepare($sql);
+                $stmt->execute(['userid' => $userid, 'groupid' => $groupid]);
+                echo json_encode(['status' => 'OK']);
         }
 }

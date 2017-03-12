@@ -9,7 +9,7 @@ $(document).ready(function() {
                         if (data.status == 'OK') {
                                 window.location.reload();
                         } else {
-                                console.log(data);
+                            $('.form-group').not('.has-error').addClass('has-error');
                         }
                 }, 'json');
         });

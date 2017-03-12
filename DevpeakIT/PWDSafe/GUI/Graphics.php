@@ -87,7 +87,7 @@ class Graphics
         public function showShareGroup($data, $num, $groupname)
         {
                 echo $this->twig->render(
-                    'groupshare.html',
+                    'group/share.html',
                     [
                         "data" => $data,
                         "groupid" => $num,

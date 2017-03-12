@@ -30,7 +30,7 @@ class Credentials
                         INNER JOIN usergroups ON groups.id = usergroups.groupid
                         INNER JOIN users ON users.id = usergroups.userid
                         INNER JOIN encryptedcredentials ON credentials.id = encryptedcredentials.credentialid
-                        WHERE credentials.id = :id AND users.id = :userid";
+                        WHERE credentials.id = :id AND encryptedcredentials.userid = :userid";
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute([
                         'id' => $pwdid,
@@ -57,7 +57,7 @@ class Credentials
          */
         public function removeCred($userid, $credid)
         {
-                $sql = "DELETE FROM credentials WHERE id = :id AND userid = :userid LIMIT 1";
+                $sql = "DELETE FROM encryptedcredentials WHERE credentialid = :id AND userid = :userid LIMIT 1";
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute([
                         'id' => $credid,
@@ -66,6 +66,13 @@ class Credentials
 
                 if ($stmt->rowCount() == 0) {
                         throw new AuthorizationFailedException();
+                } else {
+                        $sql = "DELETE FROM encryptedcredentials WHERE credentialid = :id";
+                        $stmt = $this->db->prepare($sql);
+                        $stmt->execute(['id' => $credid]);
+                        $sql = "DELETE FROM credentials WHERE id = :id";
+                        $stmt = $this->db->prepare($sql);
+                        $stmt->execute(['id' => $credid]);
                 }
         }
 

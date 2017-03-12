@@ -115,6 +115,25 @@ $(document).ready(function() {
             );
         });
 
+        $('#shareGroup').click(function() {
+                $('#shareGroupModal').modal();
+        });
+
+        $('#shareGroupSave').click(function() {
+            $.post(
+                '/groups/' + $("#currentgroupid").val() + '/share',
+                {
+                        'email': $('#email').val()
+                },
+                function(data) {
+                        if (data.status == "OK") {
+                                window.location.reload();
+                        }
+                },
+                'json'
+            );
+        });
+
         $.get(
             '/groups',
             function(data) {

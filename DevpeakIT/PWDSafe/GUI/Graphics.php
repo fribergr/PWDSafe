@@ -64,4 +64,17 @@ class Graphics
         {
                 echo $this->twig->render('unauthorized.html', ['loggedin' => true]);
         }
+
+        public function showShareGroup($data, $num, $groupname)
+        {
+                echo $this->twig->render(
+                    'group/share.html',
+                    [
+                        "data" => $data,
+                        "groupid" => $num,
+                        "groupname" => $groupname,
+                        'loggedin' => true
+                    ]
+                );
+        }
 }

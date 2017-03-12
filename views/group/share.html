@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h3>{{ groupname }}</h3>
+    {% if data|length > 0 %}
+        <table class="table table-bordered">
+            <thead>
+                <th>E-mail</th>
+                <th style="width: 1px;">Actions</th>
+            </thead>
+            <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row.email }}</td>
+                <td><a class="btn btn-danger removeUser" data-id="{{ row.id }}" href="#"><span class="glyphicon glyphicon-trash"></span> Remove</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        <strong>Not shared!</strong> This group isn't shared with anyone yet.
+    </div>
+    {% endif %}
+    <input type="hidden" id="currentgroupid" value="{{ groupid }}">
+    <a id="shareGroup" class="btn btn-primary">Share group</a>
+    {% include "group/modalShareGroup.html" %}
+</div>
+{% endblock %}

@@ -26,6 +26,7 @@ class Graphics
                     [
                         'data' => $data,
                         'loggedin' => true,
+                        'loggedin_email' => $_SESSION['user'],
                         'groupid' => $groupid,
                         'groupname' => $groupname,
                         'primary' => $_SESSION['primarygroup']
@@ -40,12 +41,24 @@ class Graphics
 
         public function showChangePwd()
         {
-                echo $this->twig->render('changepwd.html', ['loggedin' => true]);
+                echo $this->twig->render(
+                    'changepwd.html',
+                    [
+                        'loggedin' => true,
+                        'loggedin_email' => $_SESSION['user']
+                    ]
+                );
         }
 
         public function showCreateGroup()
         {
-                echo $this->twig->render('groupcreate.html', ['loggedin' => true]);
+                echo $this->twig->render(
+                    'groupcreate.html',
+                    [
+                        'loggedin' => true,
+                        'loggedin_email' => $_SESSION['user']
+                    ]
+                );
         }
 
         public function showDeleteGroup($groupname, $groupid)
@@ -53,7 +66,7 @@ class Graphics
                 echo $this->twig->render(
                     'groupdelete.html',
                     [
-                        'loggedin' => true,
+                        'loggedin' => true, 'loggedin_email' => $_SESSION['user'],
                         'groupname' => $groupname,
                         'groupid' => $groupid
                     ]
@@ -62,18 +75,24 @@ class Graphics
 
         public function showUnathorized()
         {
-                echo $this->twig->render('unauthorized.html', ['loggedin' => true]);
+                echo $this->twig->render(
+                    'unauthorized.html',
+                    [
+                        'loggedin' => true,
+                        'loggedin_email' => $_SESSION['user']
+                    ]
+                );
         }
 
         public function showShareGroup($data, $num, $groupname)
         {
                 echo $this->twig->render(
-                    'group/share.html',
+                    'groupshare.html',
                     [
                         "data" => $data,
                         "groupid" => $num,
                         "groupname" => $groupname,
-                        'loggedin' => true
+                        'loggedin' => true, 'loggedin_email' => $_SESSION['user']
                     ]
                 );
         }

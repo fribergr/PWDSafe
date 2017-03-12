@@ -24,6 +24,6 @@ class FirstPageCallback
                 ]);
                 $data = $stmt->fetchAll();
                 $graphics = new Graphics();
-                $graphics->showGroup($data);
+                $graphics->showGroup($data, $_SESSION['primarygroup'], "");
         }
 }

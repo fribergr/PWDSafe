@@ -92,8 +92,23 @@ $(document).ready(function() {
                     if (data.status == 'OK') {
                         $('input').val('');
                         $('<div class="alert alert-success"><strong>Group created!</strong> Your group has been created successfully.</div>').insertBefore('form');
+                        window.setTimeout(function(){
+                            window.location.href = "/groups/" + data.groupid;
+                        }, 1500);
                     } else {
                         $('.form-group').not('.has-error').addClass('has-error');
+                    }
+                },
+                'json'
+            );
+        });
+
+        $('#deletegroup').click(function() {
+            $.post(
+                '/groups/' + $(this).data('id') + '/delete',
+                function(data) {
+                    if (data.status == "OK") {
+                        window.location.replace("/");
                     }
                 },
                 'json'

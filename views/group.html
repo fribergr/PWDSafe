@@ -1,6 +1,23 @@
 {% extends "base.html" %} 
 {% block content %}
 <div class="container">
+        {% if primary != groupid %}
+        <div class="clearfix">
+                <div class="pull-left">
+                        <h3>{{ groupname }}</h3>
+                </div>
+                <div class="btn-group pull-right" style="margin-bottom: 20px">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="glyphicon glyphicon-cog"></span> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                                <li><a href="#">Share</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="/groups/{{ groupid }}/delete"><span class="glyphicon glyphicon-trash"></span> Delete</a></li>
+                        </ul>
+                </div>
+        </div>
+        {% endif %}
         {% if data|length > 0 %}
         <table class="table table-bordered">
                 <thead>

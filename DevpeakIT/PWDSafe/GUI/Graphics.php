@@ -19,9 +19,18 @@ class Graphics
                 $this->twig = new Twig_Environment($loader, []);
         }
 
-        public function showGroup($data, $groupid)
+        public function showGroup($data, $groupid, $groupname)
         {
-                echo $this->twig->render('group.html', ['data' => $data, 'loggedin' => true, 'groupid' => $groupid]);
+                echo $this->twig->render(
+                    'group.html',
+                    [
+                        'data' => $data,
+                        'loggedin' => true,
+                        'groupid' => $groupid,
+                        'groupname' => $groupname,
+                        'primary' => $_SESSION['primarygroup']
+                    ]
+                );
         }
 
         public function showLogin($error = false)
@@ -37,5 +46,22 @@ class Graphics
         public function showCreateGroup()
         {
                 echo $this->twig->render('groupcreate.html', ['loggedin' => true]);
+        }
+
+        public function showDeleteGroup($groupname, $groupid)
+        {
+                echo $this->twig->render(
+                    'groupdelete.html',
+                    [
+                        'loggedin' => true,
+                        'groupname' => $groupname,
+                        'groupid' => $groupid
+                    ]
+                );
+        }
+
+        public function showUnathorized()
+        {
+                echo $this->twig->render('unauthorized.html', ['loggedin' => true]);
         }
 }

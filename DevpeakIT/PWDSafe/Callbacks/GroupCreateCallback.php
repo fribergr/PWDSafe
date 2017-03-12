@@ -27,6 +27,6 @@ class GroupCreateCallback
                     'userid' => $_SESSION['id'],
                     'groupid' => $groupid
                 ]);
-                echo json_encode(['status' => "OK"]);
+                echo json_encode(['status' => "OK", "groupid" => $groupid]);
         }
 }

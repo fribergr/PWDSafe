@@ -26,6 +26,7 @@ if ($session->isLoggedIn()) {
                 "/groups/create" => "\DevpeakIT\PWDSafe\Callbacks\GroupCreateCallback",
                 "/groups/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsSpecificCallback",
                 "/groups" => "\DevpeakIT\PWDSafe\Callbacks\GroupsCallback",
+                "/groups/:number/delete" => "\DevpeakIT\PWDSafe\Callbacks\GroupsDeleteCallback",
         ];
 } else {
         // Routes for public users

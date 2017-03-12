@@ -4,13 +4,13 @@ namespace DevpeakIT\PWDSafe\Callbacks;
 use DevpeakIT\PWDSafe\DB;
 use DevpeakIT\PWDSafe\GUI\Graphics;
 
-class FirstPageCallback
+class GroupsSpecificCallback
 {
-        /**
-         * @brief Show logged in page
-         */
-        public function get()
-        {
+        public function get($num = null) {
+                if (is_null($num)) {
+                        $num = $_SESSION['primarygroup'];
+                }
+
                 $db = DB::getInstance();
                 $sql = "SELECT credentials.id, credentials.site, credentials.username FROM credentials
                         INNER JOIN groups ON credentials.groupid = groups.id
@@ -20,10 +20,10 @@ class FirstPageCallback
                 $stmt = $db->prepare($sql);
                 $stmt->execute([
                     'userid' => $_SESSION['id'],
-                    'group' => $_SESSION['primarygroup']
+                    'group' => $num
                 ]);
                 $data = $stmt->fetchAll();
                 $graphics = new Graphics();
-                $graphics->showGroup($data);
+                $graphics->showGroup($data, $num);
         }
 }

@@ -19,9 +19,9 @@ class Graphics
                 $this->twig = new Twig_Environment($loader, []);
         }
 
-        public function showLoggedin($data)
+        public function showGroup($data, $groupid)
         {
-                echo $this->twig->render('loggedin.html', ['data' => $data, 'loggedin' => true]);
+                echo $this->twig->render('group.html', ['data' => $data, 'loggedin' => true, 'groupid' => $groupid]);
         }
 
         public function showLogin($error = false)
@@ -32,5 +32,10 @@ class Graphics
         public function showChangePwd()
         {
                 echo $this->twig->render('changepwd.html', ['loggedin' => true]);
+        }
+
+        public function showCreateGroup()
+        {
+                echo $this->twig->render('groupcreate.html', ['loggedin' => true]);
         }
 }

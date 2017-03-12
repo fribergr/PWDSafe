@@ -18,7 +18,7 @@
     <![endif]-->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
-    <script src="pwdsafe.js"></script>
+    <script src="/pwdsafe.js"></script>
 
   </head>
   <body>
@@ -36,9 +36,27 @@
                         </div>
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                                 <ul class="nav navbar-nav">
-                                        <li><a href="/changepwd">Change password</a></li>
-                                        <li><a href="/logout">Logout</a></li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Groups <span class="caret"></span></a>
+                                        <ul class="dropdown-menu" id="grouplist">
+                                            <li><a href="/groups/create">Create group</a></li>
+                                            <li role="separator" class="divider"></li>
+                                            <li><a href="/">Private</a></li>
+                                        </ul>
+                                    </li>
+
                                 </ul>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span> User <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/changepwd">Change password</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="/logout">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
                         </div>
                 </div>
         </nav>

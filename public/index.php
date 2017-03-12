@@ -17,12 +17,15 @@ $session->start();
 if ($session->isLoggedIn()) {
         // Routes for logged in users
         $routes = [
-                "/" => "\DevpeakIT\PWDSafe\Callbacks\FirstPageCallback",
+                "/" => "\DevpeakIT\PWDSafe\Callbacks\GroupsSpecificCallback",
                 "/logout" => "\DevpeakIT\PWDSafe\Callbacks\LogoutCallback",
                 "/changepwd" => "\DevpeakIT\PWDSafe\Callbacks\ChangePwdCallback",
                 "/pwdfor/:number" => "\DevpeakIT\PWDSafe\Callbacks\PasswordForCallback",
                 "/cred/:number/remove" => "\DevpeakIT\PWDSafe\Callbacks\CredRemoveCallback",
                 "/cred/add" => "\DevpeakIT\PWDSafe\Callbacks\CredAddCallback",
+                "/groups/create" => "\DevpeakIT\PWDSafe\Callbacks\GroupCreateCallback",
+                "/groups/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsSpecificCallback",
+                "/groups" => "\DevpeakIT\PWDSafe\Callbacks\GroupsCallback",
         ];
 } else {
         // Routes for public users

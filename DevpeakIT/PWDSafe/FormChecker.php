@@ -18,4 +18,15 @@ class FormChecker
                         }
                 }
         }
+
+        public static function checkFieldLength($fld, $length)
+        {
+                if (strlen(trim($_POST[$fld])) < $length) {
+                        echo json_encode([
+                                'status' => 'Fail',
+                                'reason' => "Field '" . $fld . "' does not meet the length requirements"
+                        ]);
+                        die();
+                }
+        }
 }

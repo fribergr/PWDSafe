@@ -23,6 +23,7 @@
                 <strong>No credentials!</strong> You can add some below if you'd like.
         </div>
         {% endif %}
+        <input type="hidden" id="currentgroupid" value="{{ groupid }}">
         <a id="addCred" class="btn btn-primary">Add credentials</a>
         {% include "modaladdCred.html" %}
         {% include "modalshowCred.html" %}

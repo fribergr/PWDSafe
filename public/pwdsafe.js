@@ -44,9 +44,10 @@ $(document).ready(function() {
                 $.post(
                         '/cred/add',
                         {
-                                'credu': $('#user').val(),
-                                'creds': $('#site').val(),
-                                'credp': $('#pass').val()
+                            'credu': $('#user').val(),
+                            'creds': $('#site').val(),
+                            'credp': $('#pass').val(),
+                            'currentgroupid': $('#currentgroupid').val()
                         },
                         function(data) {
                                 if (data.status == 'OK') {
@@ -80,4 +81,37 @@ $(document).ready(function() {
                     'json'
                 );
         });
+
+        $('#createGroup').click(function() {
+            $.post(
+                '/groups/create',
+                {
+                    'groupname': $('#groupname').val()
+                },
+                function(data) {
+                    if (data.status == 'OK') {
+                        $('input').val('');
+                        $('<div class="alert alert-success"><strong>Group created!</strong> Your group has been created successfully.</div>').insertBefore('form');
+                    } else {
+                        $('.form-group').not('.has-error').addClass('has-error');
+                    }
+                },
+                'json'
+            );
+        });
+
+        $.get(
+            '/groups',
+            function(data) {
+                if (data.status === "OK") {
+                    $.each(data.groups, function(index, group) {
+                            console.log(group);
+                        $('#grouplist').append('<li><a href="/groups/' + group.id + '">' + group.name + '</a>');
+                    });
+                } else {
+                        console.log(data);
+                }
+            },
+            'json'
+        );
 });

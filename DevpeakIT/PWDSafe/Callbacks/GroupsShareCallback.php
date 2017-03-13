@@ -4,6 +4,7 @@ namespace DevpeakIT\PWDSafe\Callbacks;
 use DevpeakIT\PWDSafe\DB;
 use DevpeakIT\PWDSafe\Encryption;
 use DevpeakIT\PWDSafe\FormChecker;
+use DevpeakIT\PWDSafe\Group;
 use DevpeakIT\PWDSafe\GUI\Graphics;
 
 class GroupsShareCallback
@@ -49,18 +50,15 @@ class GroupsShareCallback
         public function post($groupid = null)
         {
                 FormChecker::checkRequiredFields(['email']);
-                $access_sql = "SELECT groups.id, groups.name FROM groups
-                               INNER JOIN usergroups ON usergroups.groupid = groups.id
-                               INNER JOIN users ON users.id = usergroups.userid
-                               WHERE users.id = :userid AND groups.id = :groupid";
-                $access_stmt = DB::getInstance()->prepare($access_sql);
-                $access_stmt->execute([
-                    'userid' => $_SESSION['id'],
-                    'groupid' => $groupid
-                ]);
 
-                if ($access_stmt->rowCount() === 0) {
-                        echo json_encode(['status' => 'Fail', 'resaon' => 'Unauthorized']);
+                $group = new Group();
+                $group->id = $groupid;
+
+                if (!$group->checkAccess($_SESSION['id'])) {
+                        echo json_encode([
+                            'status' => 'Fail',
+                            'reason' => 'Unauthorized'
+                        ]);
                         die();
                 }
 

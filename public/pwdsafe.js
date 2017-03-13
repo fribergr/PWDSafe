@@ -10,6 +10,10 @@ $(document).ready(function() {
                                 window.location.reload();
                         } else {
                             $('.form-group').not('.has-error').addClass('has-error');
+                            new PNotify({
+                                type: 'error',
+                                text: data.reason
+                            });
                         }
                 }, 'json');
         });

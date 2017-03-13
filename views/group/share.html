@@ -12,7 +12,7 @@
             {% for row in data %}
             <tr>
                 <td>{{ row.email }}</td>
-                <td><a class="btn btn-danger removeUser" data-id="{{ row.id }}" href="#"><span class="glyphicon glyphicon-trash"></span> Remove</a></td>
+                <td><a class="btn btn-danger removeUser" data-id="{{ row.id }}" data-groupid="{{ groupid }}" href="#"><span class="glyphicon glyphicon-trash"></span> Remove</a></td>
             </tr>
             {% endfor %}
             </tbody>

@@ -138,6 +138,23 @@ $(document).ready(function() {
             );
         });
 
+        $('.removeUser').click(function() {
+            $.post(
+                '/groups/' + $(this).data('groupid') + '/unshare/' + $(this).data('id'),
+                function(data) {
+                    if (data.status == "OK") {
+                        window.location.reload();
+                    } else {
+                        new PNotify({
+                            type: 'error',
+                            text: data.reason
+                        });
+                    }
+                },
+                'json'
+            );
+        });
+
         $.get(
             '/groups',
             function(data) {

@@ -132,6 +132,11 @@ $(document).ready(function() {
                 function(data) {
                         if (data.status == "OK") {
                                 window.location.reload();
+                        } else {
+                            new PNotify({
+                                type: 'error',
+                                text: data.reason
+                            });
                         }
                 },
                 'json'

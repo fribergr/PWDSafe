@@ -1,8 +1,8 @@
 <?php
 namespace DevpeakIT\PWDSafe\Callbacks;
 
-use DevpeakIT\PWDSafe\DB;
 use DevpeakIT\PWDSafe\FormChecker;
+use DevpeakIT\PWDSafe\Group;
 use DevpeakIT\PWDSafe\GUI\Graphics;
 
 class GroupCreateCallback
@@ -17,16 +17,8 @@ class GroupCreateCallback
         {
                 FormChecker::checkRequiredFields(['groupname']);
                 FormChecker::checkFieldLength('groupname', 1);
-                $sql = "INSERT INTO groups (name) VALUES(:name)";
-                $stmt = DB::getInstance()->prepare($sql);
-                $stmt->execute(['name' => $_POST['groupname']]);
-                $groupid = DB::getInstance()->lastInsertId();
-                $sql = "INSERT INTO usergroups (userid, groupid) VALUES (:userid, :groupid)";
-                $stmt = DB::getInstance()->prepare($sql);
-                $stmt->execute([
-                    'userid' => $_SESSION['id'],
-                    'groupid' => $groupid
-                ]);
-                echo json_encode(['status' => "OK", "groupid" => $groupid]);
+                $group = Group::create($_POST['groupname']);
+                $group->givePermission($_SESSION['id']);
+                echo json_encode(['status' => "OK", "groupid" => $group->id]);
         }
 }

@@ -10,7 +10,7 @@
             <form class="form-signin" method="post">
                 <span id="reauth-email" class="reauth-email"></span>
                 {% if error %}
-                <div class="form-group has-error" id="loginForm">
+                <div class="form-group has-error" id="loginForm"><div class="alert alert-danger">Wrong username or password</div>
                 {% else %}
                 <div class="form-group" id="loginForm">
                 {% endif %}

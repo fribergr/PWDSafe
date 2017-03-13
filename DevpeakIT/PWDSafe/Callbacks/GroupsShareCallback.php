@@ -8,7 +8,8 @@ use DevpeakIT\PWDSafe\GUI\Graphics;
 
 class GroupsShareCallback
 {
-        public function get($groupid = null) {
+        public function get($groupid = null)
+        {
                 if (is_null($groupid)) {
                         $groupid = $_SESSION['primarygroup'];
                 }
@@ -45,7 +46,8 @@ class GroupsShareCallback
                 $graphics->showShareGroup($data, $groupid, $groupname);
         }
 
-        public function post($groupid = null) {
+        public function post($groupid = null)
+        {
                 FormChecker::checkRequiredFields(['email']);
                 $access_sql = "SELECT groups.id, groups.name FROM groups
                                INNER JOIN usergroups ON usergroups.groupid = groups.id
@@ -90,7 +92,8 @@ class GroupsShareCallback
                 $stmt = DB::getInstance()->prepare($sql);
                 $stmt->execute(['groupid' => $groupid]);
 
-                $insert_sql = "INSERT INTO encryptedcredentials (credentialid, userid, data) VALUES (:credid, :userid, :data)";
+                $insert_sql = "INSERT INTO encryptedcredentials (credentialid, userid, data)
+                               VALUES (:credid, :userid, :data)";
                 $insert_stmt = DB::getInstance()->prepare($insert_sql);
 
                 $enc = new Encryption();

@@ -108,7 +108,8 @@ class Credentials
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute(['groupid' => $groupid]);
 
-                $sql_insert = "INSERT INTO encryptedcredentials(credentialid, userid, data) VALUES (:credentialid, :userid, :data)";
+                $sql_insert = "INSERT INTO encryptedcredentials(credentialid, userid, data)
+                               VALUES (:credentialid, :userid, :data)";
                 $stmt_insert = $this->db->prepare($sql_insert);
                 while ($row = $stmt->fetch()) {
                         $stmt_insert->execute([

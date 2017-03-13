@@ -6,7 +6,8 @@ use DevpeakIT\PWDSafe\GUI\Graphics;
 
 class GroupsSpecificCallback
 {
-        public function get($num = null) {
+        public function get($num = null)
+        {
                 if (is_null($num)) {
                         $num = $_SESSION['primarygroup'];
                 }

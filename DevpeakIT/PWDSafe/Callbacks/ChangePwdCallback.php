@@ -18,7 +18,12 @@ class ChangePwdCallback
         public function post()
         {
                 FormChecker::checkRequiredFields(['oldpwd', 'newpwd1', 'newpwd2']);
-                PasswordChecker::checkPwdStrength($_SESSION['pass'], $_POST['oldpwd'], $_POST['newpwd1'], $_POST['newpwd2']);
+                PasswordChecker::checkPwdStrength(
+                    $_SESSION['pass'],
+                    $_POST['oldpwd'],
+                    $_POST['newpwd1'],
+                    $_POST['newpwd2']
+                );
 
                 // Generate new public and private key
                 list($privKey, $pubKey) = Encryption::genNewKeys();

@@ -30,8 +30,7 @@ class CreateCredentials extends AbstractMigration
                 $table->addColumn('groupid', 'integer')
                     ->addColumn('site', 'string')
                     ->addColumn('username', 'string')
-                    ->addColumn('password', 'text')
-                    ->addColumn('notes', 'text')
+                    ->addColumn('notes', 'text', array('null' => true))
                     ->create();
         }
 }

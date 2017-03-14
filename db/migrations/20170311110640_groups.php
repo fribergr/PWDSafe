@@ -29,7 +29,7 @@ class Groups extends AbstractMigration
     {
             $table = $this->table('groups');
             $table->addColumn('name', 'string')
-                ->addColumn('notes', 'text')
+                ->addColumn('notes', 'text', array("null" => true))
                 ->create();
     }
 }

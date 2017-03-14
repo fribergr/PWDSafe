@@ -80,6 +80,10 @@ $(document).ready(function() {
                                 $('<div class="alert alert-success"><strong>Password changed!</strong> Your password has been changed successfully.</div>').insertBefore('form');
                         } else {
                                 $('.form-group').not('.has-error').addClass('has-error');
+                                new PNotify({
+                                    type: 'error',
+                                    text: data.reason
+                                });
                         }
                     },
                     'json'

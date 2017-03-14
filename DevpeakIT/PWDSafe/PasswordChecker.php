@@ -1,6 +1,7 @@
 <?php
 namespace DevpeakIT\PWDSafe;
 
+use DevpeakIT\PWDSafe\Exceptions\AppException;
 
 class PasswordChecker
 {
@@ -21,11 +22,9 @@ class PasswordChecker
                 }
 
                 if (count($errors) > 0) {
-                        echo json_encode([
-                            'status' => 'Fail',
-                            'reason' => implode(". ", $errors)
-                        ]);
-                        die();
+                    throw new AppException("Password strength check failed", 0, null, $errors);
+                } else {
+                    return true;
                 }
         }
 }

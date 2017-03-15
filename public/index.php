@@ -34,7 +34,8 @@ if ($session->isLoggedIn()) {
         // Routes for public users
         $routes = [
                 "/" => "\DevpeakIT\PWDSafe\Callbacks\PreLogonFirstPageCallback",
-                "/reg" => "\DevpeakIT\PWDSafe\Callbacks\PreLogonRegisterCallback"
+                "/reg" => "\DevpeakIT\PWDSafe\Callbacks\PreLogonRegisterCallback",
+                "/api/pwdchg" => "\DevpeakIT\PWDSafe\Callbacks\Api\PasswordChangeCallback",
         ];
 }
 

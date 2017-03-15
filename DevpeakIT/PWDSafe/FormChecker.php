@@ -9,7 +9,7 @@ class FormChecker
         public static function checkRequiredFields($reqfields)
         {
                 foreach ($reqfields as $fld) {
-                        if (!isset($_POST[$fld])) {
+                        if (!isset($_POST[$fld]) || strlen(trim($_POST[$fld])) === 0) {
                                 echo json_encode([
                                     'status' => 'Fail',
                                     'reason' => "Field '" . $fld . "' required but not set."

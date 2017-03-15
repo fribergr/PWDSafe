@@ -27,6 +27,7 @@ class Graphics
                         'data' => $data,
                         'loggedin' => true,
                         'loggedin_email' => $_SESSION['user'],
+                        'loggedin_ldap' => $_SESSION['ldap'],
                         'groupid' => $groupid,
                         'groupname' => $groupname,
                         'primary' => $_SESSION['primarygroup']
@@ -36,7 +37,7 @@ class Graphics
 
         public function showLogin($error = false)
         {
-                echo $this->twig->render('login.html', ['error' => $error]);
+                echo $this->twig->render('login.html', ['error' => $error, 'ldap' => USE_LDAP]);
         }
 
         public function showChangePwd()
@@ -45,7 +46,8 @@ class Graphics
                     'changepwd.html',
                     [
                         'loggedin' => true,
-                        'loggedin_email' => $_SESSION['user']
+                        'loggedin_email' => $_SESSION['user'],
+                        'loggedin_ldap' => $_SESSION['ldap'],
                     ]
                 );
         }
@@ -56,7 +58,8 @@ class Graphics
                     'groupcreate.html',
                     [
                         'loggedin' => true,
-                        'loggedin_email' => $_SESSION['user']
+                        'loggedin_email' => $_SESSION['user'],
+                        'loggedin_ldap' => $_SESSION['ldap'],
                     ]
                 );
         }
@@ -66,7 +69,9 @@ class Graphics
                 echo $this->twig->render(
                     'groupdelete.html',
                     [
-                        'loggedin' => true, 'loggedin_email' => $_SESSION['user'],
+                        'loggedin' => true,
+                        'loggedin_email' => $_SESSION['user'],
+                        'loggedin_ldap' => $_SESSION['ldap'],
                         'groupname' => $groupname,
                         'groupid' => $groupid
                     ]
@@ -79,7 +84,8 @@ class Graphics
                     'unauthorized.html',
                     [
                         'loggedin' => true,
-                        'loggedin_email' => $_SESSION['user']
+                        'loggedin_email' => $_SESSION['user'],
+                        'loggedin_ldap' => $_SESSION['ldap'],
                     ]
                 );
         }
@@ -92,7 +98,9 @@ class Graphics
                         "data" => $data,
                         "groupid" => $num,
                         "groupname" => $groupname,
-                        'loggedin' => true, 'loggedin_email' => $_SESSION['user']
+                        'loggedin' => true,
+                        'loggedin_email' => $_SESSION['user'],
+                        'loggedin_ldap' => $_SESSION['ldap'],
                     ]
                 );
         }

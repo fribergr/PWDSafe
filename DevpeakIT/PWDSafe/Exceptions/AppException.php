@@ -8,7 +8,12 @@ class AppException extends \Exception
     public function __construct($message, $code = 0, \Exception $previous = null, $errors = array())
     {
         parent::__construct($message, $code, $previous);
-        $this->_errors = $errors;
+
+        if (count($errors) === 0) {
+            $this->_errors = [$message];
+        } else {
+            $this->_errors = $errors;
+        }
     }
 
     public function getErrors() {

@@ -9,16 +9,14 @@
             <p id="profile-name" class="profile-name-card"></p>
             <form class="form-signin" method="post">
                 <span id="reauth-email" class="reauth-email"></span>
-                {% if error %}
-                <div class="form-group has-error" id="loginForm"><div class="alert alert-danger">Wrong username or password</div>
-                {% else %}
-                <div class="form-group" id="loginForm">
-                {% endif %}
-                <input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                <div class="form-group{% if error %} has-error{% endif %}" id="loginForm">{% if error %}<div class="alert alert-danger">Wrong username or password</div>{% endif %}
+                <input type="text" name="inputEmail" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
                 <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
                 </div>
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+                {%if ldap == false %}
                     <button class="btn btn-lg btn-primary btn-block btn-reg" type="button">Register</button>
+                {% endif %}
             </form><!-- /form -->
         </div><!-- /card-container -->
     </div><!-- /container -->

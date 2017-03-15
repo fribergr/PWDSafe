@@ -1,6 +1,8 @@
 <?php
 namespace DevpeakIT\PWDSafe;
 
+use DevpeakIT\PWDSafe\Authentication\LDAPAuthentication;
+
 class Session
 {
         /**
@@ -35,23 +37,33 @@ class Session
          */
         public function authenticate(\PDO $db, $user, $pass)
         {
-                $sql = "SELECT id, email, password, pubkey, privkey, primarygroup FROM users WHERE email = :email";
-                $stmt = $db->prepare($sql);
-                $stmt->execute(['email' => $user]);
+            if (USE_LDAP) {
+                $res = LDAPAuthentication::login($user, $pass);
+                if ($res) {
+                    $sql = "SELECT id, email, pubkey, privkey, primarygroup FROM users WHERE email = :email";
+                    $stmt = $db->prepare($sql);
+                    $stmt->execute(['email' => $user]);
+                    if ($stmt->rowCount() === 0) {
+                        // We should register a new account
+                        return User::registerUser(new Encryption(), $user, $pass);
+                    } else {
+                        // We already have an account. Grab information and return
+                        return User::getData($user, $pass, true);
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                $row = User::getData($user, $pass);
 
-                if ($stmt->rowCount() > 0) {
-                        $row = $stmt->fetch();
-                        if (password_verify($pass, $row['password'])) {
-                                $sql = "UPDATE users SET lastlogin = NOW() WHERE email = :email";
-                                $stmt = $db->prepare($sql);
-                                $stmt->execute(['email' => $user]);
-                                $row['password'] = $pass;
-                                return $row;
-                        } else {
-                                return false;
-                        }
+                if (password_verify($pass, $row['encryptedpassword'])) {
+                        $sql = "UPDATE users SET lastlogin = NOW() WHERE email = :email";
+                        $stmt = $db->prepare($sql);
+                        $stmt->execute(['email' => $user]);
+                        return $row;
                 } else {
                         return false;
                 }
+            }
         }
 }

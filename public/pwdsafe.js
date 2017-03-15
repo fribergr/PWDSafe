@@ -7,7 +7,7 @@ $(document).ready(function() {
                         pass: pass
                 }, function (data) {
                         if (data.status == 'OK') {
-                                window.location.reload();
+                                $('#regsuccess').removeClass('hide');
                         } else {
                             $('.form-group').not('.has-error').addClass('has-error');
                             new PNotify({

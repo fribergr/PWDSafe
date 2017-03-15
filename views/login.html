@@ -10,6 +10,7 @@
             <form class="form-signin" method="post">
                 <span id="reauth-email" class="reauth-email"></span>
                 <div class="form-group{% if error %} has-error{% endif %}" id="loginForm">{% if error %}<div class="alert alert-danger">Wrong username or password</div>{% endif %}
+                <div class="alert alert-success hide" id="regsuccess">Account registered successfully</div>
                 <input type="text" name="inputEmail" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
                 <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
                 </div>

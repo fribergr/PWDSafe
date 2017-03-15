@@ -65,6 +65,7 @@ class User
         $res = $stmt->fetch();
         if (!password_verify($currentpass, $res['password'])) {
             echo json_encode(['status' => 'Fail', 'reason' => 'Password is incorrect']);
+            die();
         }
 
         // Generate new public and private key

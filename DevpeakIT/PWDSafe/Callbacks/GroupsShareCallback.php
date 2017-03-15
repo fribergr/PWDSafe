@@ -86,9 +86,14 @@ class GroupsShareCallback
                 $sql = "SELECT encryptedcredentials.data, encryptedcredentials.credentialid FROM encryptedcredentials
                         INNER JOIN credentials ON credentials.id = encryptedcredentials.credentialid
                         INNER JOIN groups ON credentials.groupid = groups.id
-                        WHERE groups.id = :groupid";
+                        INNER JOIN usergroups ON usergroups.groupid = groups.id
+                        WHERE usergroups.groupid = :groupid AND usergroups.userid = :userid
+                        AND encryptedcredentials.userid = :userid";
                 $stmt = DB::getInstance()->prepare($sql);
-                $stmt->execute(['groupid' => $groupid]);
+                $stmt->execute([
+                    'groupid' => $groupid,
+                    'userid' => $_SESSION['id']
+                ]);
 
                 $insert_sql = "INSERT INTO encryptedcredentials (credentialid, userid, data)
                                VALUES (:credid, :userid, :data)";

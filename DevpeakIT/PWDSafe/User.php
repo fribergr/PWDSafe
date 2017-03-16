@@ -1,8 +1,6 @@
 <?php
 namespace DevpeakIT\PWDSafe;
 
-use DevpeakIT\PWDSafe\Exceptions\AppException;
-
 class User
 {
         public static function registerUser(Encryption $enc, $username, $password)
@@ -33,7 +31,8 @@ class User
                 $sql = "INSERT INTO usergroups (userid, groupid) VALUES (:userid, :groupid)";
                 $stmt = DB::getInstance()->prepare($sql);
                 $stmt->execute(['userid' => $userid, 'groupid' => $groupid]);
-                return $insert_data;
+
+                return User::getData($username, $password, true);
         }
 
         public static function getData($user, $pass, $ldap = false)

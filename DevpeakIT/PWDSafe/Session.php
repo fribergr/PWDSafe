@@ -37,33 +37,34 @@ class Session
          */
         public function authenticate(\PDO $db, $user, $pass)
         {
-            if (USE_LDAP) {
-                $res = LDAPAuthentication::login($user, $pass);
-                if ($res) {
-                    $sql = "SELECT id, email, pubkey, privkey, primarygroup FROM users WHERE email = :email";
-                    $stmt = $db->prepare($sql);
-                    $stmt->execute(['email' => $user]);
-                    if ($stmt->rowCount() === 0) {
-                        // We should register a new account
-                        return User::registerUser(new Encryption(), $user, $pass);
-                    } else {
-                        // We already have an account. Grab information and return
-                        return User::getData($user, $pass, true);
-                    }
+                if (USE_LDAP) {
+                        $res = LDAPAuthentication::login($user, $pass);
+                        if ($res) {
+                                $sql = "SELECT id, email, pubkey, privkey, primarygroup FROM users
+                                        WHERE email = :email";
+                                $stmt = $db->prepare($sql);
+                                $stmt->execute(['email' => $user]);
+                                if ($stmt->rowCount() === 0) {
+                                        // We should register a new account
+                                        return User::registerUser(new Encryption(), $user, $pass);
+                                } else {
+                                        // We already have an account. Grab information and return
+                                        return User::getData($user, $pass, true);
+                                }
+                        } else {
+                                return false;
+                        }
                 } else {
-                    return false;
-                }
-            } else {
-                $row = User::getData($user, $pass);
+                        $row = User::getData($user, $pass);
 
-                if (password_verify($pass, $row['encryptedpassword'])) {
-                        $sql = "UPDATE users SET lastlogin = NOW() WHERE email = :email";
-                        $stmt = $db->prepare($sql);
-                        $stmt->execute(['email' => $user]);
-                        return $row;
-                } else {
-                        return false;
+                        if (password_verify($pass, $row['encryptedpassword'])) {
+                                $sql = "UPDATE users SET lastlogin = NOW() WHERE email = :email";
+                                $stmt = $db->prepare($sql);
+                                $stmt->execute(['email' => $user]);
+                                return $row;
+                        } else {
+                                return false;
+                        }
                 }
-            }
         }
 }

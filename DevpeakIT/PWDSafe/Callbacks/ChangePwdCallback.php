@@ -22,18 +22,18 @@ class ChangePwdCallback
                 FormChecker::checkRequiredFields(['oldpwd', 'newpwd1', 'newpwd2']);
 
                 try {
-                    PasswordChecker::checkPwdStrength(
-                        $_SESSION['pass'],
-                        $_POST['oldpwd'],
-                        $_POST['newpwd1'],
-                        $_POST['newpwd2']
-                    );
-                } catch(AppException $ex) {
-                    echo json_encode([
-                        'status' => 'Fail',
-                        'reason' => implode(". ", $ex->getErrors())
-                    ]);
-                    die();
+                        PasswordChecker::checkPwdStrength(
+                            $_SESSION['pass'],
+                            $_POST['oldpwd'],
+                            $_POST['newpwd1'],
+                            $_POST['newpwd2']
+                        );
+                } catch (AppException $ex) {
+                        echo json_encode([
+                            'status' => 'Fail',
+                            'reason' => implode(". ", $ex->getErrors())
+                        ]);
+                        die();
                 }
 
                 User::changePassword($_SESSION['user'], $_SESSION['pass'], $_POST['newpwd1']);

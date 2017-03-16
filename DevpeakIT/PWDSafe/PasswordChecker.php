@@ -22,9 +22,9 @@ class PasswordChecker
                 }
 
                 if (count($errors) > 0) {
-                    throw new AppException("Password strength check failed", 0, null, $errors);
+                        throw new AppException("Password strength check failed", 0, null, $errors);
                 } else {
-                    return true;
+                        return true;
                 }
         }
 }

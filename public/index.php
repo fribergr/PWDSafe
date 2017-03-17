@@ -28,6 +28,7 @@ if ($session->isLoggedIn()) {
                 "/groups" => "\DevpeakIT\PWDSafe\Callbacks\GroupsCallback",
                 "/groups/:number/delete" => "\DevpeakIT\PWDSafe\Callbacks\GroupsDeleteCallback",
                 "/groups/:number/share" => "\DevpeakIT\PWDSafe\Callbacks\GroupsShareCallback",
+                "/groups/:number/changename" => "\DevpeakIT\PWDSafe\Callbacks\GroupsChangeNameCallback",
                 "/groups/:number/unshare/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsUnshareCallback",
         ];
 } else {

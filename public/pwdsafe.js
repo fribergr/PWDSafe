@@ -147,6 +147,29 @@ $(document).ready(function() {
             );
         });
 
+        $('#changeGroupName').click(function() {
+            $('#changeGroupNameModal').modal();
+        });
+        $('#changeGroupNameSave').click(function() {
+            $.post(
+                '/groups/' + $('#currentgroupid').val() + '/changename',
+                {
+                    'groupname': $('#grpname').val()
+                },
+                function(data) {
+                    if (data.status == "OK") {
+                        window.location.reload();
+                    } else {
+                        new PNotify({
+                            type: 'error',
+                            text: data.reason
+                        });
+                    }
+                },
+                'json'
+            );
+        });
+
         $('.removeUser').click(function() {
             $.post(
                 '/groups/' + $(this).data('groupid') + '/unshare/' + $(this).data('id'),
@@ -169,11 +192,13 @@ $(document).ready(function() {
             function(data) {
                 if (data.status === "OK") {
                     $.each(data.groups, function(index, group) {
-                            console.log(group);
                         $('#grouplist').append('<li><a href="/groups/' + group.id + '">' + group.name + '</a>');
                     });
                 } else {
-                        console.log(data);
+                    new PNotify({
+                        type: 'error',
+                        text: data.reason
+                    });
                 }
             },
             'json'

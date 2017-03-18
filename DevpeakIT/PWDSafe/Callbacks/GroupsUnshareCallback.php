@@ -2,6 +2,7 @@
 namespace DevpeakIT\PWDSafe\Callbacks;
 
 use DevpeakIT\PWDSafe\DB;
+use DevpeakIT\PWDSafe\Group;
 
 class GroupsUnshareCallback
 {
@@ -16,17 +17,10 @@ class GroupsUnshareCallback
                 }
 
                 // Check access
-                $access_sql = "SELECT groups.id FROM groups
-                               INNER JOIN usergroups ON groups.id = usergroups.groupid
-                               INNER JOIN users ON usergroups.userid = users.id
-                               WHERE usergroups.userid = :userid AND usergroups.groupid = :groupid";
-                $access_stmt = DB::getInstance()->prepare($access_sql);
-                $access_stmt->execute([
-                    'userid' => $_SESSION['id'],
-                    'groupid' => $groupid
-                ]);
+                $grp = new Group();
+                $grp->id = $groupid;
 
-                if ($access_stmt->rowCount() === 0) {
+                if (!$grp->checkAccess($_SESSION['id'])) {
                         echo json_encode([
                             'status' => 'Fail',
                             'reason' => 'Unauthorized'

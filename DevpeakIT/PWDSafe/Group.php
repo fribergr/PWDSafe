@@ -37,7 +37,7 @@ class Group
                 $access_sql = "SELECT groups.id, groups.name FROM groups
                                INNER JOIN usergroups ON usergroups.groupid = groups.id
                                INNER JOIN users ON users.id = usergroups.userid
-                               WHERE users.id = :userid AND groups.id = :groupid";
+                               WHERE usergroups.userid = :userid AND usergroups.groupid = :groupid";
                 $access_stmt = DB::getInstance()->prepare($access_sql);
                 $access_stmt->execute([
                     'userid' => $userid,

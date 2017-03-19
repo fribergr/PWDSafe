@@ -72,25 +72,8 @@ class User
                 list($privKey, $pubKey) = Encryption::genNewKeys();
 
                 // Loop through all credentials for this user and reencrypt them with the new private key
-                $sql = "SELECT id, data FROM encryptedcredentials WHERE userid = :userid";
-                $stmt = DB::getInstance()->prepare($sql);
-                $stmt->execute(['userid' => $res['id']]);
-
-                $sql_update = "UPDATE encryptedcredentials SET data = :data WHERE id = :id";
-                $stmt_update = DB::getInstance()->prepare($sql_update);
-
                 $enc = new Encryption();
-                while ($row = $stmt->fetch()) {
-                        $data = $enc->decWithPriv(
-                            base64_decode($row['data']),
-                            $enc->dec($res['privkey'], $currentpass)
-                        );
-                        $newdata = base64_encode($enc->encWithPub($data, $pubKey));
-                        $stmt_update->execute([
-                            'data' => $newdata,
-                            'id' => $row['id']
-                        ]);
-                }
+                self::updateEncryptedCredentials($currentpass, $res['id'], $res['privkey'], $pubKey, $enc);
 
                 // Encrypt private key with new password
                 $encryptedprivkey = $enc->enc($privKey, $newpass);
@@ -110,6 +93,37 @@ class User
                 if (isset($_SESSION['pass'])) {
                         $_SESSION['pass'] = $newpass;
                         $_SESSION['privkey'] = $encryptedprivkey;
+                }
+        }
+
+        /**
+         * @param $currentpass
+         * @param $userid
+         * @param $privkey
+         * @param $pubKey
+         * @param Encryption $enc
+         * @return array
+         * @internal param $res
+         */
+        private static function updateEncryptedCredentials($currentpass, $userid, $privkey, $pubKey, Encryption $enc)
+        {
+                $sql = "SELECT id, data FROM encryptedcredentials WHERE userid = :userid";
+                $stmt = DB::getInstance()->prepare($sql);
+                $stmt->execute(['userid' => $userid]);
+
+                $sql_update = "UPDATE encryptedcredentials SET data = :data WHERE id = :id";
+                $stmt_update = DB::getInstance()->prepare($sql_update);
+
+                while ($row = $stmt->fetch()) {
+                        $data = $enc->decWithPriv(
+                            base64_decode($row['data']),
+                            $enc->dec($privkey, $currentpass)
+                        );
+                        $newdata = base64_encode($enc->encWithPub($data, $pubKey));
+                        $stmt_update->execute([
+                            'data' => $newdata,
+                            'id' => $row['id']
+                        ]);
                 }
         }
 }

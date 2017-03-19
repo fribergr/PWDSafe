@@ -13,7 +13,7 @@
         "phpmetrics/phpmetrics": "^1.8",
         "phpmd/phpmd": "^2.3",
         "sebastian/phpcpd": "^2.0",
-        "phpunit/phpunit": "^5.2",
+        "phpunit/phpunit": "5.*",
         "theseer/phpdox": "0.8.1.1"
     }
 }

@@ -20,7 +20,6 @@ class LDAPAuthentication
                         throw new AppException("Could not connect to LDAP-server");
                 }
 
-                //ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3) or die ("Could not set LDAP Protocol version");
                 $bind = ldap_bind($conn, $upn, $pass);
 
                 if ($bind) {

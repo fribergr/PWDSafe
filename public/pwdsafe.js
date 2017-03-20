@@ -90,6 +90,11 @@ $(document).ready(function() {
                 );
         });
 
+        $('#createGroupForm').submit(function(event) {
+            event.preventDefault();
+            $('#createGroup').click();
+        });
+
         $('#createGroup').click(function() {
             $.post(
                 '/groups/create',

@@ -25,7 +25,7 @@ class GroupsSpecificCallback
                 if ($access_stmt->rowCount() === 0) {
                         $graphics = new Graphics();
                         $graphics->showUnathorized();
-                        die();
+                        return;
                 }
                 $res = $access_stmt->fetch();
                 $groupname = $res['name'];

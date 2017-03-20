@@ -10,6 +10,5 @@ class LogoutCallback
         {
                 session_destroy();
                 header("Location: /");
-                die();
         }
 }

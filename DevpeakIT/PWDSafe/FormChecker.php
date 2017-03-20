@@ -14,7 +14,7 @@ class FormChecker
                                     'status' => 'Fail',
                                     'reason' => "Field '" . $fld . "' required but not set."
                                 ]);
-                                die();
+                                return;
                         }
                 }
         }
@@ -26,7 +26,7 @@ class FormChecker
                                 'status' => 'Fail',
                                 'reason' => "Field '" . $fld . "' does not meet the length requirements"
                         ]);
-                        die();
+                        return;
                 }
         }
 }

@@ -12,7 +12,7 @@ class GroupsUnshareCallback
                             'status' => 'Fail',
                             'reason' => 'Missing groupid or userid'
                         ]);
-                        die();
+                        return;
                 }
 
                 // Check access
@@ -24,7 +24,7 @@ class GroupsUnshareCallback
                             'status' => 'Fail',
                             'reason' => 'Unauthorized'
                         ]);
-                        die();
+                        return;
                 }
 
                 // Access OK, remove credentials for this user in this group

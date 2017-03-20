@@ -24,9 +24,8 @@ class CredRemoveCallback
                                 'status' => 'Fail',
                                 'reason' => 'Authorisation failed, you do not have access to the requested credentials'
                         ]);
-                        die();
+                        return;
                 }
                 echo json_encode(['status' => 'OK']);
-                die();
         }
 }

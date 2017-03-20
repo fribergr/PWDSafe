@@ -33,7 +33,7 @@ class ChangePwdCallback
                             'status' => 'Fail',
                             'reason' => implode(". ", $ex->getErrors())
                         ]);
-                        die();
+                        return;
                 }
 
                 User::changePassword($_SESSION['user'], $_SESSION['pass'], $_POST['newpwd1']);

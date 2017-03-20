@@ -24,7 +24,7 @@ class PreLogonRegisterCallback
                             'status' => 'Fail',
                             'reason' => 'Account already exists'
                         ]);
-                        die();
+                        return;
                 }
 
                 $enc = new Encryption();

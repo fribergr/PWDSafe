@@ -28,7 +28,7 @@ class GroupsShareCallback
                 if ($access_stmt->rowCount() === 0) {
                         $graphics = new Graphics();
                         $graphics->showUnathorized();
-                        die();
+                        return;
                 }
                 $res = $access_stmt->fetch();
                 $groupname = $res['name'];
@@ -59,7 +59,7 @@ class GroupsShareCallback
                             'status' => 'Fail',
                             'reason' => 'Unauthorized'
                         ]);
-                        die();
+                        return;
                 }
 
                 // Make sure new user exists, grab pubkey
@@ -68,7 +68,7 @@ class GroupsShareCallback
                 $stmt->execute(['email' => $_POST['email']]);
                 if ($stmt->rowCount() === 0) {
                         echo json_encode(['status' => 'Fail', 'reason' => 'User does not exist']);
-                        die();
+                        return;
                 }
                 $newuser = $stmt->fetch();
 
@@ -79,7 +79,7 @@ class GroupsShareCallback
                 $stmt->execute(['email' => $_POST['email'], 'groupid' => $groupid]);
                 if ($stmt->rowCount() > 0) {
                         echo json_encode(['status' => 'Fail', 'reason' => 'User already in group']);
-                        die();
+                        return;
                 }
 
                 // Grab all credentials for group, decode and reinsert with the new users pubkey

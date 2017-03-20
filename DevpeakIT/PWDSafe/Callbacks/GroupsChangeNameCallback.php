@@ -17,7 +17,7 @@ class GroupsChangeNameCallback
                             'status' => 'Fail',
                             'reason' => 'Missing groupid'
                         ]);
-                        die();
+                        return;
                 }
 
                 $groupname = preg_replace('/[^\p{L}\p{N}-_ ]/u', "", trim($_POST['groupname']));
@@ -39,7 +39,7 @@ class GroupsChangeNameCallback
                             'status' => 'Fail',
                             'reason' => 'Unauthorized'
                         ]);
-                        die();
+                        return;
                 }
                 $sql = "UPDATE groups SET name = :groupname WHERE id = :groupid";
                 $stmt = DB::getInstance()->prepare($sql);

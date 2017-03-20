@@ -59,13 +59,13 @@ class User
                 $stmt->execute(['username' => $user]);
                 if ($stmt->rowCount() === 0) {
                         echo json_encode(['status' => 'Fail', 'reason' => 'No such user exists']);
-                        die();
+                        return;
                 }
 
                 $res = $stmt->fetch();
                 if (!password_verify($currentpass, $res['password'])) {
                         echo json_encode(['status' => 'Fail', 'reason' => 'Password is incorrect']);
-                        die();
+                        return;
                 }
 
                 // Generate new public and private key

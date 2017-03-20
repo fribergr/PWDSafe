@@ -25,6 +25,5 @@ class CredAddCallback
 
                 $credentials->add($_POST['creds'], $_POST['credu'], $_POST['credp'], "", $_POST['currentgroupid']);
                 echo json_encode(['status' => 'OK']);
-                die();
         }
 }

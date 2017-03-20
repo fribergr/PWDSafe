@@ -16,25 +16,29 @@ class PasswordForcallback
         {
                 $pwd = $this->getCredForID($id);
 
-                $encryption = new Encryption();
+                if ($pwd) {
+                        $encryption = new Encryption();
 
-                $user = $pwd['user'];
-                $site = $pwd['site'];
-                $pwd = base64_decode($pwd['pass']);
+                        $user = $pwd['user'];
+                        $site = $pwd['site'];
+                        $pwd = base64_decode($pwd['pass']);
 
-                $pwd = $encryption->decWithPriv($pwd, $encryption->dec($_SESSION['privkey'], $_SESSION['pass']));
-                echo json_encode([
-                        'status' => 'OK',
-                        'pwd' => $pwd,
-                        'user' => $user,
-                        'site' => $site
-                ]);
-                die();
+                        $pwd = $encryption->decWithPriv(
+                            $pwd,
+                            $encryption->dec($_SESSION['privkey'], $_SESSION['pass'])
+                        );
+                        echo json_encode([
+                                'status' => 'OK',
+                                'pwd' => $pwd,
+                                'user' => $user,
+                                'site' => $site
+                        ]);
+                }
         }
 
         /**
          * @param $id int credential id
-         * @return array containing site, username and password
+         * @return bool|array containing site, username and password
          */
         private function getCredForID($id)
         {
@@ -48,7 +52,7 @@ class PasswordForcallback
                             'status' => 'Fail',
                             'reason' => 'Authorisation failed, you do not have access to the requested credentials'
                         ]);
-                        die();
+                        return false;
                 }
         }
 }

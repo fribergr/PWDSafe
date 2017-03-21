@@ -192,6 +192,22 @@ $(document).ready(function() {
             );
         });
 
+        new Clipboard('.copypwd', {
+            text: function(trigger) {
+                var pwd = "";
+                $.ajax({
+                    url: '/pwdfor/' + $(trigger).data('id'),
+                    type: 'get',
+                    dataType: 'json',
+                    async: false,
+                    success: function(data) {
+                        pwd = data.pwd;
+                    }
+                });
+                return pwd;
+            }
+        });
+
         $.get(
             '/groups',
             function(data) {

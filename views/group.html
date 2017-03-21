@@ -32,7 +32,14 @@
                                 <tr>
                                         <td>{{ row.site }}</td>
                                         <td>{{ row.username }}</td>
-                                        <td><a class="btn btn-primary showPass" data-id="{{ row.id }}" href="#">Show</a></td>
+                                        <td style="white-space: nowrap; width: 1px;">
+                                                <button class="btn btn-primary showPass" data-id="{{ row.id }}">
+                                                        Show
+                                                </button>
+                                                <button class="btn btn-default copypwd" data-id="{{ row.id }}">
+                                                        Copy to clipboard
+                                                </button>
+                                        </td>
                                 </tr>
                         {% endfor %}
                 </tbody>

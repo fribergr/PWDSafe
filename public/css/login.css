@@ -6,9 +6,7 @@
  */
 body, html {
     height: 100%;
-    background-repeat: no-repeat;
-/*    background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33)); */
-    background-image: linear-gradient(rgb(51, 122, 183), rgb(4, 93, 52));
+    background-color: #e2e2e2;
 }
 
 .card-container.card {
@@ -25,16 +23,11 @@ body, html {
     cursor: default;
 }
 
-/*
- * Card component
- */
 .card {
     background-color: #F7F7F7;
-    /* just in case there no content*/
     padding: 20px 25px 30px;
     margin: 0 auto 25px;
     margin-top: 50px;
-    /* shadows and rounded borders */
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
     border-radius: 2px;
@@ -54,7 +47,6 @@ body, html {
         border: 0px solid #ccc;
         padding: 25px;
         margin: 0;
-/*        background-color: #ccc;*/
 }
 
 .profile-img-card {
@@ -67,9 +59,6 @@ body, html {
     border-radius: 50%;
 }
 
-/*
- * Form styles
- */
 .profile-name-card {
     font-size: 16px;
     font-weight: bold;
@@ -122,9 +111,7 @@ body, html {
 }
 
 .btn.btn-signin, .btn.btn-reg {
-    /*background-color: #4d90fe; */
     background-color: rgb(104, 145, 162);
-    /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
     padding: 0px;
     font-weight: 700;
     font-size: 14px;

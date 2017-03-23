@@ -104,4 +104,9 @@ class Graphics
                     ]
                 );
         }
+
+        public function showLoginRequired()
+        {
+                echo $this->twig->render('static/login_required.html');
+        }
 }

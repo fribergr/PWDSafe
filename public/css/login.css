@@ -1,12 +1,7 @@
-/*
- * Specific styles of signin component
- */
-/*
- * General styles
- */
 body, html {
     height: 100%;
-    background-color: #e2e2e2;
+    background-color: #fff;
+    color: #636b6f;
 }
 
 .card-container.card {
@@ -26,14 +21,13 @@ body, html {
 .card {
     background-color: #F7F7F7;
     padding: 20px 25px 30px;
-    margin: 0 auto 25px;
-    margin-top: 50px;
+    margin: 50px auto 25px;
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
     border-radius: 2px;
-    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
 }
 
 .login-img-header {
@@ -42,9 +36,8 @@ body, html {
 }
 .lock-login {
         font-size: 72px;
-        color: #aaa;
         border-radius: 50%;
-        border: 0px solid #ccc;
+        border: 0 solid #ccc;
         padding: 25px;
         margin: 0;
 }
@@ -65,21 +58,6 @@ body, html {
     text-align: center;
     margin: 10px 0 0;
     min-height: 1em;
-}
-
-.reauth-email {
-    display: block;
-    color: #404040;
-    line-height: 2;
-    margin-bottom: 10px;
-    font-size: 14px;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
 }
 
 .form-signin #inputEmail,
@@ -111,8 +89,8 @@ body, html {
 }
 
 .btn.btn-signin, .btn.btn-reg {
-    background-color: rgb(104, 145, 162);
-    padding: 0px;
+    background-color: rgba(99, 107, 111, 0.8);
+    padding: 0;
     font-weight: 700;
     font-size: 14px;
     height: 36px;
@@ -128,23 +106,10 @@ body, html {
 
 .btn.btn-signin:hover,
 .btn.btn-signin:active,
-.btn.btn-signin:focus {
-    background-color: rgb(12, 97, 33);
-    cursor: pointer;
-}
+.btn.btn-signin:focus,
 .btn.btn-reg:hover,
 .btn.btn-reg:active,
 .btn.btn-reg:focus {
-    background-color: rgb(95, 0, 97);
+    background-color: #636b6f;
     cursor: pointer;
-}
-
-.forgot-password {
-    color: rgb(104, 145, 162);
-}
-
-.forgot-password:hover,
-.forgot-password:active,
-.forgot-password:focus{
-    color: rgb(12, 97, 33);
 }

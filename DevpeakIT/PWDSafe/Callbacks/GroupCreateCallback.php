@@ -15,10 +15,10 @@ class GroupCreateCallback
 
         public function post()
         {
-                FormChecker::checkRequiredFields(['groupname']);
-                FormChecker::checkFieldLength('groupname', 1);
-                $group = Group::create($_POST['groupname']);
-                $group->givePermission($_SESSION['id']);
-                echo json_encode(['status' => "OK", "groupid" => $group->id]);
+                if (FormChecker::checkRequiredFields(['groupname']) && FormChecker::checkFieldLength('groupname', 1)) {
+                        $group = Group::create($_POST['groupname']);
+                        $group->givePermission($_SESSION['id']);
+                        echo json_encode(['status' => "OK", "groupid" => $group->id]);
+                }
         }
 }

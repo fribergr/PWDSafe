@@ -18,12 +18,12 @@ class CredAddCallback
 
                 // Save new credentials
                 $reqfields = ['creds', 'credu', 'credp', 'currentgroupid'];
-                FormChecker::checkRequiredFields($reqfields);
+                if (FormChecker::checkRequiredFields($reqfields)) {
+                        $credentials = new Credentials();
+                        $credentials->setDB(DB::getInstance());
 
-                $credentials = new Credentials();
-                $credentials->setDB(DB::getInstance());
-
-                $credentials->add($_POST['creds'], $_POST['credu'], $_POST['credp'], "", $_POST['currentgroupid']);
-                echo json_encode(['status' => 'OK']);
+                        $credentials->add($_POST['creds'], $_POST['credu'], $_POST['credp'], "", $_POST['currentgroupid']);
+                        echo json_encode(['status' => 'OK']);
+                }
         }
 }

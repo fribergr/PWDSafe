@@ -9,37 +9,42 @@ class FormCheckerTest extends PHPUnit_Framework_TestCase
         public function testRequiredFields()
         {
                 $_POST['username'] = "Something";
-                FormChecker::checkRequiredFields(['username']);
+                $res = FormChecker::checkRequiredFields(['username']);
                 $this->expectOutputString("");
+                $this->assertTrue($res);
         }
 
         public function testRequiredFieldsWhichShouldFail()
         {
                 $_POST['username'] = "Something";
                 $_POST['password'] = "";
-                FormChecker::checkRequiredFields(["username", "password", "key"]);
+                $res = FormChecker::checkRequiredFields(["username", "password", "key"]);
                 $this->expectOutputRegex("/Fail/");
+                $this->assertFalse($res);
         }
 
         public function testRequiredFieldsWhichAlsoShouldFail()
         {
                 $_POST['username'] = "Something";
                 $_POST['password'] = "";
-                FormChecker::checkRequiredFields(["username", "password"]);
+                $res = FormChecker::checkRequiredFields(["username", "password"]);
                 $this->expectOutputRegex("/Fail/");
+                $this->assertFalse($res);
         }
 
         public function testCheckFieldLengthFail()
         {
                 $_POST['username'] = "Something";
-                FormChecker::checkFieldLength("username", 10);
+                $res = FormChecker::checkFieldLength("username", 10);
                 $this->expectOutputRegex("/Fail/");
+                $this->assertFalse($res);
         }
 
         public function testCheckFieldLengthOk()
         {
                 $_POST['username'] = "Something";
-                FormChecker::checkFieldLength("username", 6);
+                $res = FormChecker::checkFieldLength("username", 6);
                 $this->expectOutputString("");
+                $this->assertTrue($res);
         }
 }

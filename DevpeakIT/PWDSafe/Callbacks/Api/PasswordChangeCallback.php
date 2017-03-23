@@ -8,7 +8,8 @@ class PasswordChangeCallback
 {
         public function post()
         {
-                FormChecker::checkRequiredFields(['username', 'old_password', 'new_password']);
-                User::changePassword($_POST['username'], $_POST['old_password'], $_POST['new_password']);
+                if (FormChecker::checkRequiredFields(['username', 'old_password', 'new_password'])) {
+                        User::changePassword($_POST['username'], $_POST['old_password'], $_POST['new_password']);
+                }
         }
 }

@@ -5,6 +5,7 @@ class FormChecker
 {
         /**
          * @param $reqfields array with POST-fields we require for saving credentials
+         * @return bool
          */
         public static function checkRequiredFields($reqfields)
         {
@@ -14,9 +15,10 @@ class FormChecker
                                     'status' => 'Fail',
                                     'reason' => "Field '" . $fld . "' required but not set."
                                 ]);
-                                return;
+                                return false;
                         }
                 }
+                return true;
         }
 
         public static function checkFieldLength($fld, $length)
@@ -26,7 +28,8 @@ class FormChecker
                                 'status' => 'Fail',
                                 'reason' => "Field '" . $fld . "' does not meet the length requirements"
                         ]);
-                        return;
+                        return false;
                 }
+                return true;
         }
 }

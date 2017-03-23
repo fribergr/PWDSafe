@@ -49,7 +49,9 @@ class GroupsShareCallback
 
         public function post($groupid = null)
         {
-                FormChecker::checkRequiredFields(['email']);
+                if (!FormChecker::checkRequiredFields(['email'])) {
+                        return;
+                }
 
                 $group = new Group();
                 $group->id = $groupid;

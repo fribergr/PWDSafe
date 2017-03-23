@@ -27,7 +27,7 @@ $(document).ready(function() {
                         if (data.status == 'OK') {
                                 window.location.reload();
                         } else {
-                                console.log(data);
+                                showError(data.reason);
                         }
                 }, 'json');
         });

@@ -12,7 +12,7 @@ $(document).ready(function() {
                         user: user,
                         pass: pass
                 }, function (data) {
-                        if (data.status == 'OK') {
+                        if (data.status === 'OK') {
                                 $('#regsuccess').removeClass('hide');
                         } else {
                             $('.form-group').not('.has-error').addClass('has-error');
@@ -24,7 +24,7 @@ $(document).ready(function() {
         $('#deleteCred').click(function() {
                 var id = $(this).data('id');
                 $.get('/cred/' + id + '/remove', function(data) {
-                        if (data.status == 'OK') {
+                        if (data.status === 'OK') {
                                 window.location.reload();
                         } else {
                                 showError(data.reason);
@@ -57,7 +57,7 @@ $(document).ready(function() {
                             'currentgroupid': $('#currentgroupid').val()
                         },
                         function(data) {
-                                if (data.status == 'OK') {
+                                if (data.status === 'OK') {
                                         $('#addCredModal').find('input').val('');
                                         $('#addCredModal').modal('hide');
                                         window.location.reload();
@@ -78,7 +78,7 @@ $(document).ready(function() {
                         'newpwd2': $('#newpwd2').val()
                     },
                     function(data) {
-                        if (data.status == 'OK') {
+                        if (data.status === 'OK') {
                                 $('input').val('');
                                 $('<div class="alert alert-success"><strong>Password changed!</strong> Your password has been changed successfully.</div>').insertBefore('form');
                         } else {
@@ -102,7 +102,7 @@ $(document).ready(function() {
                     'groupname': $('#groupname').val()
                 },
                 function(data) {
-                    if (data.status == 'OK') {
+                    if (data.status === 'OK') {
                         $('input').val('');
                         $('<div class="alert alert-success"><strong>Group created!</strong> Your group has been created successfully.</div>').insertBefore('form');
                         window.setTimeout(function(){
@@ -120,7 +120,7 @@ $(document).ready(function() {
             $.post(
                 '/groups/' + $(this).data('id') + '/delete',
                 function(data) {
-                    if (data.status == "OK") {
+                    if (data.status === "OK") {
                         window.location.replace("/");
                     }
                 },
@@ -139,7 +139,7 @@ $(document).ready(function() {
                         'email': $('#email').val()
                 },
                 function(data) {
-                        if (data.status == "OK") {
+                        if (data.status === "OK") {
                                 window.location.reload();
                         } else {
                             showError(data.reason);
@@ -159,7 +159,7 @@ $(document).ready(function() {
                     'groupname': $('#grpname').val()
                 },
                 function(data) {
-                    if (data.status == "OK") {
+                    if (data.status === "OK") {
                         window.location.reload();
                     } else {
                         showError(data.reason);
@@ -173,7 +173,7 @@ $(document).ready(function() {
             $.post(
                 '/groups/' + $(this).data('groupid') + '/unshare/' + $(this).data('id'),
                 function(data) {
-                    if (data.status == "OK") {
+                    if (data.status === "OK") {
                         window.location.reload();
                     } else {
                         showError(data.reason);

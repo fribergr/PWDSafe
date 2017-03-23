@@ -35,10 +35,10 @@ class EncryptionTest extends PHPUnit_Framework_TestCase
 
         public function testEncWithPub()
         {
-            $data = "Testdata";
-            $enc = $this->encryption->encWithPub($data, $this->pubkey);
-            $this->assertNotEquals($data, $enc);
-            $dec = $this->encryption->decWithPriv($enc, $this->privkey);
-            $this->assertEquals($data, $dec);
+                $data = "Testdata";
+                $enc = $this->encryption->encWithPub($data, $this->pubkey);
+                $this->assertNotEquals($data, $enc);
+                $dec = $this->encryption->decWithPriv($enc, $this->privkey);
+                $this->assertEquals($data, $dec);
         }
 }

@@ -43,17 +43,4 @@ class LDAPAuthentication
                         return false;
                 }
         }
-
-        public static function serviceping($host, $port = 389, $timeout = 1)
-        {
-                $host = str_replace("ldaps://", "", $host);
-                $host = str_replace("ldap://", "", $host);
-                $op = fsockopen($host, $port, $errno, $errstr, $timeout);
-                if (!$op) {
-                        return false;
-                } else {
-                        fclose($op);
-                        return true;
-                }
-        }
 }

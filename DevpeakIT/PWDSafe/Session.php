@@ -46,13 +46,12 @@ class Session
                                 $stmt->execute(['email' => $user]);
                                 if ($stmt->rowCount() === 0) {
                                         // We should register a new account
-                                        return User::registerUser(new Encryption(), $user, $pass);
+                                        $data = User::registerUser(new Encryption(), $user, $pass);
                                 } else {
                                         // We already have an account. Grab information and return
-                                        return User::getData($user, $pass, true);
+                                        $data = User::getData($user, $pass, true);
                                 }
-                        } else {
-                                return false;
+                                return $data;
                         }
                 } else {
                         $row = User::getData($user, $pass);
@@ -62,9 +61,9 @@ class Session
                                 $stmt = $db->prepare($sql);
                                 $stmt->execute(['email' => $user]);
                                 return $row;
-                        } else {
-                                return false;
                         }
                 }
+
+                return false;
         }
 }

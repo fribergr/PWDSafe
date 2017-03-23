@@ -39,5 +39,9 @@ if ($session->isLoggedIn()) {
                 "/api/pwdchg" => "\DevpeakIT\PWDSafe\Callbacks\Api\PasswordChangeCallback",
         ];
 }
-
+ToroHook::add("404",  function() {
+        $loader = new Twig_Loader_Filesystem(dirname(__FILE__) . '/../views');
+        $twig = new Twig_Environment($loader, []);
+        echo $twig->render('static/404.html');
+});
 Toro::serve($routes);

@@ -6,7 +6,7 @@ use ToroHook;
 
 class RequireAuthorization
 {
-        function __construct()
+        public function __construct()
         {
                 ToroHook::add("before_handler", function () {
                         $session = new Session();

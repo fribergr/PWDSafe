@@ -32,7 +32,8 @@ class Group
                 ]);
         }
 
-        public function removePermission($userid) {
+        public function removePermission($userid)
+        {
                 $sql = "DELETE FROM usergroups WHERE groupid = :groupid AND userid = :userid LIMIT 1";
                 $stmt = DB::getInstance()->prepare($sql);
                 $stmt->execute([
@@ -41,7 +42,8 @@ class Group
                 ]);
         }
 
-        public function deleteCredentialsForUser($userid) {
+        public function deleteCredentialsForUser($userid)
+        {
                 $sql = "DELETE FROM encryptedcredentials
                         WHERE userid = :userid AND credentialid IN (
                           SELECT id FROM credentials WHERE groupid = :groupid

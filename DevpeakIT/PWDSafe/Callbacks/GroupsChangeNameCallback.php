@@ -22,7 +22,7 @@ class GroupsChangeNameCallback extends RequireAuthorization
                 }
 
                 $groupname = preg_replace('/[^\p{L}\p{N}-_ ]/u', "", trim($_POST['groupname']));
-                $groupname = substr($groupname,0, 100);
+                $groupname = substr($groupname, 0, 100);
 
                 // Check access
                 $access_sql = "SELECT groups.id FROM groups

@@ -23,7 +23,13 @@ class CredAddCallback extends RequireAuthorization
                         $credentials = new Credentials();
                         $credentials->setDB(DB::getInstance());
 
-                        $credentials->add($_POST['creds'], $_POST['credu'], $_POST['credp'], "", $_POST['currentgroupid']);
+                        $credentials->add(
+                            $_POST['creds'],
+                            $_POST['credu'],
+                            $_POST['credp'],
+                            "",
+                            $_POST['currentgroupid']
+                        );
                         echo json_encode(['status' => 'OK']);
                 }
         }

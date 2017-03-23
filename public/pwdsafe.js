@@ -59,7 +59,10 @@ $(document).ready(function() {
                                         $('#addCredModal').modal('hide');
                                         window.location.reload();
                                 } else {
-                                        console.log(data);
+                                    new PNotify({
+                                        type: 'error',
+                                        text: data.reason
+                                    });
                                 }
                         },
                         'json'

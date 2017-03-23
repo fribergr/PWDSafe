@@ -1,3 +1,9 @@
+function showError(reason) {
+    new PNotify({
+        type: 'error',
+        text: reason
+    });
+}
 $(document).ready(function() {
         $('.btn-reg').click(function() {
                 var user = $('#inputEmail').val();
@@ -10,10 +16,7 @@ $(document).ready(function() {
                                 $('#regsuccess').removeClass('hide');
                         } else {
                             $('.form-group').not('.has-error').addClass('has-error');
-                            new PNotify({
-                                type: 'error',
-                                text: data.reason
-                            });
+                            showError(data.reason);
                         }
                 }, 'json');
         });
@@ -59,10 +62,7 @@ $(document).ready(function() {
                                         $('#addCredModal').modal('hide');
                                         window.location.reload();
                                 } else {
-                                    new PNotify({
-                                        type: 'error',
-                                        text: data.reason
-                                    });
+                                    showError(data.reason);
                                 }
                         },
                         'json'
@@ -83,10 +83,7 @@ $(document).ready(function() {
                                 $('<div class="alert alert-success"><strong>Password changed!</strong> Your password has been changed successfully.</div>').insertBefore('form');
                         } else {
                                 $('.form-group').not('.has-error').addClass('has-error');
-                                new PNotify({
-                                    type: 'error',
-                                    text: data.reason
-                                });
+                                showError(data.reason);
                         }
                     },
                     'json'
@@ -145,10 +142,7 @@ $(document).ready(function() {
                         if (data.status == "OK") {
                                 window.location.reload();
                         } else {
-                            new PNotify({
-                                type: 'error',
-                                text: data.reason
-                            });
+                            showError(data.reason);
                         }
                 },
                 'json'
@@ -168,10 +162,7 @@ $(document).ready(function() {
                     if (data.status == "OK") {
                         window.location.reload();
                     } else {
-                        new PNotify({
-                            type: 'error',
-                            text: data.reason
-                        });
+                        showError(data.reason);
                     }
                 },
                 'json'
@@ -185,10 +176,7 @@ $(document).ready(function() {
                     if (data.status == "OK") {
                         window.location.reload();
                     } else {
-                        new PNotify({
-                            type: 'error',
-                            text: data.reason
-                        });
+                        showError(data.reason);
                     }
                 },
                 'json'
@@ -219,10 +207,7 @@ $(document).ready(function() {
                         $('#grouplist').append('<li><a href="/groups/' + group.id + '">' + group.name + '</a>');
                     });
                 } else {
-                    new PNotify({
-                        type: 'error',
-                        text: data.reason
-                    });
+                    showError(data.reason);
                 }
             },
             'json'

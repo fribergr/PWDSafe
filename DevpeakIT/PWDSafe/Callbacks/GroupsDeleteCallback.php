@@ -11,8 +11,9 @@ namespace DevpeakIT\PWDSafe\Callbacks;
 
 use DevpeakIT\PWDSafe\DB;
 use DevpeakIT\PWDSafe\GUI\Graphics;
+use DevpeakIT\PWDSafe\RequireAuthorization;
 
-class GroupsDeleteCallback
+class GroupsDeleteCallback extends RequireAuthorization
 {
         public function get($id)
         {

@@ -1,7 +1,9 @@
 <?php
 namespace DevpeakIT\PWDSafe\Callbacks;
 
-class LogoutCallback
+use DevpeakIT\PWDSafe\RequireAuthorization;
+
+class LogoutCallback extends RequireAuthorization
 {
         /**
          * @brief Wrapper for logging out (destroying session)

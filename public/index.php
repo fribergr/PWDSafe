@@ -9,39 +9,30 @@ spl_autoload_register(function ($class) {
                 require_once($f);
         }
 });
-
-// Wrapper for session stuff
 $session = new DevpeakIT\PWDSafe\Session();
 $session->start();
 
-if ($session->isLoggedIn()) {
-        // Routes for logged in users
-        $routes = [
-                "/" => "\DevpeakIT\PWDSafe\Callbacks\GroupsSpecificCallback",
-                "/logout" => "\DevpeakIT\PWDSafe\Callbacks\LogoutCallback",
-                "/changepwd" => "\DevpeakIT\PWDSafe\Callbacks\ChangePwdCallback",
-                "/pwdfor/:number" => "\DevpeakIT\PWDSafe\Callbacks\PasswordForCallback",
-                "/cred/:number/remove" => "\DevpeakIT\PWDSafe\Callbacks\CredRemoveCallback",
-                "/cred/add" => "\DevpeakIT\PWDSafe\Callbacks\CredAddCallback",
-                "/groups/create" => "\DevpeakIT\PWDSafe\Callbacks\GroupCreateCallback",
-                "/groups/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsSpecificCallback",
-                "/groups" => "\DevpeakIT\PWDSafe\Callbacks\GroupsCallback",
-                "/groups/:number/delete" => "\DevpeakIT\PWDSafe\Callbacks\GroupsDeleteCallback",
-                "/groups/:number/share" => "\DevpeakIT\PWDSafe\Callbacks\GroupsShareCallback",
-                "/groups/:number/changename" => "\DevpeakIT\PWDSafe\Callbacks\GroupsChangeNameCallback",
-                "/groups/:number/unshare/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsUnshareCallback",
-        ];
-} else {
-        // Routes for public users
-        $routes = [
-                "/" => "\DevpeakIT\PWDSafe\Callbacks\PreLogonFirstPageCallback",
-                "/reg" => "\DevpeakIT\PWDSafe\Callbacks\PreLogonRegisterCallback",
-                "/api/pwdchg" => "\DevpeakIT\PWDSafe\Callbacks\Api\PasswordChangeCallback",
-        ];
-}
+// Show 404 for non-existing routes
 ToroHook::add("404",  function() {
         $loader = new Twig_Loader_Filesystem(dirname(__FILE__) . '/../views');
         $twig = new Twig_Environment($loader, []);
         echo $twig->render('static/404.html');
 });
-Toro::serve($routes);
+
+Toro::serve([
+    "/" => "\DevpeakIT\PWDSafe\Callbacks\PreLogonFirstPageCallback",
+    "/changepwd" => "\DevpeakIT\PWDSafe\Callbacks\ChangePwdCallback",
+    "/logout" => "\DevpeakIT\PWDSafe\Callbacks\LogoutCallback",
+    "/reg" => "\DevpeakIT\PWDSafe\Callbacks\PreLogonRegisterCallback",
+    "/groups" => "\DevpeakIT\PWDSafe\Callbacks\GroupsCallback",
+    "/groups/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsSpecificCallback",
+    "/groups/:number/changename" => "\DevpeakIT\PWDSafe\Callbacks\GroupsChangeNameCallback",
+    "/groups/:number/delete" => "\DevpeakIT\PWDSafe\Callbacks\GroupsDeleteCallback",
+    "/groups/:number/share" => "\DevpeakIT\PWDSafe\Callbacks\GroupsShareCallback",
+    "/groups/:number/unshare/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsUnshareCallback",
+    "/groups/create" => "\DevpeakIT\PWDSafe\Callbacks\GroupCreateCallback",
+    "/cred/:number/remove" => "\DevpeakIT\PWDSafe\Callbacks\CredRemoveCallback",
+    "/cred/add" => "\DevpeakIT\PWDSafe\Callbacks\CredAddCallback",
+    "/pwdfor/:number" => "\DevpeakIT\PWDSafe\Callbacks\PasswordForCallback",
+    "/api/pwdchg" => "\DevpeakIT\PWDSafe\Callbacks\Api\PasswordChangeCallback",
+]);

@@ -4,8 +4,9 @@ namespace DevpeakIT\PWDSafe\Callbacks;
 use DevpeakIT\PWDSafe\FormChecker;
 use DevpeakIT\PWDSafe\Group;
 use DevpeakIT\PWDSafe\GUI\Graphics;
+use DevpeakIT\PWDSafe\RequireAuthorization;
 
-class GroupCreateCallback
+class GroupCreateCallback extends RequireAuthorization
 {
         public function get()
         {

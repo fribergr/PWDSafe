@@ -7,9 +7,10 @@ use DevpeakIT\PWDSafe\Exceptions\AppException;
 use DevpeakIT\PWDSafe\FormChecker;
 use DevpeakIT\PWDSafe\GUI\Graphics;
 use DevpeakIT\PWDSafe\PasswordChecker;
+use DevpeakIT\PWDSafe\RequireAuthorization;
 use DevpeakIT\PWDSafe\User;
 
-class ChangePwdCallback
+class ChangePwdCallback extends RequireAuthorization
 {
         public function get()
         {

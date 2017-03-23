@@ -2,8 +2,9 @@
 namespace DevpeakIT\PWDSafe\Callbacks;
 
 use DevpeakIT\PWDSafe\Group;
+use DevpeakIT\PWDSafe\RequireAuthorization;
 
-class GroupsUnshareCallback
+class GroupsUnshareCallback extends RequireAuthorization
 {
         public function post($groupid = null, $userid = null)
         {

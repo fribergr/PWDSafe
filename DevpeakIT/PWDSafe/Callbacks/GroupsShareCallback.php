@@ -6,8 +6,9 @@ use DevpeakIT\PWDSafe\Encryption;
 use DevpeakIT\PWDSafe\FormChecker;
 use DevpeakIT\PWDSafe\Group;
 use DevpeakIT\PWDSafe\GUI\Graphics;
+use DevpeakIT\PWDSafe\RequireAuthorization;
 
-class GroupsShareCallback
+class GroupsShareCallback extends RequireAuthorization
 {
         public function get($groupid = null)
         {

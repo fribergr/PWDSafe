@@ -2,8 +2,9 @@
 namespace DevpeakIT\PWDSafe\Callbacks;
 
 use DevpeakIT\PWDSafe\DB;
+use DevpeakIT\PWDSafe\RequireAuthorization;
 
-class GroupsChangeNameCallback
+class GroupsChangeNameCallback extends RequireAuthorization
 {
         public function post($groupid)
         {

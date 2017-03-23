@@ -3,8 +3,9 @@ namespace DevpeakIT\PWDSafe\Callbacks;
 
 use DevpeakIT\PWDSafe\DB;
 use DevpeakIT\PWDSafe\GUI\Graphics;
+use DevpeakIT\PWDSafe\RequireAuthorization;
 
-class GroupsSpecificCallback
+class GroupsSpecificCallback extends RequireAuthorization
 {
         public function get($num = null)
         {

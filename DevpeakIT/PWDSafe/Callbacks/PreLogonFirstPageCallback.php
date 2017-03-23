@@ -12,8 +12,13 @@ class PreLogonFirstPageCallback
          */
         public function get()
         {
-                $graphics = new Graphics();
-                $graphics->showLogin();
+                $session = new Session();
+                if (!$session->isLoggedIn()) {
+                        $graphics = new Graphics();
+                        $graphics->showLogin();
+                } else {
+                        header("Location: /groups/" . $_SESSION['primarygroup']);
+                }
         }
 
         /**

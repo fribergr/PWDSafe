@@ -4,8 +4,9 @@ namespace DevpeakIT\PWDSafe\Callbacks;
 use DevpeakIT\PWDSafe\Credentials;
 use DevpeakIT\PWDSafe\DB;
 use DevpeakIT\PWDSafe\FormChecker;
+use DevpeakIT\PWDSafe\RequireAuthorization;
 
-class CredAddCallback
+class CredAddCallback extends RequireAuthorization
 {
         /**
          * @brief Callback for adding credentials to the database (used via json)

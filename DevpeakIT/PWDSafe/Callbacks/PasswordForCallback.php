@@ -5,8 +5,9 @@ use \DevpeakIT\PWDSafe\Exceptions\AuthorizationFailedException;
 use \DevpeakIT\PWDSafe\Credentials;
 use \DevpeakIT\PWDSafe\Encryption;
 use \DevpeakIT\PWDSafe\DB;
+use DevpeakIT\PWDSafe\RequireAuthorization;
 
-class PasswordForcallback
+class PasswordForcallback extends RequireAuthorization
 {
         /**
          * @brief Used for getting credentials based on id

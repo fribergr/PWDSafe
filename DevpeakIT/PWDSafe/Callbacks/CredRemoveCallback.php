@@ -5,8 +5,9 @@ use DevpeakIT\PWDSafe\Exceptions\AuthorizationFailedException;
 use DevpeakIT\PWDSafe\Credentials;
 use DevpeakIT\PWDSafe\Encryption;
 use DevpeakIT\PWDSafe\DB;
+use DevpeakIT\PWDSafe\RequireAuthorization;
 
-class CredRemoveCallback
+class CredRemoveCallback extends RequireAuthorization
 {
         /**
          * @brief Callback for removing credentials from the database (used via json)

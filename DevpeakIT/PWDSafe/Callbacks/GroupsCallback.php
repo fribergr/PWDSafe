@@ -2,8 +2,9 @@
 namespace DevpeakIT\PWDSafe\Callbacks;
 
 use DevpeakIT\PWDSafe\DB;
+use DevpeakIT\PWDSafe\RequireAuthorization;
 
-class GroupsCallback
+class GroupsCallback extends RequireAuthorization
 {
         public function get()
         {

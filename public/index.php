@@ -13,7 +13,7 @@ $session = new DevpeakIT\PWDSafe\Session();
 $session->start();
 
 // Show 404 for non-existing routes
-ToroHook::add("404",  function() {
+ToroHook::add("404", function () {
         $loader = new Twig_Loader_Filesystem(dirname(__FILE__) . '/../views');
         $twig = new Twig_Environment($loader, []);
         echo $twig->render('static/404.html');

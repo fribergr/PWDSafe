@@ -14,6 +14,16 @@ class PreLogonRegisterCallback
         public function post()
         {
                 if (FormChecker::checkRequiredFields(['user', 'pass'])) {
+                        $user = preg_replace('/[^A-Za-z0-9-_@\.]/', '', $_POST['user']);
+
+                        if ($_POST['user'] !== $user) {
+                                echo json_encode([
+                                    'status' => 'Fail',
+                                    'reason' => 'Your username contains invalid characters'
+                                ]);
+                                return;
+                        }
+
                         $sql = "SELECT id FROM users WHERE email = :email";
                         $stmt = DB::getInstance()->prepare($sql);
                         $stmt->execute(['email' => $_POST['user']]);

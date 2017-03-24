@@ -1,5 +1,5 @@
 <?php
-namespace DevpeakIT\PWDSafe\Callbacks;
+namespace DevpeakIT\PWDSafe\Callbacks\Api;
 
 use DevpeakIT\PWDSafe\DB;
 use DevpeakIT\PWDSafe\Encryption;

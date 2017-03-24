@@ -23,7 +23,7 @@ Toro::serve([
     "/" => "\DevpeakIT\PWDSafe\Callbacks\PreLogonFirstPageCallback",
     "/changepwd" => "\DevpeakIT\PWDSafe\Callbacks\ChangePwdCallback",
     "/logout" => "\DevpeakIT\PWDSafe\Callbacks\LogoutCallback",
-    "/reg" => "\DevpeakIT\PWDSafe\Callbacks\PreLogonRegisterCallback",
+    "/reg" => "\DevpeakIT\PWDSafe\Callbacks\Api\PreLogonRegisterCallback",
     "/groups" => "\DevpeakIT\PWDSafe\Callbacks\GroupsCallback",
     "/groups/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsSpecificCallback",
     "/groups/:number/changename" => "\DevpeakIT\PWDSafe\Callbacks\GroupsChangeNameCallback",

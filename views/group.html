@@ -34,10 +34,16 @@
                                         <td>{{ row.username }}</td>
                                         <td style="white-space: nowrap; width: 1px;">
                                                 <button class="btn btn-primary showPass" data-id="{{ row.id }}">
-                                                        Show
+                                                        <span class="visible-xs glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                                        <span class="hidden-xs">Show</span>
                                                 </button>
                                                 <button class="btn btn-default copypwd" data-id="{{ row.id }}">
-                                                        Copy to clipboard
+                                                        <span class="visible-xs glyphicon glyphicon-copy" aria-hidden="true"></span>
+                                                        <span class="hidden-xs">Copy to clipboard</span>
+                                                </button>
+                                                <button class="btn btn-danger popconfirm credDelete" data-id="{{ row.id }}">
+                                                        <span class="visible-xs glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                                        <span class="hidden-xs">Delete</span>
                                                 </button>
                                         </td>
                                 </tr>

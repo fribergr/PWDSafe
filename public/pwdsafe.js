@@ -21,7 +21,7 @@ $(document).ready(function() {
                 }, 'json');
         });
 
-        $('#deleteCred').click(function() {
+        $('#deleteCred, .credDelete').click(function() {
                 var id = $(this).data('id');
                 $.get('/cred/' + id + '/remove', function(data) {
                         if (data.status === 'OK') {
@@ -212,4 +212,8 @@ $(document).ready(function() {
             },
             'json'
         );
+
+        $('.popconfirm').popConfirm({
+            placement: "left",
+        });
 });

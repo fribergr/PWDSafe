@@ -6,7 +6,7 @@ require_once "../vendor/autoload.php";
 
 // Load classes
 spl_autoload_register(function ($class) {
-        $f = dirname(__FILE__)."/../".str_replace("\\", "/", $class) . ".php";
+        $f = dirname(__FILE__) . "/../" . str_replace("\\", "/", $class) . ".php";
         if (file_exists($f)) {
                 require_once($f);
         }
@@ -31,7 +31,9 @@ Toro::serve([
     "/" => "\DevpeakIT\PWDSafe\Callbacks\PreLogonFirstPageCallback",
     "/changepwd" => "\DevpeakIT\PWDSafe\Callbacks\ChangePwdCallback",
     "/logout" => "\DevpeakIT\PWDSafe\Callbacks\LogoutCallback",
-    "/reg" => function() use ($container) { return new \DevpeakIT\PWDSafe\Callbacks\Api\PreLogonRegisterCallback($container); },
+    "/reg" => function () use ($container) {
+            return new \DevpeakIT\PWDSafe\Callbacks\Api\PreLogonRegisterCallback($container);
+    },
     "/groups" => "\DevpeakIT\PWDSafe\Callbacks\GroupsCallback",
     "/groups/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsSpecificCallback",
     "/groups/:number/changename" => "\DevpeakIT\PWDSafe\Callbacks\GroupsChangeNameCallback",
@@ -42,6 +44,8 @@ Toro::serve([
     "/cred/:number/remove" => "\DevpeakIT\PWDSafe\Callbacks\CredRemoveCallback",
     "/cred/add" => "\DevpeakIT\PWDSafe\Callbacks\CredAddCallback",
     "/pwdfor/:number" => "\DevpeakIT\PWDSafe\Callbacks\PasswordForCallback",
-    "/api/pwdchg" => function() use ($container) { return new \DevpeakIT\PWDSafe\Callbacks\Api\PasswordChangeCallback($container); },
+    "/api/pwdchg" => function () use ($container) {
+            return new \DevpeakIT\PWDSafe\Callbacks\Api\PasswordChangeCallback($container);
+    },
 
 ]);

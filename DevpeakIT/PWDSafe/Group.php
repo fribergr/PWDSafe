@@ -100,7 +100,7 @@ class Group
         {
                 $members = $this->getMembers();
                 return array_filter($members, function ($element) use ($userid) {
-                        return ($element != $userid);
+                        return ($element['id'] != $userid);
                 });
         }
 }

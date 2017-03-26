@@ -38,7 +38,9 @@ Toro::serve([
     "/groups/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsSpecificCallback",
     "/groups/:number/changename" => "\DevpeakIT\PWDSafe\Callbacks\GroupsChangeNameCallback",
     "/groups/:number/delete" => "\DevpeakIT\PWDSafe\Callbacks\GroupsDeleteCallback",
-    "/groups/:number/share" => "\DevpeakIT\PWDSafe\Callbacks\GroupsShareCallback",
+    "/groups/:number/share" => function () use ($container) {
+            return new \DevpeakIT\PWDSafe\Callbacks\GroupsShareCallback($container);
+    },
     "/groups/:number/unshare/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsUnshareCallback",
     "/groups/create" => "\DevpeakIT\PWDSafe\Callbacks\GroupCreateCallback",
     "/cred/:number/remove" => "\DevpeakIT\PWDSafe\Callbacks\CredRemoveCallback",

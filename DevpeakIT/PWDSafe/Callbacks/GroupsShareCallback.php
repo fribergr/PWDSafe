@@ -7,9 +7,12 @@ use DevpeakIT\PWDSafe\FormChecker;
 use DevpeakIT\PWDSafe\Group;
 use DevpeakIT\PWDSafe\GUI\Graphics;
 use DevpeakIT\PWDSafe\RequireAuthorization;
+use DevpeakIT\PWDSafe\Traits\ContainerInject;
 
 class GroupsShareCallback extends RequireAuthorization
 {
+        use ContainerInject;
+
         public function get($groupid = null)
         {
                 $groupid = is_null($groupid)?$_SESSION['primarygroup']:$groupid;
@@ -33,7 +36,7 @@ class GroupsShareCallback extends RequireAuthorization
 
         public function post($groupid = null)
         {
-                $fc = new FormChecker();
+                $fc = $this->container->getFormchecker();
                 if (!$fc->checkRequiredFields(['email'])) {
                         return;
                 }

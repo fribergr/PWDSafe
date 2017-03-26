@@ -2,16 +2,11 @@
 
 namespace DevpeakIT\PWDSafe\Callbacks\Api;
 
-use DevpeakIT\PWDSafe\Container;
+use DevpeakIT\PWDSafe\Traits\ContainerInject;
 
 class PasswordChangeCallback
 {
-        protected $container;
-
-        public function __construct(Container $container)
-        {
-                $this->container = $container;
-        }
+        use ContainerInject;
 
         public function post()
         {

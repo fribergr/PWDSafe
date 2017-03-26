@@ -3,7 +3,7 @@ namespace DevpeakIT\PWDSafe;
 
 class User
 {
-        public static function registerUser(Encryption $enc, $username, $password)
+        public function registerUser(Encryption $enc, $username, $password)
         {
                 list($privKey, $pubKey) = Encryption::genNewKeys();
                 $privKey = $enc->enc($privKey, $password);

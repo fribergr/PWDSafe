@@ -39,4 +39,16 @@ class Container
         {
                 $this->formchecker = $fc;
         }
+
+        private $db;
+
+        public function getDB()
+        {
+                return $this->db;
+        }
+
+        public function setDB(\PDO $db)
+        {
+                $this->db = $db;
+        }
 }

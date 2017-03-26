@@ -37,6 +37,7 @@ class Session
          */
         public function authenticate(\PDO $db, $user, $pass)
         {
+                $usercont = new User();
                 if (USE_LDAP) {
                         $res = LDAPAuthentication::login($user, $pass);
                         if ($res) {
@@ -44,17 +45,18 @@ class Session
                                         WHERE email = :email";
                                 $stmt = $db->prepare($sql);
                                 $stmt->execute(['email' => $user]);
+
                                 if ($stmt->rowCount() === 0) {
                                         // We should register a new account
-                                        $data = User::registerUser(new Encryption(), $user, $pass);
+                                        $data = $usercont->registerUser(new Encryption(), $user, $pass);
                                 } else {
                                         // We already have an account. Grab information and return
-                                        $data = User::getData($user, $pass, true);
+                                        $data = $usercont->getData($user, $pass, true);
                                 }
                                 return $data;
                         }
                 } else {
-                        $row = User::getData($user, $pass);
+                        $row = $usercont->getData($user, $pass);
 
                         if (password_verify($pass, $row['encryptedpassword'])) {
                                 $sql = "UPDATE users SET lastlogin = NOW() WHERE email = :email";

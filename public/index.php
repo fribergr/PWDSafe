@@ -1,4 +1,6 @@
 <?php
+use DevpeakIT\PWDSafe\DB;
+
 require_once("../config.inc.php");
 require_once "../vendor/autoload.php";
 
@@ -23,12 +25,13 @@ $container = new \DevpeakIT\PWDSafe\Container();
 $container->setEncryption(new \DevpeakIT\PWDSafe\Encryption());
 $container->setUser(new \DevpeakIT\PWDSafe\User());
 $container->setFormchecker(new \DevpeakIT\PWDSafe\FormChecker());
+$container->setDB(DB::getInstance());
 
 Toro::serve([
     "/" => "\DevpeakIT\PWDSafe\Callbacks\PreLogonFirstPageCallback",
     "/changepwd" => "\DevpeakIT\PWDSafe\Callbacks\ChangePwdCallback",
     "/logout" => "\DevpeakIT\PWDSafe\Callbacks\LogoutCallback",
-    "/reg" => "\DevpeakIT\PWDSafe\Callbacks\Api\PreLogonRegisterCallback",
+    "/reg" => function() use ($container) { return new \DevpeakIT\PWDSafe\Callbacks\Api\PreLogonRegisterCallback($container); },
     "/groups" => "\DevpeakIT\PWDSafe\Callbacks\GroupsCallback",
     "/groups/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsSpecificCallback",
     "/groups/:number/changename" => "\DevpeakIT\PWDSafe\Callbacks\GroupsChangeNameCallback",

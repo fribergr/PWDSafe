@@ -13,7 +13,8 @@ class PreLogonRegisterCallback
          */
         public function post()
         {
-                if (FormChecker::checkRequiredFields(['user', 'pass'])) {
+                $fc = new FormChecker();
+                if ($fc->checkRequiredFields(['user', 'pass'])) {
                         $user = preg_replace('/[^A-Za-z0-9-_@\.]/', '', $_POST['user']);
 
                         if ($_POST['user'] !== $user) {

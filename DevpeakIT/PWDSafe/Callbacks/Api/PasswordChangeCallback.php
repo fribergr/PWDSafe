@@ -1,15 +1,24 @@
 <?php
+
 namespace DevpeakIT\PWDSafe\Callbacks\Api;
 
-use DevpeakIT\PWDSafe\FormChecker;
-use DevpeakIT\PWDSafe\User;
+use DevpeakIT\PWDSafe\Container;
 
 class PasswordChangeCallback
 {
+        protected $container;
+
+        public function __construct(Container $container)
+        {
+                $this->container = $container;
+        }
+
         public function post()
         {
-                if (FormChecker::checkRequiredFields(['username', 'old_password', 'new_password'])) {
-                        User::changePassword($_POST['username'], $_POST['old_password'], $_POST['new_password']);
+                $formchecker = $this->container->getFormchecker();
+                if ($formchecker->checkRequiredFields(['username', 'old_password', 'new_password'])) {
+                        $user = $this->container->getUser();
+                        $user->changePassword($_POST['username'], $_POST['old_password'], $_POST['new_password']);
                 }
         }
 }

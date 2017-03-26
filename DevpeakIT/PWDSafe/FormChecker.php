@@ -7,7 +7,7 @@ class FormChecker
          * @param $reqfields array with POST-fields we require for saving credentials
          * @return bool
          */
-        public static function checkRequiredFields($reqfields)
+        public function checkRequiredFields($reqfields)
         {
                 foreach ($reqfields as $fld) {
                         if (!isset($_POST[$fld]) || strlen(trim($_POST[$fld])) === 0) {
@@ -21,7 +21,7 @@ class FormChecker
                 return true;
         }
 
-        public static function checkFieldLength($fld, $length)
+        public function checkFieldLength($fld, $length)
         {
                 if (strlen(trim($_POST[$fld])) < $length) {
                         echo json_encode([

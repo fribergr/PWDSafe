@@ -19,7 +19,8 @@ class CredAddCallback extends RequireAuthorization
 
                 // Save new credentials
                 $reqfields = ['creds', 'credu', 'credp', 'currentgroupid'];
-                if (FormChecker::checkRequiredFields($reqfields)) {
+                $fc = new FormChecker();
+                if ($fc->checkRequiredFields($reqfields)) {
                         $credentials = new Credentials();
                         $credentials->setDB(DB::getInstance());
 

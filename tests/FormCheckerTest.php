@@ -6,10 +6,16 @@ use PHPUnit_Framework_TestCase;
 
 class FormCheckerTest extends PHPUnit_Framework_TestCase
 {
+        protected $fc;
+        public function setUp()
+        {
+                $this->fc = new FormChecker();
+        }
+
         public function testRequiredFields()
         {
                 $_POST['username'] = "Something";
-                $res = FormChecker::checkRequiredFields(['username']);
+                $res = $this->fc->checkRequiredFields(['username']);
                 $this->expectOutputString("");
                 $this->assertTrue($res);
         }
@@ -18,7 +24,7 @@ class FormCheckerTest extends PHPUnit_Framework_TestCase
         {
                 $_POST['username'] = "Something";
                 $_POST['password'] = "";
-                $res = FormChecker::checkRequiredFields(["username", "password", "key"]);
+                $res = $this->fc->checkRequiredFields(["username", "password", "key"]);
                 $this->expectOutputRegex("/Fail/");
                 $this->assertFalse($res);
         }
@@ -27,7 +33,7 @@ class FormCheckerTest extends PHPUnit_Framework_TestCase
         {
                 $_POST['username'] = "Something";
                 $_POST['password'] = "";
-                $res = FormChecker::checkRequiredFields(["username", "password"]);
+                $res = $this->fc->checkRequiredFields(["username", "password"]);
                 $this->expectOutputRegex("/Fail/");
                 $this->assertFalse($res);
         }
@@ -35,7 +41,7 @@ class FormCheckerTest extends PHPUnit_Framework_TestCase
         public function testCheckFieldLengthFail()
         {
                 $_POST['username'] = "Something";
-                $res = FormChecker::checkFieldLength("username", 10);
+                $res = $this->fc->checkFieldLength("username", 10);
                 $this->expectOutputRegex("/Fail/");
                 $this->assertFalse($res);
         }
@@ -43,7 +49,7 @@ class FormCheckerTest extends PHPUnit_Framework_TestCase
         public function testCheckFieldLengthOk()
         {
                 $_POST['username'] = "Something";
-                $res = FormChecker::checkFieldLength("username", 6);
+                $res = $this->fc->checkFieldLength("username", 6);
                 $this->expectOutputString("");
                 $this->assertTrue($res);
         }

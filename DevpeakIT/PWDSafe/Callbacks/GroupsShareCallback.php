@@ -50,7 +50,8 @@ class GroupsShareCallback extends RequireAuthorization
 
         public function post($groupid = null)
         {
-                if (!FormChecker::checkRequiredFields(['email'])) {
+                $fc = new FormChecker();
+                if (!$fc->checkRequiredFields(['email'])) {
                         return;
                 }
 

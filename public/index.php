@@ -19,6 +19,11 @@ ToroHook::add("404", function () {
         echo $twig->render('static/404.html');
 });
 
+$container = new \DevpeakIT\PWDSafe\Container();
+$container->setEncryption(new \DevpeakIT\PWDSafe\Encryption());
+$container->setUser(new \DevpeakIT\PWDSafe\User());
+$container->setFormchecker(new \DevpeakIT\PWDSafe\FormChecker());
+
 Toro::serve([
     "/" => "\DevpeakIT\PWDSafe\Callbacks\PreLogonFirstPageCallback",
     "/changepwd" => "\DevpeakIT\PWDSafe\Callbacks\ChangePwdCallback",
@@ -34,5 +39,6 @@ Toro::serve([
     "/cred/:number/remove" => "\DevpeakIT\PWDSafe\Callbacks\CredRemoveCallback",
     "/cred/add" => "\DevpeakIT\PWDSafe\Callbacks\CredAddCallback",
     "/pwdfor/:number" => "\DevpeakIT\PWDSafe\Callbacks\PasswordForCallback",
-    "/api/pwdchg" => "\DevpeakIT\PWDSafe\Callbacks\Api\PasswordChangeCallback",
+    "/api/pwdchg" => function() use ($container) { return new \DevpeakIT\PWDSafe\Callbacks\Api\PasswordChangeCallback($container); },
+
 ]);

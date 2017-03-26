@@ -1,8 +1,6 @@
 <?php
 namespace DevpeakIT\PWDSafe\Callbacks;
 
-use DevpeakIT\PWDSafe\DB;
-use DevpeakIT\PWDSafe\Encryption;
 use DevpeakIT\PWDSafe\Exceptions\AppException;
 use DevpeakIT\PWDSafe\FormChecker;
 use DevpeakIT\PWDSafe\GUI\Graphics;
@@ -20,10 +18,12 @@ class ChangePwdCallback extends RequireAuthorization
 
         public function post()
         {
-                if (FormChecker::checkRequiredFields(['oldpwd', 'newpwd1', 'newpwd2'])) {
+                $fc = new FormChecker();
+                $pwdchecker = new PasswordChecker();
+                if ($fc->checkRequiredFields(['oldpwd', 'newpwd1', 'newpwd2'])) {
 
                         try {
-                                PasswordChecker::checkPwdStrength(
+                                $pwdchecker->checkPwdStrength(
                                     $_SESSION['pass'],
                                     $_POST['oldpwd'],
                                     $_POST['newpwd1'],
@@ -38,7 +38,8 @@ class ChangePwdCallback extends RequireAuthorization
                                 return;
                         }
 
-                        User::changePassword($_SESSION['user'], $_SESSION['pass'], $_POST['newpwd1']);
+                        $user = new User();
+                        $user->changePassword($_SESSION['user'], $_SESSION['pass'], $_POST['newpwd1']);
                 }
         }
 }

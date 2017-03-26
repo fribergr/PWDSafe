@@ -52,7 +52,7 @@ class User
                 }
         }
 
-        public static function changePassword($user, $currentpass, $newpass)
+        public function changePassword($user, $currentpass, $newpass)
         {
                 $sql = "SELECT id, password, privkey FROM users WHERE email = :username";
                 $stmt = DB::getInstance()->prepare($sql);

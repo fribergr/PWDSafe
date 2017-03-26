@@ -12,38 +12,21 @@ class GroupsShareCallback extends RequireAuthorization
 {
         public function get($groupid = null)
         {
-                if (is_null($groupid)) {
-                        $groupid = $_SESSION['primarygroup'];
-                }
+                $groupid = is_null($groupid)?$_SESSION['primarygroup']:$groupid;
 
-                $access_sql = "SELECT groups.id, groups.name FROM groups
-                               INNER JOIN usergroups ON usergroups.groupid = groups.id
-                               INNER JOIN users ON users.id = usergroups.userid
-                               WHERE users.id = :userid AND groups.id = :groupid";
-                $access_stmt = DB::getInstance()->prepare($access_sql);
-                $access_stmt->execute([
-                    'userid' => $_SESSION['id'],
-                    'groupid' => $groupid
-                ]);
+                // Check access
+                $grp = new Group();
+                $grp->id = $groupid;
 
-                if ($access_stmt->rowCount() === 0) {
+                if (!$grp->checkAccess($_SESSION['id'])) {
                         $graphics = new Graphics();
                         $graphics->showUnathorized();
                         return;
                 }
-                $res = $access_stmt->fetch();
-                $groupname = $res['name'];
 
-                $sql = "SELECT users.id, users.email FROM users
-                        INNER JOIN usergroups ON usergroups.userid = users.id
-                        WHERE usergroups.groupid = :group AND users.id != :userid";
-                $stmt = DB::getInstance()->prepare($sql);
-                $stmt->execute([
-                    'group' => $groupid,
-                    'userid' => $_SESSION['id']
-                ]);
+                $groupname = $grp->getName();
+                $data = $grp->getMembersExcept($_SESSION['id']);
 
-                $data = $stmt->fetchAll();
                 $graphics = new Graphics();
                 $graphics->showShareGroup($data, $groupid, $groupname);
         }

@@ -1,4 +1,5 @@
 <?php
+
 namespace DevpeakIT\PWDSafe;
 
 class Group
@@ -67,5 +68,39 @@ class Group
                     'groupid' => $this->id
                 ]);
                 return $access_stmt->rowCount() !== 0;
+        }
+
+        public function getName()
+        {
+                if (!is_null($this->name)) {
+                        return $this->name;
+                }
+
+                $sql = "SELECT name FROM groups WHERE id = :groupid";
+                $stmt = DB::getInstance()->prepare($sql);
+                $stmt->execute(['groupid' => $this->id]);
+                $this->name = $stmt->fetchColumn();
+                return $this->name;
+        }
+
+        private function getMembers()
+        {
+                $sql = "SELECT users.id, users.email FROM users
+                        INNER JOIN usergroups ON usergroups.userid = users.id
+                        WHERE usergroups.groupid = :groupid";
+                $stmt = DB::getInstance()->prepare($sql);
+                $stmt->execute([
+                    'groupid' => $this->id
+                ]);
+
+                return $stmt->fetchAll();
+        }
+
+        public function getMembersExcept($userid)
+        {
+                $members = $this->getMembers();
+                return array_filter($members, function ($element) use ($userid) {
+                        return ($element != $userid);
+                });
         }
 }

@@ -1,15 +1,11 @@
 <?php
 namespace DevpeakIT\PWDSafe\Callbacks\Api;
 
-use DevpeakIT\PWDSafe\Container;
+use DevpeakIT\PWDSafe\Traits\ContainerInject;
 
 class PreLogonRegisterCallback
 {
-        private $container;
-        public function __construct(Container $container)
-        {
-                $this->container = $container;
-        }
+        use ContainerInject;
 
         /**
          * @brief Used for creating new user by email and password

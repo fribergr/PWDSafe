@@ -11,7 +11,7 @@ class Credentials
          */
         private $db;
 
-        public function setDb(PDO $db)
+        public function __construct(PDO $db)
         {
                 $this->db = $db;
         }

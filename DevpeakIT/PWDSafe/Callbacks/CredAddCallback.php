@@ -1,13 +1,12 @@
 <?php
 namespace DevpeakIT\PWDSafe\Callbacks;
 
-use DevpeakIT\PWDSafe\Credentials;
-use DevpeakIT\PWDSafe\DB;
-use DevpeakIT\PWDSafe\FormChecker;
 use DevpeakIT\PWDSafe\RequireAuthorization;
+use DevpeakIT\PWDSafe\Traits\ContainerInject;
 
 class CredAddCallback extends RequireAuthorization
 {
+        use ContainerInject;
         /**
          * @brief Callback for adding credentials to the database (used via json)
          */
@@ -19,10 +18,8 @@ class CredAddCallback extends RequireAuthorization
 
                 // Save new credentials
                 $reqfields = ['creds', 'credu', 'credp', 'currentgroupid'];
-                $fc = new FormChecker();
-                if ($fc->checkRequiredFields($reqfields)) {
-                        $credentials = new Credentials();
-                        $credentials->setDB(DB::getInstance());
+                if ($this->container->getFormchecker()->checkRequiredFields($reqfields)) {
+                        $credentials = $this->container->getCredentials();
 
                         $credentials->add(
                             $_POST['creds'],

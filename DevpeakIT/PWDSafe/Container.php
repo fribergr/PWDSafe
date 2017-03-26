@@ -63,4 +63,19 @@ class Container
         {
                 $this->db = $db;
         }
+
+        private $credentials;
+
+        /**
+         * @return Credentials
+         */
+        public function getCredentials()
+        {
+                return $this->credentials;
+        }
+
+        public function setCredentials(Credentials $credentials)
+        {
+                $this->credentials = $credentials;
+        }
 }

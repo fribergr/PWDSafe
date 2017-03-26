@@ -26,6 +26,7 @@ $container->setEncryption(new \DevpeakIT\PWDSafe\Encryption());
 $container->setUser(new \DevpeakIT\PWDSafe\User());
 $container->setFormchecker(new \DevpeakIT\PWDSafe\FormChecker());
 $container->setDB(DB::getInstance());
+$container->setCredentials(new \DevpeakIT\PWDSafe\Credentials($container->getDB()));
 
 Toro::serve([
     "/" => "\DevpeakIT\PWDSafe\Callbacks\PreLogonFirstPageCallback",
@@ -44,7 +45,9 @@ Toro::serve([
     "/groups/:number/unshare/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsUnshareCallback",
     "/groups/create" => "\DevpeakIT\PWDSafe\Callbacks\GroupCreateCallback",
     "/cred/:number/remove" => "\DevpeakIT\PWDSafe\Callbacks\CredRemoveCallback",
-    "/cred/add" => "\DevpeakIT\PWDSafe\Callbacks\CredAddCallback",
+    "/cred/add" => function () use ($container) {
+            return new \DevpeakIT\PWDSafe\Callbacks\CredAddCallback($container);
+    },
     "/pwdfor/:number" => "\DevpeakIT\PWDSafe\Callbacks\PasswordForCallback",
     "/api/pwdchg" => function () use ($container) {
             return new \DevpeakIT\PWDSafe\Callbacks\Api\PasswordChangeCallback($container);

@@ -43,8 +43,7 @@ class PasswordForcallback extends RequireAuthorization
          */
         private function getCredForID($id)
         {
-                $credentials = new Credentials();
-                $credentials->setDb(DB::getInstance());
+                $credentials = new Credentials(DB::getInstance());
 
                 try {
                         return $credentials->getPwdFor($_SESSION['id'], $id);

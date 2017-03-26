@@ -15,8 +15,7 @@ class CredRemoveCallback extends RequireAuthorization
          */
         public function get($id)
         {
-                $credentials = new Credentials();
-                $credentials->setDb(DB::getInstance());
+                $credentials = new Credentials(DB::getInstance());
 
                 try {
                         $credentials->removeCred($_SESSION['id'], $id);

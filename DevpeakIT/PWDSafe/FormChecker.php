@@ -21,6 +21,11 @@ class FormChecker
                 return true;
         }
 
+        /**
+         * @param $fld string field to look for in $_POST
+         * @param $length int minimum required length
+         * @return bool
+         */
         public function checkFieldLength($fld, $length)
         {
                 if (strlen(trim($_POST[$fld])) < $length) {

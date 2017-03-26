@@ -6,6 +6,9 @@ class Container
 {
         private $encryption;
 
+        /**
+         * @return Encryption
+         */
         public function getEncryption()
         {
                 return $this->encryption;
@@ -18,6 +21,9 @@ class Container
 
         private $user;
 
+        /**
+         * @return User
+         */
         public function getUser()
         {
                 return $this->user;
@@ -30,6 +36,9 @@ class Container
 
         private $formchecker;
 
+        /**
+         * @return FormChecker
+         */
         public function getFormchecker()
         {
                 return $this->formchecker;
@@ -42,6 +51,9 @@ class Container
 
         private $db;
 
+        /**
+         * @return \PDO
+         */
         public function getDB()
         {
                 return $this->db;

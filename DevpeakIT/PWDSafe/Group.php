@@ -2,8 +2,12 @@
 
 namespace DevpeakIT\PWDSafe;
 
+use DevpeakIT\PWDSafe\Traits\ContainerInject;
+
 class Group
 {
+        use ContainerInject;
+
         public $name;
         public $id;
 
@@ -13,14 +17,13 @@ class Group
                 $this->id = $data['id'];
         }
 
-        public static function create($name)
+        public function create($name)
         {
                 $sql = "INSERT INTO groups (name) VALUES(:name)";
-                $stmt = DB::getInstance()->prepare($sql);
+                $stmt = $this->container->getDB()->prepare($sql);
                 $stmt->execute(['name' => $name]);
-                $self = new self();
-                $self->setAll(['name' => $name, 'id' => DB::getInstance()->lastInsertId()]);
-                return $self;
+                $this->setAll(['name' => $name, 'id' => $this->container->getDB()->lastInsertId()]);
+                return $this;
         }
 
         public function givePermission($userid)

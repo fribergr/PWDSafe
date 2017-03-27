@@ -43,7 +43,9 @@ Toro::serve([
             return new \DevpeakIT\PWDSafe\Callbacks\GroupsShareCallback($container);
     },
     "/groups/:number/unshare/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsUnshareCallback",
-    "/groups/create" => "\DevpeakIT\PWDSafe\Callbacks\GroupCreateCallback",
+    "/groups/create" => function () use ($container) {
+            return new \DevpeakIT\PWDSafe\Callbacks\GroupCreateCallback($container);
+    },
     "/cred/:number/remove" => "\DevpeakIT\PWDSafe\Callbacks\CredRemoveCallback",
     "/cred/add" => function () use ($container) {
             return new \DevpeakIT\PWDSafe\Callbacks\CredAddCallback($container);

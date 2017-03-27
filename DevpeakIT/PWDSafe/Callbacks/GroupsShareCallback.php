@@ -18,7 +18,7 @@ class GroupsShareCallback extends RequireAuthorization
                 $groupid = is_null($groupid)?$_SESSION['primarygroup']:$groupid;
 
                 // Check access
-                $grp = new Group();
+                $grp = new Group($this->container);
                 $grp->id = $groupid;
 
                 if (!$grp->checkAccess($_SESSION['id'])) {
@@ -41,7 +41,7 @@ class GroupsShareCallback extends RequireAuthorization
                         return;
                 }
 
-                $group = new Group();
+                $group = new Group($this->container);
                 $group->id = $groupid;
 
                 if (!$group->checkAccess($_SESSION['id'])) {

@@ -42,7 +42,9 @@ Toro::serve([
     "/groups/:number/share" => function () use ($container) {
             return new \DevpeakIT\PWDSafe\Callbacks\GroupsShareCallback($container);
     },
-    "/groups/:number/unshare/:number" => "\DevpeakIT\PWDSafe\Callbacks\GroupsUnshareCallback",
+    "/groups/:number/unshare/:number" => function () use ($container) {
+            return new \DevpeakIT\PWDSafe\Callbacks\GroupsUnshareCallback($container);
+    },
     "/groups/create" => function () use ($container) {
             return new \DevpeakIT\PWDSafe\Callbacks\GroupCreateCallback($container);
     },

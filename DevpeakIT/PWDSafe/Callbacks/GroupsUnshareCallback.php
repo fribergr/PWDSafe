@@ -3,9 +3,12 @@ namespace DevpeakIT\PWDSafe\Callbacks;
 
 use DevpeakIT\PWDSafe\Group;
 use DevpeakIT\PWDSafe\RequireAuthorization;
+use DevpeakIT\PWDSafe\Traits\ContainerInject;
 
 class GroupsUnshareCallback extends RequireAuthorization
 {
+        use ContainerInject;
+
         public function post($groupid = null, $userid = null)
         {
                 if (is_null($groupid) || is_null($userid) || !is_numeric($groupid) || !is_numeric($userid)) {
@@ -17,7 +20,7 @@ class GroupsUnshareCallback extends RequireAuthorization
                 }
 
                 // Check access
-                $grp = new Group();
+                $grp = new Group($this->container);
                 $grp->id = $groupid;
 
                 if (!$grp->checkAccess($_SESSION['id'])) {

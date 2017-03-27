@@ -29,7 +29,7 @@ class Group
         public function givePermission($userid)
         {
                 $sql = "INSERT INTO usergroups (userid, groupid) VALUES (:userid, :groupid)";
-                $stmt = DB::getInstance()->prepare($sql);
+                $stmt = $this->container->getDB()->prepare($sql);
                 $stmt->execute([
                     'userid' => $userid,
                     'groupid' => $this->id

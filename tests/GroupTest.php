@@ -64,4 +64,12 @@ class GroupTest extends TestCase
             $group->id = 5;
             $this->assertEquals("Something Strange", $group->getName());
     }
+
+    public function testGetNameNotNull()
+    {
+            $container = new Container();
+            $group = new Group($container);
+            $group->name = "A not null name";
+            $this->assertEquals("A not null name", $group->getName());
+    }
 }

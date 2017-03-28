@@ -80,7 +80,7 @@ class Group
                 }
 
                 $sql = "SELECT name FROM groups WHERE id = :groupid";
-                $stmt = DB::getInstance()->prepare($sql);
+                $stmt = $this->container->getDB()->prepare($sql);
                 $stmt->execute(['groupid' => $this->id]);
                 $this->name = $stmt->fetchColumn();
                 return $this->name;

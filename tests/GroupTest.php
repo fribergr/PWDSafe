@@ -44,4 +44,24 @@ class GroupTest extends TestCase
             $group->givePermission(5);
             $this->expectOutputString("");
     }
+
+    public function testGetName()
+    {
+            $container = new Container();
+
+            $result = 'Something Strange';
+
+            $PDOmock = $this->getMockBuilder('\PDO')->disableOriginalConstructor()->getMock();
+            $PDOstmt = $this->getMockBuilder('PDOStatement')->getMock();
+            $PDOstmt->expects($this->once())->method('execute')->will($this->returnValue(1));
+            $PDOstmt->expects($this->once())->method('fetchColumn')->will($this->returnValue($result));
+            $PDOmock->expects($this->once())->method('prepare')->will($this->returnValue($PDOstmt));
+
+            /** @var \PDO $PDOmock */
+            $container->setDB($PDOmock);
+
+            $group = new Group($container);
+            $group->id = 5;
+            $this->assertEquals("Something Strange", $group->getName());
+    }
 }

@@ -91,7 +91,7 @@ class Group
                 $sql = "SELECT users.id, users.email FROM users
                         INNER JOIN usergroups ON usergroups.userid = users.id
                         WHERE usergroups.groupid = :groupid";
-                $stmt = DB::getInstance()->prepare($sql);
+                $stmt = $this->container->getDB()->prepare($sql);
                 $stmt->execute([
                     'groupid' => $this->id
                 ]);

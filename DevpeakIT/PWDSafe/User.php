@@ -73,7 +73,7 @@ class User
                 list($privKey, $pubKey) = $enc->genNewKeys();
 
                 // Loop through all credentials for this user and reencrypt them with the new private key
-                self::updateEncryptedCredentials($currentpass, $res['id'], $res['privkey'], $pubKey, $enc);
+                $this->updateEncryptedCredentials($currentpass, $res['id'], $res['privkey'], $pubKey, $enc);
 
                 // Encrypt private key with new password
                 $encryptedprivkey = $enc->enc($privKey, $newpass);
@@ -105,7 +105,7 @@ class User
          * @return array
          * @internal param $res
          */
-        private static function updateEncryptedCredentials($currentpass, $userid, $privkey, $pubKey, Encryption $enc)
+        private function updateEncryptedCredentials($currentpass, $userid, $privkey, $pubKey, Encryption $enc)
         {
                 $sql = "SELECT id, data FROM encryptedcredentials WHERE userid = :userid";
                 $stmt = DB::getInstance()->prepare($sql);

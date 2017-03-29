@@ -39,7 +39,7 @@ class Group
         public function removePermission($userid)
         {
                 $sql = "DELETE FROM usergroups WHERE groupid = :groupid AND userid = :userid LIMIT 1";
-                $stmt = DB::getInstance()->prepare($sql);
+                $stmt = $this->container->getDB()->prepare($sql);
                 $stmt->execute([
                     'groupid' => $this->id,
                     'userid' => $userid

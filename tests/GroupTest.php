@@ -45,6 +45,25 @@ class GroupTest extends TestCase
             $this->expectOutputString("");
     }
 
+        public function testRemovePermission()
+        {
+                $container = new Container();
+
+                $PDOmock = $this->getMockBuilder('\PDO')->disableOriginalConstructor()->getMock();
+                $PDOstmt = $this->getMockBuilder('PDOStatement')->getMock();
+                $PDOstmt->expects($this->once())->method('execute')->will($this->returnValue(1));
+                $PDOmock->expects($this->once())->method('prepare')->will($this->returnValue($PDOstmt));
+
+                /** @var \PDO $PDOmock */
+                $container->setDB($PDOmock);
+
+                $group = new Group($container);
+                $group->setAll(['id' => 1, 'name' => "Something"]);
+
+                $group->removePermission(5);
+                $this->expectOutputString("");
+        }
+
     public function testGetName()
     {
             $container = new Container();

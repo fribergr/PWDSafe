@@ -5,7 +5,7 @@ use DevpeakIT\PWDSafe\Exceptions\AppException;
 
 class PasswordChecker
 {
-        public static function checkPwdStrength($current, $old, $new1, $new2)
+        public function checkPwdStrength($current, $old, $new1, $new2)
         {
                 $errors = [];
 

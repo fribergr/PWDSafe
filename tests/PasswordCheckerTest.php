@@ -12,27 +12,34 @@ use PHPUnit_Framework_TestCase;
  */
 class PasswordCheckerTest extends PHPUnit_Framework_TestCase
 {
+        /** @var  PasswordChecker */
+        private $passwordchecker;
+
+        public function setUp()
+        {
+                $this->passwordchecker = new PasswordChecker();
+        }
         public function testPasswordStrength()
         {
                 $this->expectException(AppException::class);
-                PasswordChecker::checkPwdStrength("OldPasswd", "OldPasswd", "asdf", "asdf");
+                $this->passwordchecker->checkPwdStrength("OldPasswd", "OldPasswd", "asdf", "asdf");
         }
 
         public function testPasswordStrengthWorking()
         {
-                $res = PasswordChecker::checkPwdStrength("OldPasswd", "OldPasswd", "NewPasswd", "NewPasswd");
+                $res = $this->passwordchecker->checkPwdStrength("OldPasswd", "OldPasswd", "NewPasswd", "NewPasswd");
                 $this->assertTrue($res);
         }
 
         public function testPasswordStrengthDiffOld()
         {
                 $this->expectException(AppException::class);
-                PasswordChecker::checkPwdStrength("OldPasswd", "Old1Passwd", "NewPasswd", "NewPasswd");
+                $this->passwordchecker->checkPwdStrength("OldPasswd", "Old1Passwd", "NewPasswd", "NewPasswd");
         }
 
         public function testPasswordStrengthDiffNew()
         {
                 $this->expectException(AppException::class);
-                PasswordChecker::checkPwdStrength("OldPasswd", "OldPasswd", "NewPasswd", "asdf");
+                $this->passwordchecker->checkPwdStrength("OldPasswd", "OldPasswd", "NewPasswd", "asdf");
         }
 }

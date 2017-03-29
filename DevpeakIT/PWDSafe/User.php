@@ -73,7 +73,6 @@ class User
                 list($privKey, $pubKey) = $enc->genNewKeys();
 
                 // Loop through all credentials for this user and reencrypt them with the new private key
-                $enc = new Encryption();
                 self::updateEncryptedCredentials($currentpass, $res['id'], $res['privkey'], $pubKey, $enc);
 
                 // Encrypt private key with new password

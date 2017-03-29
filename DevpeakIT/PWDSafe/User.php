@@ -32,10 +32,10 @@ class User
                 $stmt = DB::getInstance()->prepare($sql);
                 $stmt->execute(['userid' => $userid, 'groupid' => $groupid]);
 
-                return User::getData($username, $password, true);
+                return $this->getData($username, $password, true);
         }
 
-        public static function getData($user, $pass, $ldap = false)
+        public function getData($user, $pass, $ldap = false)
         {
                 $sql = "SELECT id, email, password AS encryptedpassword, pubkey, privkey, primarygroup
                 FROM users WHERE email = :email";

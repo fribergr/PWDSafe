@@ -7,7 +7,7 @@ namespace DevpeakIT\PWDSafe;
  */
 class Encryption
 {
-        public static function genNewKeys()
+        public function genNewKeys()
         {
                 $config = array(
                    "digest_alg" => "sha512",

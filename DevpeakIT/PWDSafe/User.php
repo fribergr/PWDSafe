@@ -5,7 +5,7 @@ class User
 {
         public function registerUser(Encryption $enc, $username, $password)
         {
-                list($privKey, $pubKey) = Encryption::genNewKeys();
+                list($privKey, $pubKey) = $enc->genNewKeys();
                 $privKey = $enc->enc($privKey, $password);
 
                 $p = password_hash($password, PASSWORD_BCRYPT);
@@ -69,7 +69,8 @@ class User
                 }
 
                 // Generate new public and private key
-                list($privKey, $pubKey) = Encryption::genNewKeys();
+                $enc = new Encryption();
+                list($privKey, $pubKey) = $enc->genNewKeys();
 
                 // Loop through all credentials for this user and reencrypt them with the new private key
                 $enc = new Encryption();

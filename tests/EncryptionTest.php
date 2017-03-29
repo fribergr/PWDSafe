@@ -22,7 +22,7 @@ class EncryptionTest extends PHPUnit_Framework_TestCase
         public function setUp()
         {
                 $this->encryption = new Encryption();
-                list($this->privkey, $this->pubkey) = Encryption::genNewKeys();
+                list($this->privkey, $this->pubkey) = $this->encryption->genNewKeys();
         }
 
         public function testEncDec()

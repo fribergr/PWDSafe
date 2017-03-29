@@ -65,6 +65,60 @@ class GroupTest extends TestCase
                 $this->expectOutputString("");
         }
 
+        public function testDeleteCredentialsForUser()
+        {
+                $container = new Container();
+
+                $PDOmock = $this->getMockBuilder('\PDO')->disableOriginalConstructor()->getMock();
+                $PDOstmt = $this->getMockBuilder('PDOStatement')->getMock();
+                $PDOstmt->expects($this->once())->method('execute')->will($this->returnValue(1));
+                $PDOmock->expects($this->once())->method('prepare')->will($this->returnValue($PDOstmt));
+
+                /** @var \PDO $PDOmock */
+                $container->setDB($PDOmock);
+
+                $group = new Group($container);
+                $group->setAll(['id' => 1, 'name' => "Something"]);
+
+                $group->deleteCredentialsForUser(5);
+                $this->expectOutputString("");
+        }
+
+        public function testCheckAccess()
+        {
+                $container = new Container();
+
+                $PDOmock = $this->getMockBuilder('\PDO')->disableOriginalConstructor()->getMock();
+                $PDOstmt = $this->getMockBuilder('PDOStatement')->getMock();
+                $PDOstmt->expects($this->once())->method('execute')->will($this->returnValue(1));
+                $PDOstmt->expects($this->once())->method('rowCount')->will($this->returnValue(1));
+                $PDOmock->expects($this->once())->method('prepare')->will($this->returnValue($PDOstmt));
+
+                /** @var \PDO $PDOmock */
+                $container->setDB($PDOmock);
+
+                $group = new Group($container);
+                $group->setAll(['id' => 1, 'name' => "Something"]);
+
+                $res = $group->checkAccess(5);
+                $this->assertTrue($res);
+
+                $PDOmock = $this->getMockBuilder('\PDO')->disableOriginalConstructor()->getMock();
+                $PDOstmt = $this->getMockBuilder('PDOStatement')->getMock();
+                $PDOstmt->expects($this->once())->method('execute')->will($this->returnValue(1));
+                $PDOstmt->expects($this->once())->method('rowCount')->will($this->returnValue(0));
+                $PDOmock->expects($this->once())->method('prepare')->will($this->returnValue($PDOstmt));
+
+                /** @var \PDO $PDOmock */
+                $container->setDB($PDOmock);
+
+                $group = new Group($container);
+                $group->setAll(['id' => 1, 'name' => "Something"]);
+
+                $res = $group->checkAccess(5);
+                $this->assertFalse($res);
+        }
+
         public function testGetName()
         {
                 $container = new Container();

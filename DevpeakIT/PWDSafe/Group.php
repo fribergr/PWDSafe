@@ -52,7 +52,7 @@ class Group
                         WHERE userid = :userid AND credentialid IN (
                           SELECT id FROM credentials WHERE groupid = :groupid
                         )";
-                $stmt = DB::getInstance()->prepare($sql);
+                $stmt = $this->container->getDB()->prepare($sql);
                 $stmt->execute([
                     'userid' => $userid,
                     'groupid' => $this->id
@@ -65,7 +65,7 @@ class Group
                                INNER JOIN usergroups ON usergroups.groupid = groups.id
                                INNER JOIN users ON users.id = usergroups.userid
                                WHERE usergroups.userid = :userid AND usergroups.groupid = :groupid";
-                $access_stmt = DB::getInstance()->prepare($access_sql);
+                $access_stmt = $this->container->getDB()->prepare($access_sql);
                 $access_stmt->execute([
                     'userid' => $userid,
                     'groupid' => $this->id

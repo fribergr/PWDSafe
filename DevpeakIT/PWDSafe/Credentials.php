@@ -76,6 +76,49 @@ class Credentials
                 }
         }
 
+        public function update($userid, $credid, $site, $user, $pass)
+        {
+                $sql = "SELECT credentialid FROM encryptedcredentials
+                        WHERE credentialid = :id AND userid = :userid LIMIT 1";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([
+                        'id' => $credid,
+                        'userid' => $userid
+                ]);
+
+                $enc = new Encryption();
+
+                if ($stmt->rowCount() == 0) {
+                        throw new AuthorizationFailedException();
+                } else {
+                        $sql = "UPDATE credentials SET site = :site, username = :user
+                                WHERE id = :id LIMIT 1";
+                        $stmt = $this->db->prepare($sql);
+                        $stmt->execute([
+                                'id' => $credid,
+                                'site' => $site,
+                                'user' => $user
+                        ]);
+
+                        $sql = "SELECT users.id, users.pubkey FROM users
+                                INNER JOIN encryptedcredentials ON users.id = encryptedcredentials.userid
+                                WHERE encryptedcredentials.credentialid = :credentialid";
+                        $stmt = $this->db->prepare($sql);
+                        $stmt->execute(['credentialid' => $credid]);
+
+                        $sql_update = "UPDATE encryptedcredentials SET data = :data
+                                       WHERE credentialid = :credentialid AND userid = :userid";
+                        $stmt_update = $this->db->prepare($sql_update);
+                        while ($row = $stmt->fetch()) {
+                                $stmt_update->execute([
+                                        'credentialid' => $credid,
+                                        'userid' => $row['id'],
+                                        'data' => base64_encode($enc->encWithPub($pass, $row['pubkey']))
+                                ]);
+                        }
+                }
+        }
+
         /**
          * @brief Add credentials in database
          * @param $site string

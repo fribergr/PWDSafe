@@ -32,6 +32,26 @@ $(document).ready(function() {
                 }, 'json');
         });
 
+        $('#updateCred').click(function() {
+            var id = $(this).data('id');
+            var s_site = $('#s_site').val();
+            var s_user = $('#s_user').val();
+            var s_pass = $('#s_pass').val();
+            $.post('/cred/' + id, {
+                'site': s_site,
+                'user': s_user,
+                'pass': s_pass
+            }, function(data) {
+                if (data.status === 'OK') {
+                    $('#addCredModal').find('input').val('');
+                    $('#addCredModal').modal('hide');
+                    window.location.reload();
+                } else {
+                    showError(data.reason);
+                }
+            }, 'json');
+        });
+
         $('.showPass').click(function() {
                 var id = $(this).data('id');
                 $.get('/pwdfor/' + id, function(data) {
@@ -39,6 +59,7 @@ $(document).ready(function() {
                         $('#showCredModal').find('#s_user').val(data.user);
                         $('#showCredModal').find('#s_site').val(data.site);
                         $('#showCredModal').find('#deleteCred').data('id', id);
+                        $('#showCredModal').find('#updateCred').data('id', id);
                         $('#showCredModal').modal();                       
                 }, 'json'); 
         });

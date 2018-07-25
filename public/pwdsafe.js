@@ -5,19 +5,26 @@ function showError(reason) {
     });
 }
 $(document).ready(function() {
+    $('.btn-signin').click(function() {
+        $('#working').removeClass('d-none');
+    });
         $('.btn-reg').click(function() {
+                $('#working').removeClass('d-none');
                 var user = $('#inputEmail').val();
                 var pass = $('#inputPassword').val();
                 $.post('/reg', {
                         user: user,
                         pass: pass
                 }, function (data) {
-                        if (data.status === 'OK') {
-                                $('#regsuccess').removeClass('hide');
-                        } else {
-                            $('.form-group').not('.has-error').addClass('has-error');
-                            showError(data.reason);
-                        }
+                        setTimeout(function() {
+                            $('#working').addClass('d-none');
+                            if (data.status === 'OK') {
+                                $('#regsuccess').removeClass('d-none');
+                            } else {
+                                $('.form-group').not('.has-error').addClass('has-error');
+                                showError(data.reason);
+                            }
+                        }, 500);
                 }, 'json');
         });
 
@@ -225,7 +232,7 @@ $(document).ready(function() {
             function(data) {
                 if (data.status === "OK") {
                     $.each(data.groups, function(index, group) {
-                        $('#grouplist').append('<li><a href="/groups/' + group.id + '">' + group.name + '</a>');
+                        $('#grouplist').append('<a class="dropdown-item" href="/groups/' + group.id + '">' + group.name + '</a>');
                     });
                 } else {
                     showError(data.reason);

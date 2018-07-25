@@ -3,19 +3,21 @@
 <div class="container">
         {% if primary != groupid %}
         <div class="clearfix">
-                <div class="pull-left">
+                <div class="float-left" style="margin-bottom: 20px">
                         <h3>{{ groupname }}</h3>
                 </div>
-                <div class="btn-group pull-right" style="margin-bottom: 20px">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="glyphicon glyphicon-cog"></span> <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                                <li><a href="#" id="changeGroupName">Change name</a></li>
-                                <li><a href="/groups/{{ groupid }}/share">Share</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="/groups/{{ groupid }}/delete"><span class="glyphicon glyphicon-trash"></span> Delete</a></li>
-                        </ul>
+                <div class="btn-group float-right">
+                        <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-cog"></i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="#" id="changeGroupName">Change name</a>
+                                        <a class="dropdown-item" href="/groups/{{ groupid }}/share">Share</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="/groups/{{ groupid }}/delete"><i class="far fa-trash-alt"></i> Delete</a>
+                                </div>
+                        </div>
                 </div>
         </div>
         {% include "group/modalChangeGroupName.html" %}
@@ -34,16 +36,16 @@
                                         <td>{{ row.username }}</td>
                                         <td style="white-space: nowrap; width: 1px;">
                                                 <button class="btn btn-primary showPass" data-id="{{ row.id }}">
-                                                        <span class="visible-xs glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-                                                        <span class="hidden-xs">Show</span>
+                                                        <i class="d-sm-none far fa-eye"></i>
+                                                        <span class="d-none d-sm-inline">Show</span>
                                                 </button>
-                                                <button class="btn btn-default copypwd" data-id="{{ row.id }}">
-                                                        <span class="visible-xs glyphicon glyphicon-copy" aria-hidden="true"></span>
-                                                        <span class="hidden-xs">Copy to clipboard</span>
+                                                <button class="btn btn-secondary copypwd" data-id="{{ row.id }}">
+                                                        <i class="d-sm-none far fa-copy"></i>
+                                                        <span class="d-none d-sm-inline">Copy to clipboard</span>
                                                 </button>
                                                 <button class="btn btn-danger popconfirm credDelete" data-id="{{ row.id }}">
-                                                        <span class="visible-xs glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                                        <span class="hidden-xs">Delete</span>
+                                                        <i class="d-sm-none far fa-trash-alt"></i>
+                                                        <span class="d-none d-sm-inline">Delete</span>
                                                 </button>
                                         </td>
                                 </tr>
@@ -56,7 +58,7 @@
         </div>
         {% endif %}
         <input type="hidden" id="currentgroupid" value="{{ groupid }}">
-        <a id="addCred" class="btn btn-primary">Add credentials</a>
+        <button id="addCred" class="btn btn-primary">Add credentials</button>
         {% include "modaladdCred.html" %}
         {% include "modalshowCred.html" %}
 </div>

@@ -2,22 +2,24 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="css/login.css">
 <div class="container">
-        <div class="card card-container">
-                <div class="login-img-header">
-                <span class="lock-login glyphicon glyphicon-lock"></span>
-                </div>
-            <p id="profile-name" class="profile-name-card"></p>
-            <form class="form-signin" method="post">
-                <div class="form-group{% if error %} has-error{% endif %}" id="loginForm">{% if error %}<div class="alert alert-danger">Wrong username or password</div>{% endif %}
-                <div class="alert alert-success hide" id="regsuccess">Account registered successfully</div>
+    <div class="card card-container">
+        <div class="login-img-header">
+            <i class="lock-login fas fa-lock"></i>
+        </div>
+        <p id="profile-name" class="profile-name-card"></p>
+        <form class="form-signin" method="post">
+            <div class="form-group{% if error %} has-error{% endif %}" id="loginForm">
+                {% if error %}<div class="alert alert-danger">Wrong username or password</div>{% endif %}
+                <div class="alert alert-success d-none" id="regsuccess">Account registered successfully</div>
+                <div class="alert alert-info d-none" id="working">Working on it...</div>
                 <input type="text" name="inputEmail" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
                 <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
-                </div>
-                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
-                {%if ldap == false %}
-                    <button class="btn btn-lg btn-primary btn-block btn-reg" type="button">Register</button>
-                {% endif %}
-            </form>
-        </div>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+            {% if ldap == false %}
+            <button class="btn btn-lg btn-primary btn-block btn-reg" type="button">Register</button>
+            {% endif %}
+        </form>
+    </div>
 </div>
 {% endblock %}

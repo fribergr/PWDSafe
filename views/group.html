@@ -32,7 +32,7 @@
                 <tbody>
                         {% for row in data %}
                                 <tr>
-                                        <td>{{ row.site }}</td>
+                                        <td>{{ row.site|raw }}</td>
                                         <td>{{ row.username }}</td>
                                         <td style="white-space: nowrap; width: 1px;">
                                                 <button class="btn btn-primary showPass" data-id="{{ row.id }}">

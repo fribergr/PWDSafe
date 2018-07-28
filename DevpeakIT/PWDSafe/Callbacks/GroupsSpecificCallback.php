@@ -4,9 +4,11 @@ namespace DevpeakIT\PWDSafe\Callbacks;
 use DevpeakIT\PWDSafe\DB;
 use DevpeakIT\PWDSafe\GUI\Graphics;
 use DevpeakIT\PWDSafe\RequireAuthorization;
+use DevpeakIT\PWDSafe\Traits\ClickableLinks;
 
 class GroupsSpecificCallback extends RequireAuthorization
 {
+        use ClickableLinks;
         public function get($num = null)
         {
                 if (is_null($num)) {
@@ -42,7 +44,15 @@ class GroupsSpecificCallback extends RequireAuthorization
                     'group' => $num
                 ]);
 
-                $data = $stmt->fetchAll();
+                $originaldata = $stmt->fetchAll();
+                $data = [];
+                foreach ($originaldata as $row) {
+                        $data[] = [
+                                'id' => $row['id'],
+                                'site' => $this->makeLinksClickable($row['site']),
+                                'username' => $row['username']
+                        ];
+                }
                 $graphics = new Graphics();
                 $graphics->showGroup($data, $num, $groupname);
         }

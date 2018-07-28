@@ -18,7 +18,7 @@
             {% for row in data %}
             <tr>
                 <td><a href="/groups/{{ row.groupid }}">{{ row.groupname }}</a></td>
-                <td>{{ row.site }}</td>
+                <td>{{ row.site|raw }}</td>
                 <td>{{ row.username }}</td>
                 <td style="white-space: nowrap; width: 1px;">
                     <button class="btn btn-primary showPass" data-id="{{ row.id }}">

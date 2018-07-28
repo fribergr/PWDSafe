@@ -59,7 +59,7 @@ Toro::serve([
     "/api/pwdchg" => function () use ($container) {
             return new \DevpeakIT\PWDSafe\Callbacks\Api\PasswordChangeCallback($container);
     },
-    "/search" => function () use ($container) {
+    "/search/:string" => function () use ($container) {
             return new \DevpeakIT\PWDSafe\Callbacks\SearchCallback($container);
     }
 

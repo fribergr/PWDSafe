@@ -30,7 +30,7 @@
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <form class="d-inline" method="post" action="/search" id="searchform">
+                        <form class="d-inline" id="searchform">
                             <div class="input-group">
                                 <input type="text" class="form-control border border-right-0" name="search" placeholder="Search...">
                                 <span class="input-group-append">
@@ -66,8 +66,10 @@
     $(document).ready(function() {
         PNotify.prototype.options.styling = "bootstrap3";
         $('#searchform').submit(function(event) {
-            if ($('input[name="search"]').val().length === 0) {
-                event.preventDefault();
+            event.preventDefault();
+            var searchstring = $('input[name="search"]').val().trim();
+            if (searchstring.length !== 0) {
+                window.location.href = "/search/" + searchstring;
             }
         });
     });

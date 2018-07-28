@@ -29,6 +29,18 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <form class="d-inline" method="post" action="/search" id="searchform">
+                            <div class="input-group">
+                                <input type="text" class="form-control border border-right-0" name="search" placeholder="Search...">
+                                <span class="input-group-append">
+                                    <button class="btn btn-outline-secondary border border-left-0" type="submit" id="searchbtn">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </li>
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="far fa-user"></span> {{ loggedin_email }} <span class="caret"></span></a>
                         <div class="dropdown-menu">
@@ -52,7 +64,12 @@
     <script type="text/javascript" src="/components/jquery.popconfirm.js"></script>
     <script type="text/javascript">
     $(document).ready(function() {
-      PNotify.prototype.options.styling = "bootstrap3";
+        PNotify.prototype.options.styling = "bootstrap3";
+        $('#searchform').submit(function(event) {
+            if ($('input[name="search"]').val().length === 0) {
+                event.preventDefault();
+            }
+        });
     });
     </script>
     <script src="/pwdsafe.js"></script>

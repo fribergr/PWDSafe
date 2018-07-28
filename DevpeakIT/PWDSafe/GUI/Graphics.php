@@ -19,6 +19,20 @@ class Graphics
                 $this->twig = new Twig_Environment($loader, []);
         }
 
+        public function showSearch($data)
+        {
+            echo $this->twig->render(
+                'search.html',
+                [
+                    'data' => $data,
+                    'loggedin' => true,
+                    'loggedin_email' => $_SESSION['user'],
+                    'loggedin_ldap' => $_SESSION['ldap'],
+                    'primary' => $_SESSION['primarygroup']
+                ]
+            );
+        }
+
         public function showGroup($data, $groupid, $groupname)
         {
                 echo $this->twig->render(

@@ -33,7 +33,7 @@ class GroupsSpecificCallback extends RequireAuthorization
                 $res = $access_stmt->fetch();
                 $groupname = $res['name'];
 
-                $sql = "SELECT credentials.id, credentials.site, credentials.username FROM credentials
+                $sql = "SELECT credentials.id, credentials.site, credentials.username, credentials.notes FROM credentials
                         INNER JOIN groups ON credentials.groupid = groups.id
                         INNER JOIN usergroups ON groups.id = usergroups.groupid
                         INNER JOIN users ON usergroups.userid = users.id
@@ -49,6 +49,7 @@ class GroupsSpecificCallback extends RequireAuthorization
                 foreach ($originaldata as $row) {
                         $data[] = [
                                 'id' => $row['id'],
+                                'notes' => nl2br($this->makeLinksClickable($row['notes']), false),
                                 'site' => $this->makeLinksClickable($row['site']),
                                 'username' => $row['username']
                         ];

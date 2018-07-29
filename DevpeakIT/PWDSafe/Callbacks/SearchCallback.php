@@ -15,7 +15,7 @@ class SearchCallback extends RequireAuthorization
         public function get($search)
         {
                 $sql = "SELECT CASE WHEN groups.id = users.primarygroup THEN 'Private' ELSE groups.name END AS groupname,
-                        groups.id AS groupid, credentials.id, credentials.site, credentials.username FROM credentials
+                        groups.id AS groupid, credentials.id, credentials.site, credentials.username, credentials.notes FROM credentials
                         INNER JOIN groups ON credentials.groupid = groups.id
                         INNER JOIN usergroups ON groups.id = usergroups.groupid
                         INNER JOIN users ON usergroups.userid = users.id
@@ -32,6 +32,7 @@ class SearchCallback extends RequireAuthorization
                         $data[] = [
                                 'groupname' => $row['groupname'],
                                 'groupid' => $row['groupid'],
+                                'notes' => $row['notes'],
                                 'id' => $row['id'],
                                 'site' => $this->makeLinksClickable($row['site']),
                                 'username' => $row['username']

@@ -22,43 +22,21 @@
         </div>
         {% include "group/modalChangeGroupName.html" %}
         {% endif %}
+        <div class="clearfix">
+                <button id="addCred" class="btn btn-primary float-right">Add credentials</button>
+        </div>
         {% if data|length > 0 %}
-        <table class="table table-bordered">
-                <thead>
-                        <th>Site</th>
-                        <th>Username</th>
-                        <th>Password</th>
-                </thead>
-                <tbody>
-                        {% for row in data %}
-                                <tr>
-                                        <td>{{ row.site|raw }}</td>
-                                        <td>{{ row.username }}</td>
-                                        <td style="white-space: nowrap; width: 1px;">
-                                                <button class="btn btn-primary showPass" data-id="{{ row.id }}">
-                                                        <i class="d-sm-none far fa-eye"></i>
-                                                        <span class="d-none d-sm-inline">Show</span>
-                                                </button>
-                                                <button class="btn btn-secondary copypwd" data-id="{{ row.id }}">
-                                                        <i class="d-sm-none far fa-copy"></i>
-                                                        <span class="d-none d-sm-inline">Copy to clipboard</span>
-                                                </button>
-                                                <button class="btn btn-danger popconfirm credDelete" data-id="{{ row.id }}">
-                                                        <i class="d-sm-none far fa-trash-alt"></i>
-                                                        <span class="d-none d-sm-inline">Delete</span>
-                                                </button>
-                                        </td>
-                                </tr>
-                        {% endfor %}
-                </tbody>
-        </table>
+        <div class="card-columns">
+        {% for row in data %}
+                {% include "credential-card.html" %}
+        {% endfor %}
+        </div>
         {% else %}
         <div class="alert alert-info" role="alert">
                 <strong>No credentials!</strong> You can add some below if you'd like.
         </div>
         {% endif %}
         <input type="hidden" id="currentgroupid" value="{{ groupid }}">
-        <button id="addCred" class="btn btn-primary">Add credentials</button>
         {% include "modaladdCred.html" %}
         {% include "modalshowCred.html" %}
 </div>

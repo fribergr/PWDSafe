@@ -7,37 +7,11 @@
         </div>
     </div>
     {% if data|length > 0 %}
-    <table class="table table-bordered">
-        <thead>
-            <th>Group</th>
-            <th>Site</th>
-            <th>Username</th>
-            <th>Password</th>
-        </thead>
-        <tbody>
-            {% for row in data %}
-            <tr>
-                <td><a href="/groups/{{ row.groupid }}">{{ row.groupname }}</a></td>
-                <td>{{ row.site|raw }}</td>
-                <td>{{ row.username }}</td>
-                <td style="white-space: nowrap; width: 1px;">
-                    <button class="btn btn-primary showPass" data-id="{{ row.id }}">
-                        <i class="d-sm-none far fa-eye"></i>
-                        <span class="d-none d-sm-inline">Show</span>
-                    </button>
-                    <button class="btn btn-secondary copypwd" data-id="{{ row.id }}">
-                        <i class="d-sm-none far fa-copy"></i>
-                        <span class="d-none d-sm-inline">Copy to clipboard</span>
-                    </button>
-                    <button class="btn btn-danger popconfirm credDelete" data-id="{{ row.id }}">
-                        <i class="d-sm-none far fa-trash-alt"></i>
-                        <span class="d-none d-sm-inline">Delete</span>
-                    </button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="card-columns">
+        {% for row in data %}
+                {% include "credential-card.html" %}
+        {% endfor %}
+        </div>
     {% else %}
     <div class="alert alert-info" role="alert">
         <strong>No credentials found!</strong> Try searching for something else.

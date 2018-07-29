@@ -25,7 +25,7 @@ class CredAddCallback extends RequireAuthorization
                             $_POST['creds'],
                             $_POST['credu'],
                             $_POST['credp'],
-                            "",
+                            $_POST['credn'],
                             $_POST['currentgroupid']
                         );
                         echo json_encode(['status' => 'OK']);

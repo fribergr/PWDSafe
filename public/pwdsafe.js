@@ -44,10 +44,12 @@ $(document).ready(function() {
             var s_site = $('#s_site').val();
             var s_user = $('#s_user').val();
             var s_pass = $('#s_pass').val();
+            var s_notes = $('#s_notes').val();
             $.post('/cred/' + id, {
                 'site': s_site,
                 'user': s_user,
-                'pass': s_pass
+                'pass': s_pass,
+                'notes': s_notes
             }, function(data) {
                 if (data.status === 'OK') {
                     $('#addCredModal').find('input').val('');
@@ -65,10 +67,11 @@ $(document).ready(function() {
                         $('#showCredModal').find('#s_pass').val(data.pwd);
                         $('#showCredModal').find('#s_user').val(data.user);
                         $('#showCredModal').find('#s_site').val(data.site);
+                        $('#showCredModal').find('#s_notes').val(data.notes);
                         $('#showCredModal').find('#deleteCred').data('id', id);
                         $('#showCredModal').find('#updateCred').data('id', id);
-                        $('#showCredModal').modal();                       
-                }, 'json'); 
+                        $('#showCredModal').modal();
+                }, 'json');
         });
 
         $('#addCred').click(function() {
@@ -82,6 +85,7 @@ $(document).ready(function() {
                             'credu': $('#user').val(),
                             'creds': $('#site').val(),
                             'credp': $('#pass').val(),
+                            'credn': $('#notes').val(),
                             'currentgroupid': $('#currentgroupid').val()
                         },
                         function(data) {

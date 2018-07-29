@@ -25,7 +25,7 @@ class Credentials
          */
         public function getPwdFor($userid, $pwdid)
         {
-                $sql = "SELECT username, site, encryptedcredentials.data FROM credentials
+                $sql = "SELECT username, site, credentials.notes, encryptedcredentials.data FROM credentials
                         INNER JOIN groups ON groups.id = credentials.groupid
                         INNER JOIN usergroups ON groups.id = usergroups.groupid
                         INNER JOIN users ON users.id = usergroups.userid
@@ -44,7 +44,8 @@ class Credentials
                         return [
                                 'user' => $res['username'],
                                 'site' => $res['site'],
-                                'pass' => $res['data']
+                                'pass' => $res['data'],
+                                'notes' => $res['notes'],
                         ];
                 }
         }
@@ -76,7 +77,7 @@ class Credentials
                 }
         }
 
-        public function update($userid, $credid, $site, $user, $pass)
+        public function update($userid, $credid, $site, $user, $pass, $notes)
         {
                 $sql = "SELECT credentialid FROM encryptedcredentials
                         WHERE credentialid = :id AND userid = :userid LIMIT 1";
@@ -91,13 +92,14 @@ class Credentials
                 if ($stmt->rowCount() == 0) {
                         throw new AuthorizationFailedException();
                 } else {
-                        $sql = "UPDATE credentials SET site = :site, username = :user
+                        $sql = "UPDATE credentials SET site = :site, username = :user, notes = :notes
                                 WHERE id = :id LIMIT 1";
                         $stmt = $this->db->prepare($sql);
                         $stmt->execute([
                                 'id' => $credid,
                                 'site' => $site,
-                                'user' => $user
+                                'user' => $user,
+                                'notes' => $notes,
                         ]);
 
                         $sql = "SELECT users.id, users.pubkey FROM users

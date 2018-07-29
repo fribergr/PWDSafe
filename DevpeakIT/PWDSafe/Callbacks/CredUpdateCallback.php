@@ -26,7 +26,8 @@ class CredUpdateCallback extends RequireAuthorization
                             $id,
                             $_POST['site'],
                             $_POST['user'],
-                            $_POST['pass']
+                            $_POST['pass'],
+                            isset($_POST['notes']) ? $_POST['notes'] : ""
                         );
                         echo json_encode(['status' => 'OK']);
                 }

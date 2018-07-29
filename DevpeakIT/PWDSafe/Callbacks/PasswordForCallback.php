@@ -22,6 +22,7 @@ class PasswordForcallback extends RequireAuthorization
 
                         $user = $pwd['user'];
                         $site = $pwd['site'];
+                        $notes = $pwd['notes'];
                         $pwd = base64_decode($pwd['pass']);
 
                         $pwd = $encryption->decWithPriv(
@@ -32,7 +33,8 @@ class PasswordForcallback extends RequireAuthorization
                                 'status' => 'OK',
                                 'pwd' => $pwd,
                                 'user' => $user,
-                                'site' => $site
+                                'site' => $site,
+                                'notes' => $notes,
                         ]);
                 }
         }

@@ -21,7 +21,7 @@ class SecurityCheckCallback extends RequireAuthorization
                         INNER JOIN usergroups ON groups.id = usergroups.groupid
                         INNER JOIN users ON usergroups.userid = users.id
                         INNER JOIN encryptedcredentials ON encryptedcredentials.credentialid = credentials.id
-                        WHERE users.id = :userid";
+                        WHERE users.id = :userid AND encryptedcredentials.userid = users.id";
                 $stmt = $this->container->getDb()->prepare($sql);
                 $stmt->execute([
                         'userid' => $_SESSION['id'],

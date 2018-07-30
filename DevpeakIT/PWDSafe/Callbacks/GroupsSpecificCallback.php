@@ -16,7 +16,9 @@ class GroupsSpecificCallback extends RequireAuthorization
                         $num = $_SESSION['primarygroup'];
                 }
 
-                $access_sql = "SELECT groups.id, groups.name FROM groups
+                $access_sql = "SELECT groups.id,
+                               CASE WHEN groups.id = users.primarygroup THEN 'Private' ELSE groups.name END AS `name`
+                               FROM groups
                                INNER JOIN usergroups ON usergroups.groupid = groups.id
                                INNER JOIN users ON users.id = usergroups.userid
                                WHERE users.id = :userid AND groups.id = :groupid";

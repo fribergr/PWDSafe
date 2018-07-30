@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-        {% if primary != groupid %}
         <div class="clearfix">
                 <div class="float-left" style="margin-bottom: 20px">
                         <h3>{{ currentgroup.name }}</h3>
                 </div>
                 <div class="btn-group float-right">
-                        <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button id="addCred" class="btn btn-outline-primary"><i class="fa fa-plus"></i> Add</button>
+                        <button id="importCred" class="btn btn-outline-secondary"><i class="fa fa-file-import"></i> Import</button>
+                        {% if primary != groupid %}
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-cog"></i>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -17,14 +18,9 @@
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="/groups/{{ groupid }}/delete"><i class="far fa-trash-alt"></i> Delete</a>
                                 </div>
-                        </div>
+                        {% include "group/modalChangeGroupName.html" %}
+                        {% endif %}
                 </div>
-        </div>
-        {% include "group/modalChangeGroupName.html" %}
-        {% endif %}
-        <div class="clearfix mb-2">
-                <button id="addCred" class="btn btn-primary float-right">Add credentials</button>
-                <button id="importCred" class="btn btn-outline-secondary float-right mr-2">Import</button>
         </div>
         {% if data|length > 0 %}
         <div class="card-columns">

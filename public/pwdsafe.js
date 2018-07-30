@@ -112,7 +112,7 @@ $(document).ready(function() {
                     function(data) {
                         if (data.status === 'OK') {
                                 $('input').val('');
-                                $('<div class="alert alert-success"><strong>Password changed!</strong> Your password has been changed successfully.</div>').insertBefore('form');
+                                $('<div class="alert alert-success"><strong>Password changed!</strong> Your password has been changed successfully.</div>').insertBefore('form#pwdchangeform');
                         } else {
                                 $('.form-group').not('.has-error').addClass('has-error');
                                 showError(data.reason);
@@ -136,7 +136,7 @@ $(document).ready(function() {
                 function(data) {
                     if (data.status === 'OK') {
                         $('input').val('');
-                        $('<div class="alert alert-success"><strong>Group created!</strong> Your group has been created successfully.</div>').insertBefore('form');
+                        $('<div class="alert alert-success"><strong>Group created!</strong> Your group has been created successfully.</div>').insertBefore('form#createGroupForm');
                         window.setTimeout(function(){
                             window.location.href = "/groups/" + data.groupid;
                         }, 1500);

@@ -3,6 +3,7 @@ namespace DevpeakIT\PWDSafe\Callbacks;
 
 use DevpeakIT\PWDSafe\DB;
 use DevpeakIT\PWDSafe\FormChecker;
+use DevpeakIT\PWDSafe\Group;
 use DevpeakIT\PWDSafe\RequireAuthorization;
 use DevpeakIT\PWDSafe\GUI\Graphics;
 use DevpeakIT\PWDSafe\Traits\ContainerInject;
@@ -39,7 +40,8 @@ class SearchCallback extends RequireAuthorization
                         ];
                 }
 
+                $groups = Group::getAllGroupsForUser($_SESSION['id']);
                 $graphics = new Graphics();
-                $graphics->showSearch($data);
+                $graphics->showSearch($data, $groups);
         }
 }

@@ -70,6 +70,7 @@ $(document).ready(function() {
                         $('#showCredModal').find('#s_user').val(data.user);
                         $('#showCredModal').find('#s_site').val(data.site);
                         $('#showCredModal').find('#s_notes').val(data.notes);
+                        $('#showCredModal').find('#s_group').val(data.groupid);
                         $('#showCredModal').find('#deleteCred').data('id', id);
                         $('#showCredModal').find('#updateCred').data('id', id);
                         $('#showCredModal').modal();

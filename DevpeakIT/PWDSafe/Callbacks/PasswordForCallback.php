@@ -20,21 +20,19 @@ class PasswordForcallback extends RequireAuthorization
                 if ($pwd) {
                         $encryption = new Encryption();
 
-                        $user = $pwd['user'];
-                        $site = $pwd['site'];
-                        $notes = $pwd['notes'];
-                        $pwd = base64_decode($pwd['pass']);
+                        $pwdunbase = base64_decode($pwd['pass']);
 
-                        $pwd = $encryption->decWithPriv(
-                            $pwd,
+                        $pwddecoded = $encryption->decWithPriv(
+                            $pwdunbase,
                             $encryption->dec($_SESSION['privkey'], $_SESSION['pass'])
                         );
                         echo json_encode([
                                 'status' => 'OK',
-                                'pwd' => $pwd,
-                                'user' => $user,
-                                'site' => $site,
-                                'notes' => $notes,
+                                'pwd' => $pwddecoded,
+                                'user' => $pwd['user'],
+                                'site' => $pwd['site'],
+                                'notes' => $pwd['notes'],
+                                'groupid' => $pwd['groupid']
                         ]);
                 }
         }

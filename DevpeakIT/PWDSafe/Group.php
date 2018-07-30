@@ -106,4 +106,19 @@ class Group
                         return ($element['id'] != $userid);
                 });
         }
+
+        public static function getAllGroupsForUser($userid)
+        {
+                $sql = "SELECT groups.id,
+                        CASE WHEN groups.id = users.primarygroup THEN 'Private' ELSE groups.name END AS `name`
+                        FROM groups
+                        INNER JOIN usergroups ON usergroups.groupid = groups.id
+                        INNER JOIN users ON users.id = usergroups.userid
+                        WHERE usergroups.userid = :userid";
+                $stmt = DB::getInstance()->prepare($sql);
+                $stmt->execute([
+                        'userid' => $userid
+                ]);
+                return $stmt->fetchAll();
+        }
 }

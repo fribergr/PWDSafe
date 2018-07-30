@@ -25,7 +25,7 @@ class Credentials
          */
         public function getPwdFor($userid, $pwdid)
         {
-                $sql = "SELECT username, site, credentials.notes, encryptedcredentials.data FROM credentials
+                $sql = "SELECT username, site, credentials.notes, encryptedcredentials.data, credentials.groupid FROM credentials
                         INNER JOIN groups ON groups.id = credentials.groupid
                         INNER JOIN usergroups ON groups.id = usergroups.groupid
                         INNER JOIN users ON users.id = usergroups.userid
@@ -46,6 +46,7 @@ class Credentials
                                 'site' => $res['site'],
                                 'pass' => $res['data'],
                                 'notes' => $res['notes'],
+                                'groupid' => $res['groupid'],
                         ];
                 }
         }

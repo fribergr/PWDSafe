@@ -33,7 +33,7 @@ class Graphics
                 );
         }
 
-        public function showSearch($data)
+        public function showSearch($data, $groups)
         {
             echo $this->twig->render(
                 'search.html',
@@ -42,7 +42,8 @@ class Graphics
                     'loggedin' => true,
                     'loggedin_email' => $_SESSION['user'],
                     'loggedin_ldap' => $_SESSION['ldap'],
-                    'primary' => $_SESSION['primarygroup']
+                    'primary' => $_SESSION['primarygroup'],
+                    'groups' => $groups
                 ]
             );
         }

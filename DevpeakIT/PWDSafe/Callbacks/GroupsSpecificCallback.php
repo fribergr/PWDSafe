@@ -2,8 +2,9 @@
 namespace DevpeakIT\PWDSafe\Callbacks;
 
 use DevpeakIT\PWDSafe\DB;
-use DevpeakIT\PWDSafe\GUI\Graphics;
+use DevpeakIT\PWDSafe\Group;
 use DevpeakIT\PWDSafe\RequireAuthorization;
+use DevpeakIT\PWDSafe\GUI\Graphics;
 use DevpeakIT\PWDSafe\Traits\ClickableLinks;
 
 class GroupsSpecificCallback extends RequireAuthorization
@@ -33,7 +34,7 @@ class GroupsSpecificCallback extends RequireAuthorization
                 $res = $access_stmt->fetch();
                 $currentgroup = $res;
 
-                $sql = "SELECT credentials.id, credentials.site, credentials.username, credentials.notes FROM credentials
+                $sql = "SELECT groups.id as groupid, credentials.id, credentials.site, credentials.username, credentials.notes FROM credentials
                         INNER JOIN groups ON credentials.groupid = groups.id
                         INNER JOIN usergroups ON groups.id = usergroups.groupid
                         INNER JOIN users ON usergroups.userid = users.id
@@ -48,6 +49,7 @@ class GroupsSpecificCallback extends RequireAuthorization
                 $data = [];
                 foreach ($originaldata as $row) {
                         $data[] = [
+                                'groupid' => $row['groupid'],
                                 'id' => $row['id'],
                                 'notes' => nl2br($this->makeLinksClickable($row['notes']), false),
                                 'site' => $this->makeLinksClickable($row['site']),
@@ -55,17 +57,7 @@ class GroupsSpecificCallback extends RequireAuthorization
                         ];
                 }
 
-                $sql = "SELECT groups.id,
-                        CASE WHEN groups.id = users.primarygroup THEN 'Private' ELSE groups.name END AS `name`
-                        FROM groups
-                        INNER JOIN usergroups ON usergroups.groupid = groups.id
-                        INNER JOIN users ON users.id = usergroups.userid
-                        WHERE usergroups.userid = :userid";
-                $stmt = DB::getInstance()->prepare($sql);
-                $stmt->execute([
-                        'userid' => $_SESSION['id']
-                ]);
-                $groups = $stmt->fetchAll();
+                $groups = Group::getAllGroupsForUser($_SESSION['id']);
                 $graphics = new Graphics();
                 $graphics->showGroup($data, $num, $currentgroup, $groups);
         }

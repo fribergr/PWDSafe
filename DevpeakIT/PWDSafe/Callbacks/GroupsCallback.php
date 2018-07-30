@@ -9,11 +9,14 @@ class GroupsCallback extends RequireAuthorization
         public function get()
         {
                 $db = DB::getInstance();
-                $sql = "SELECT groups.id, groups.name FROM groups
+                $sql = "SELECT groups.id,
+                        CASE WHEN groups.id = users.primarygroup THEN 'Private' ELSE groups.name END AS `name`,
+                        COUNT(credentials.id) AS cnt FROM groups
+                        LEFT JOIN credentials ON credentials.groupid = groups.id
                         INNER JOIN usergroups ON groups.id = usergroups.groupid
                         INNER JOIN users ON usergroups.userid = users.id
-                        WHERE users.id = :userid AND groups.id != users.primarygroup
-                        ORDER BY groups.name ASC";
+                        WHERE users.id = :userid GROUP BY groups.id
+                        ORDER BY FIELD(groups.name,'Private') ASC";
                 $stmt = $db->prepare($sql);
                 $stmt->execute([
                     'userid' => $_SESSION['id']

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="clearfix">
+        <div class="float-left" style="margin-bottom: 20px">
+            <h3>Security check</h3>
+            <p>The security check groups credentials that share the same password together. Consider changing the passwords for one or several credentials in each group to make sure that you use an unique password for each application/site.</p>
+        </div>
+    </div>
+    {% if data|length > 0 %}
+        {% for group in data %}
+        <div class="card mb-4 border-secondary">
+            <h5 class="card-header">Password group</h5>
+            <div class="card-body">
+                    <div class="card-columns">
+                        {% for row in group %}
+                            {% include "credential-card.html" %}
+                        {% endfor %}
+                    </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+    <div class="alert alert-success" role="alert">
+        <strong>No credentials found!</strong> This means that your credentials all have different passwords.
+    </div>
+    {% endif %}
+    {% include "modalshowCred.html" %}
+</div>
+{% endblock %}

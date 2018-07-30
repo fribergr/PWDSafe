@@ -61,6 +61,8 @@ Toro::serve([
     },
     "/search/:string" => function () use ($container) {
             return new \DevpeakIT\PWDSafe\Callbacks\SearchCallback($container);
-    }
-
+    },
+    "/securitycheck" => function () use ($container) {
+        return new \DevpeakIT\PWDSafe\Callbacks\SecurityCheckCallback($container);
+    },
 ]);

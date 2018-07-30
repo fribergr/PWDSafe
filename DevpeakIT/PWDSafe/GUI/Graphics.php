@@ -19,6 +19,20 @@ class Graphics
                 $this->twig = new Twig_Environment($loader, []);
         }
 
+        public function showSecurityCheck($data)
+        {
+                echo $this->twig->render(
+                    'securitycheck.html',
+                    [
+                        'data' => $data,
+                        'loggedin' => true,
+                        'loggedin_email' => $_SESSION['user'],
+                        'loggedin_ldap' => $_SESSION['ldap'],
+                        'primary' => $_SESSION['primarygroup']
+                    ]
+                );
+        }
+
         public function showSearch($data)
         {
             echo $this->twig->render(

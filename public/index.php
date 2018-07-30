@@ -65,4 +65,7 @@ Toro::serve([
     "/securitycheck" => function () use ($container) {
         return new \DevpeakIT\PWDSafe\Callbacks\SecurityCheckCallback($container);
     },
+    "/import" => function () use ($container) {
+            return new \DevpeakIT\PWDSafe\Callbacks\ImportCallback($container);
+    },
 ]);

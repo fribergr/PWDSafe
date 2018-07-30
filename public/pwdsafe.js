@@ -78,6 +78,13 @@ $(document).ready(function() {
                 $('#addCredModal').modal();
         });
 
+        $('#importCred').click(function() {
+            $('#importCredModal').modal();
+        });
+        $('#importCredSave').click(function() {
+            $('#creduploadform').submit();
+        })
+
         $('#saveCred').click(function() {
                 $.post(
                         '/cred/add',

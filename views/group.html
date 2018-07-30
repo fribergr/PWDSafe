@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% block content %}
 <div class="container">
         {% if primary != groupid %}
@@ -22,8 +22,9 @@
         </div>
         {% include "group/modalChangeGroupName.html" %}
         {% endif %}
-        <div class="clearfix">
+        <div class="clearfix mb-2">
                 <button id="addCred" class="btn btn-primary float-right">Add credentials</button>
+                <button id="importCred" class="btn btn-outline-secondary float-right mr-2">Import</button>
         </div>
         {% if data|length > 0 %}
         <div class="card-columns">
@@ -38,6 +39,7 @@
         {% endif %}
         <input type="hidden" id="currentgroupid" value="{{ groupid }}">
         {% include "modaladdCred.html" %}
+        {% include "modalimportCred.html" %}
         {% include "modalshowCred.html" %}
 </div>
 {% endblock %}

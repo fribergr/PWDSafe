@@ -45,11 +45,13 @@ $(document).ready(function() {
             var s_user = $('#s_user').val();
             var s_pass = $('#s_pass').val();
             var s_notes = $('#s_notes').val();
+            var s_group = $('#s_group').val();
             $.post('/cred/' + id, {
                 'site': s_site,
                 'user': s_user,
                 'pass': s_pass,
-                'notes': s_notes
+                'notes': s_notes,
+                'group': s_group
             }, function(data) {
                 if (data.status === 'OK') {
                     $('#addCredModal').find('input').val('');

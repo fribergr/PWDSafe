@@ -47,7 +47,7 @@ class Graphics
             );
         }
 
-        public function showGroup($data, $groupid, $groupname)
+        public function showGroup($data, $groupid, $currentgroup, $groups)
         {
                 echo $this->twig->render(
                     'group.html',
@@ -57,7 +57,8 @@ class Graphics
                         'loggedin_email' => $_SESSION['user'],
                         'loggedin_ldap' => $_SESSION['ldap'],
                         'groupid' => $groupid,
-                        'groupname' => $groupname,
+                        'currentgroup' => $currentgroup,
+                        'groups' => $groups,
                         'primary' => $_SESSION['primarygroup']
                     ]
                 );

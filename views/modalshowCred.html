@@ -24,6 +24,14 @@
             <label for="s_notes">Notes</label>
             <textarea class="form-control" name="s_notes" id="s_notes"></textarea>
         </div>
+        <div class="form-group">
+            <label for="s_group">Move to group</label>
+            <select name="s_group" id="s_group" class="form-control">
+                {% for group in groups %}
+                <option value="{{ group.id }}" {% if currentgroup.id == group.id %}selected="selected"{% endif %}>{{ group.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-danger mr-auto" id="deleteCred" data-id="">Delete</button>

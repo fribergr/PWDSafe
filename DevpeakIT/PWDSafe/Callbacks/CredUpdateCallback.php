@@ -17,18 +17,31 @@ class CredUpdateCallback extends RequireAuthorization
                 }
 
                 // Update credentials
-                $reqfields = ['site', 'user', 'pass'];
+                $reqfields = ['site', 'user', 'pass', 'group'];
                 if ($this->container->getFormchecker()->checkRequiredFields($reqfields)) {
                         $credentials = $this->container->getCredentials();
 
-                        $credentials->update(
-                            $_SESSION['id'],
-                            $id,
-                            $_POST['site'],
-                            $_POST['user'],
-                            $_POST['pass'],
-                            isset($_POST['notes']) ? $_POST['notes'] : ""
-                        );
+                        $newgroup = $_POST['group'];
+                        $oldgroup = $credentials->getGroup($id, $_SESSION['id']);
+                        if ($oldgroup && $oldgroup != $newgroup) {
+                                $credentials->add(
+                                    $_POST['site'],
+                                    $_POST['user'],
+                                    $_POST['pass'],
+                                    isset($_POST['notes']) ? $_POST['notes'] : "",
+                                    $newgroup
+                                );
+                                $credentials->removeCred($_SESSION['id'], $id);
+                        } else {
+                                $credentials->update(
+                                    $_SESSION['id'],
+                                    $id,
+                                    $_POST['site'],
+                                    $_POST['user'],
+                                    $_POST['pass'],
+                                    isset($_POST['notes']) ? $_POST['notes'] : ""
+                                );
+                        }
                         echo json_encode(['status' => 'OK']);
                 }
         }

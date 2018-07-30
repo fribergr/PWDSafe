@@ -50,6 +50,33 @@ class Credentials
                 }
         }
 
+        public function getGroup($credid, $userid) {
+                if ($this->checkAccess($credid, $userid)) {
+                        $sql = "SELECT groupid FROM credentials WHERE id = :credid";
+                        $stmt = $this->db->prepare($sql);
+                        $stmt->execute([
+                                'credid' => $credid,
+                        ]);
+                        return $stmt->fetchColumn();
+                } else {
+                        return false;
+                }
+        }
+
+        public function checkAccess($credid, $userid) {
+                $sql = "SELECT credentials.id FROM credentials
+                        INNER JOIN groups ON groups.id = credentials.groupid
+                        INNER JOIN usergroups ON usergroups.groupid = groups.id
+                        INNER JOIN users ON users.id = usergroups.userid
+                        WHERE users.id = :userid AND credentials.id = :credid";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([
+                        'userid' => $userid,
+                        'credid' => $credid,
+                ]);
+                return $stmt->rowCount() > 0;
+        }
+
         /**
          * @brief Remove credentials from database
          * @param $userid int

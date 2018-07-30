@@ -31,7 +31,7 @@ class GroupsSpecificCallback extends RequireAuthorization
                         return;
                 }
                 $res = $access_stmt->fetch();
-                $groupname = $res['name'];
+                $currentgroup = $res;
 
                 $sql = "SELECT credentials.id, credentials.site, credentials.username, credentials.notes FROM credentials
                         INNER JOIN groups ON credentials.groupid = groups.id
@@ -54,7 +54,19 @@ class GroupsSpecificCallback extends RequireAuthorization
                                 'username' => $row['username']
                         ];
                 }
+
+                $sql = "SELECT groups.id,
+                        CASE WHEN groups.id = users.primarygroup THEN 'Private' ELSE groups.name END AS `name`
+                        FROM groups
+                        INNER JOIN usergroups ON usergroups.groupid = groups.id
+                        INNER JOIN users ON users.id = usergroups.userid
+                        WHERE usergroups.userid = :userid";
+                $stmt = DB::getInstance()->prepare($sql);
+                $stmt->execute([
+                        'userid' => $_SESSION['id']
+                ]);
+                $groups = $stmt->fetchAll();
                 $graphics = new Graphics();
-                $graphics->showGroup($data, $num, $groupname);
+                $graphics->showGroup($data, $num, $currentgroup, $groups);
         }
 }

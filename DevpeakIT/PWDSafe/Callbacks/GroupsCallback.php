@@ -16,7 +16,7 @@ class GroupsCallback extends RequireAuthorization
                         INNER JOIN usergroups ON groups.id = usergroups.groupid
                         INNER JOIN users ON usergroups.userid = users.id
                         WHERE users.id = :userid GROUP BY groups.id
-                        ORDER BY FIELD(groups.name,'Private') ASC";
+                        ORDER BY CASE WHEN groups.id = users.primarygroup THEN 1 ELSE 2 END, LOWER(`name`) ASC";
                 $stmt = $db->prepare($sql);
                 $stmt->execute([
                     'userid' => $_SESSION['id']

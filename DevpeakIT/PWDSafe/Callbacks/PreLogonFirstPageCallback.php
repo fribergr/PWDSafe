@@ -42,7 +42,9 @@ class PreLogonFirstPageCallback
                         $_SESSION['privkey'] = $res['privkey'];
                         $_SESSION['primarygroup'] = $res['primarygroup'];
                         $_SESSION['ldap'] = $res['ldap'];
-                        header("Location: ?");
+
+                        $ref = isset($_GET['ref']) ? urldecode($_GET['ref']) : "/";
+                        header("Location: $ref");
                 } else {
                         $graphics->showLogin(true);
                 }

@@ -11,8 +11,7 @@ class RequireAuthorization
                 ToroHook::add("before_handler", function () {
                         $session = new Session();
                         if (!$session->isLoggedIn()) {
-                                $graphics = new Graphics();
-                                $graphics->showLoginRequired();
+                                header("Location: /?ref=" . urlencode($_SERVER['REQUEST_URI']));
                                 die();
                         }
                 });

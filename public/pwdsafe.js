@@ -246,7 +246,7 @@ $(document).ready(function() {
             function(data) {
                 if (data.status === "OK") {
                     $.each(data.groups, function(index, group) {
-                        $('#grouplist').append('<a class="dropdown-item" href="/groups/' + group.id + '">' + group.name + '<span class="badge badge-info float-right badge-pill">' + group.cnt + '</span></a>');
+                        $('#grouplist').append('<a class="dropdown-item d-flex align-items-center justify-content-between" href="/groups/' + group.id + '">' + group.name + '<span class="badge badge-info badge-pill ml-2">' + group.cnt + '</span></a>');
                     });
                 } else {
                     showError(data.reason);

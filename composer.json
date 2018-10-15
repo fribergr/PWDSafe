@@ -14,6 +14,10 @@
         "phpmd/phpmd": "^2.3",
         "sebastian/phpcpd": "^2.0",
         "phpunit/phpunit": "5.*",
-        "theseer/phpdox": "0.8.1.1"
+        "theseer/phpdox": "0.8.1.1",
+        "phan/phan": "^1.1"
+    },
+    "autoload": {
+            "psr-4": {"DevpeakIT\\": "DevpeakIT/"}
     }
 }

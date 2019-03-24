@@ -15,7 +15,7 @@ class GroupsCallback extends RequireAuthorization
                         LEFT JOIN credentials ON credentials.groupid = groups.id
                         INNER JOIN usergroups ON groups.id = usergroups.groupid
                         INNER JOIN users ON usergroups.userid = users.id
-                        WHERE users.id = :userid GROUP BY groups.id
+                        WHERE users.id = :userid GROUP BY groups.id, users.primarygroup, groups.name
                         ORDER BY CASE WHEN groups.id = users.primarygroup THEN 1 ELSE 2 END, LOWER(`name`) ASC";
                 $stmt = $db->prepare($sql);
                 $stmt->execute([

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <ruleset name="Devpeak">
  <description>The Devpeak coding standard.</description>
- <arg name="tab-width" value="8"/>
+ <arg name="tab-width" value="4"/>
 
  <!-- 2. General -->
 

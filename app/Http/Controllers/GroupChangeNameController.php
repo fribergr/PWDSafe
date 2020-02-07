@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Group;
+use Illuminate\Http\Request;
+
+class GroupChangeNameController extends Controller
+{
+
+    public function store(Request $request, Group $group)
+    {
+        $this->authorize('update', $group);
+        $params = $this->validate($request, [
+            'groupname' => 'required|max:100'
+        ]);
+
+        $groupname = preg_replace('/[^\p{L}\p{N}\-_ ]/u', "", trim($params['groupname']));
+
+        abort_if(strlen($groupname) === 0, 400);
+
+        $group->name = $groupname;
+        $group->save();
+
+        return response(['status' => 'OK']);
+    }
+}

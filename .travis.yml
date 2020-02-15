@@ -3,5 +3,11 @@ php:
   - '7.2'
   - '7.3'
   - '7.4'
-before_script: composer install && npm install
-script: vendor/bin/phpunit
+before_script:
+  - cp .env.example .env
+  - composer install
+  - npm install
+  - npm run prod
+  - php artisan key:generate
+script:
+  - vendor/bin/phpunit

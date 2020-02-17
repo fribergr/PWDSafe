@@ -4,13 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link href="/components/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/components/pnotify/pnotify.custom.min.css" media="all" rel="stylesheet" type="text/css">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link href="/components/fontawesome/css/all.min.css" rel="stylesheet">
-    <link href="/css/application.css" rel="stylesheet">
     <title>PWDSafe</title>
 </head>
-<body>
+<body class="mt-20">
 @auth
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <a class="navbar-brand" href="/">PWDSafe</a>
@@ -72,15 +70,10 @@
 </nav>
 @endauth
 @yield('content')
-<script type="text/javascript" src="/components/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="/components/popper.min.js"></script>
-<script type="text/javascript" src="/components/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/components/clipboard.js/clipboard.min.js"></script>
-<script type="text/javascript" src="/components/pnotify/pnotify.custom.min.js"></script>
+<script src="{{ mix('js/app.js') }}"></script>
 <script type="text/javascript" src="/components/jquery.popconfirm.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        PNotify.prototype.options.styling = "bootstrap3";
         $('#searchform').submit(function(event) {
             event.preventDefault();
             var searchstring = $('input[name="search"]').val().trim();
@@ -90,7 +83,6 @@
         });
     });
 </script>
-<script src="{{ mix('js/app.js') }}"></script>
 <script src="{{ mix('js/pwdsafe.js') }}"></script>
 </body>
 </html>

@@ -1,12 +1,14 @@
 function showError(reason) {
-    new PNotify({
+    PNotify.alert({
         type: 'error',
         text: reason
     });
 }
 $(document).ready(function() {
     $('.btn-signin').click(function() {
-        $('#working').removeClass('d-none');
+        if ($('input[name="email"]').val().length > 0 && $('input[name="password"]').val().length > 0) {
+            $('#working').removeClass('d-none');
+        }
     });
         $('.btn-reg').click(function() {
                 $('#working').removeClass('d-none');
@@ -26,7 +28,13 @@ $(document).ready(function() {
                                 showError(data.reason);
                             }
                         }, 500);
-                }, 'json');
+                }, 'json')
+                .fail(function(data) {
+                    $('#working').addClass('d-none');
+                    Object.keys(data.responseJSON.errors).forEach(function (key) {
+                        showError(data.responseJSON.errors[key]);
+                    });
+                });
         });
 
         $('#deleteCred, .credDelete').click(function() {
@@ -236,7 +244,7 @@ $(document).ready(function() {
             );
         });
 
-        new Clipboard('.copypwd', {
+        new ClipboardJS('.copypwd', {
             text: function(trigger) {
                 var pwd = "";
                 $.ajax({

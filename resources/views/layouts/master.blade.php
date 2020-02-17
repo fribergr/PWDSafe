@@ -21,10 +21,10 @@
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Groups <span class="caret"></span></a>
                 <div class="dropdown-menu" id="grouplist">
-                    <a class="dropdown-item" href="/groups/create">Create group</a>
+                    <a class="dropdown-item" href="{{ route('groupCreate') }}">Create group</a>
                     <div class="dropdown-divider"></div>
                     @foreach (auth()->user()->groups as $group)
-                        <a class="dropdown-item d-flex align-items-center justify-content-between" href="/groups/{{ $group->id }}">
+                        <a class="dropdown-item d-flex align-items-center justify-content-between" href="{{ route('group', $group->id) }}">
                             @if ($group->id === auth()->user()->primarygroup)
                                 Private
                             @else
@@ -36,7 +36,7 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/securitycheck">Security check</a>
+                <a class="nav-link" href="{{ route('securitycheck') }}">Security check</a>
             </li>
         </ul>
         <ul class="navbar-nav">
@@ -45,21 +45,21 @@
                     <div class="input-group">
                         <input type="text" class="form-control border border-right-0" name="search" placeholder="Search...">
                         <span class="input-group-append">
-                                    <button class="btn btn-outline-secondary border border-left-0" type="submit" id="searchbtn">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
+                            <button class="btn btn-outline-secondary border border-left-0" type="submit" id="searchbtn">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
                     </div>
                 </form>
             </li>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="far fa-user"></span> {{ auth()->user()->email }} <span class="caret"></span></a>
                 <div class="dropdown-menu dropdown-menu-right">
-                    @if (!auth()->user()->ldap)
-                        <a class="dropdown-item" href="/changepwd">Change password</a>
+                    @if (!config('ldap.enabled'))
+                        <a class="dropdown-item" href="{{ route('changepassword') }}">Change password</a>
                         <div class="dropdown-divider"></div>
                     @endif
-                    <form method="post" action="/logout">
+                    <form method="post" action="{{ route('logout') }}">
                         @csrf
                         <button class="dropdown-item" type="submit">Logout</button>
                     </form>

@@ -5,3 +5,4 @@ PNotify.defaults.icons = 'fontawesome5';
 window.PNotify = PNotify;
 
 window.ClipboardJS = require('clipboard/dist/clipboard.min');
+$.fn.tooltip.Constructor.Default.whiteList.button = [];

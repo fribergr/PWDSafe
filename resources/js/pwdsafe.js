@@ -122,28 +122,6 @@ $(document).ready(function() {
         );
     });
 
-        $('#changePwd').click(function() {
-                $.post(
-                    '/changepwd',
-                    {
-                        'oldpwd': $('#oldpwd').val(),
-                        'newpwd1': $('#newpwd1').val(),
-                        'newpwd2': $('#newpwd2').val(),
-                        '_token': $('meta[name="csrf-token"]').attr('content'),
-                    },
-                    function(data) {
-                        if (data.status === 'OK') {
-                                $('input').val('');
-                                $('<div class="alert alert-success"><strong>Password changed!</strong> Your password has been changed successfully.</div>').insertBefore('form#pwdchangeform');
-                        } else {
-                                $('.form-group').not('.has-error').addClass('has-error');
-                                showError(data.reason);
-                        }
-                    },
-                    'json'
-                );
-        });
-
         $('#createGroupForm').submit(function(event) {
             event.preventDefault();
             $('#createGroup').click();

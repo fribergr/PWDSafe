@@ -11,9 +11,9 @@ class ChangePasswordController extends Controller
         return view('changepassword');
     }
 
-    public function post(Request $request)
+    public function store(Request $request)
     {
-        abort_if(config('ldap'), '403');
+        abort_if(config('ldap.enabled'), '403');
 
         $validated = $request->validate([
             'oldpwd' => 'required',
@@ -21,7 +21,7 @@ class ChangePasswordController extends Controller
         ]);
 
         if (session()->get('password') !== $validated['oldpwd']) {
-            throw ValidationException::withMessages(['oldpwd' => 'Old password missmatch']);
+            return redirect()->back()->withErrors(['oldpwd' => 'Old password missmatch']);
         }
 
         auth()->user()->changePassword($validated['password']);

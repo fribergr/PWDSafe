@@ -30,6 +30,11 @@ class GroupTest extends TestCase
         $this->assertDatabaseHas('groups', ['name' => 'testgroup']);
     }
 
+    public function testVisitingCreate()
+    {
+        $this->get('/groups/create')->assertStatus(200)->assertSee('Create group');
+    }
+
     public function testDeletingGroup()
     {
         $this->json('POST', '/groups/create', [
@@ -78,6 +83,16 @@ class GroupTest extends TestCase
         $this->assertDatabaseHas('groups', ['name' => 'new name']);
     }
 
+    public function testVisitingShareGroup()
+    {
+        $this->json('POST', '/groups/create', [
+            'groupname' => 'testgroup',
+        ]);
+
+        $group = \App\Group::orderBy('id', 'desc')->first();
+        $this->get('/groups/' . $group->id . '/share')->assertStatus(200)->assertSee('Share group');
+    }
+
     public function testSharingGroup()
     {
         $this->json('POST', '/groups/create', [
@@ -116,6 +131,9 @@ class GroupTest extends TestCase
 
         $this->assertEquals('The super secret password', $decryptedcredential);
         $this->assertCount(2, \App\Encryptedcredential::all());
+
+        $this->json('POST', '/groups/' . $group->id . '/share', ['email' => 'does@not.exist'])->assertStatus(404);
+        $this->json('POST', '/groups/' . $group->id . '/share', ['email' => 'second@email.com'])->assertStatus(202);
     }
 
     public function testUnsharingGroup()

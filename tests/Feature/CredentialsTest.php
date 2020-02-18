@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Credential;
 use App\Helpers\Encryption;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
@@ -31,6 +32,22 @@ class CredentialsTest extends TestCase
         $this->get('/groups/' . $this->user->primarygroup)->assertSee('Some site');
     }
 
+    public function testAddingCredentialsToAGroupYouDoNotHaveAccessToWhichEndsUpInYourPrimaryGroup()
+    {
+        $this->json('POST', '/cred/add', [
+            'creds' => 'Some site',
+            'credu' => 'The username',
+            'credp' => 'The super secret password',
+            'credn' => 'Notes',
+            'currentgroupid' => 9317,
+        ]);
+        $this->assertDatabaseHas('credentials', ['site' => 'Some site']);
+        $credential = \App\Credential::first();
+        $this->assertDatabaseHas('encryptedcredentials', ['credentialid' => $credential->id, 'userid' => $this->user->id]);
+
+        $this->get('/groups/' . $this->user->primarygroup)->assertSee('Some site');
+    }
+
     public function testUpdatingCredentials()
     {
         $this->addTestCredential();
@@ -42,6 +59,7 @@ class CredentialsTest extends TestCase
             'creds' => 'New site',
             'credu' => $credential->username,
             'credp' => $this->getPassword($credential, $this->user),
+            'credn' => '',
             'currentgroupid' => $credential->groupid,
         ]);
 
@@ -54,10 +72,28 @@ class CredentialsTest extends TestCase
             'creds' => 'New site',
             'credu' => $credential->username,
             'credp' => $newpassword,
+            'credn' => '',
             'currentgroupid' => $credential->groupid,
         ]);
 
         $this->assertEquals($newpassword, $this->getPassword($credential, $this->user));
+
+        $this->json('POST', '/groups/create', [
+            'groupname' => 'testgroup',
+        ]);
+
+        $group = \App\Group::where('name', 'testgroup')->first();
+
+        $result = $this->json('POST', '/cred/' . $credential->id, [
+            'creds' => 'New site',
+            'credu' => $credential->username,
+            'credp' => $newpassword,
+            'credn' => '',
+            'currentgroupid' => $group->id,
+        ]);
+        $credential = \App\Credential::first();
+        $this->assertEquals($group->id, $credential->groupid);
+        $this->assertEquals('New site', $credential->site);
     }
 
     public function testRemovingCredentials()
@@ -92,13 +128,7 @@ class CredentialsTest extends TestCase
 
     private function getPassword($credential, $user, $password = 'password')
     {
-        $pwd = \App\Encryptedcredential::where('credentialid', $credential->id)->first();
-        $encryption = app(Encryption::class);
-
-        return $encryption->decWithPriv(
-            base64_decode($pwd->data),
-            $encryption->dec($user->privkey, $password)
-        );
+        return json_decode($this->get('/pwdfor/' . $credential->id)->getContent(), true)['pwd'];
     }
 
     private function addTestCredential()

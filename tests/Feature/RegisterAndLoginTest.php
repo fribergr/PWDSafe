@@ -64,4 +64,36 @@ class RegisterAndLoginTest extends TestCase
 
         $this->assertTrue(Hash::check('SecretPassword', \App\User::first()->password));
     }
+
+    public function testRegisterUserAndChangePasswordViaWeb()
+    {
+        $this->json('POST', '/reg', ['user' => 'some@email.com', 'pass' => 'password']);
+        $this->json('POST', '/login', ['email' => 'some@email.com', 'password' => 'password']);
+        $this->get('/changepwd')->assertStatus(200)->assertSee('Old password');
+        $result = $this->post('/changepwd', ['oldpwd' => 'something', 'password' => 'short']);
+        $result->assertRedirect('/changepwd')->assertSessionHasErrors();
+
+        $result = $this->post('/changepwd', ['oldpwd' => 'password', 'password' => 'short', 'password_confirmation' => 'short']);
+        $result->assertRedirect('/changepwd')->assertSessionHasErrors();
+
+        $result = $this->post('/changepwd', ['oldpwd' => 'password', 'password' => 'longpassword', 'password_confirmation' => 'longpassword']);
+        $result->assertRedirect('/changepwd')->assertSessionDoesntHaveErrors();
+    }
+
+    public function testLogout()
+    {
+        $this->json('POST', '/reg', ['user' => 'some@email.com', 'pass' => 'password']);
+        $this->json('POST', '/login', ['email' => 'some@email.com', 'password' => 'password']);
+        $this->isAuthenticated();
+        $this->post('/logout');
+        $this->assertGuest();
+    }
+
+    public function testRedirectedToPrimaryGroup()
+    {
+        $this->json('POST', '/reg', ['user' => 'some@email.com', 'pass' => 'password']);
+        $this->json('POST', '/login', ['email' => 'some@email.com', 'password' => 'password']);
+        $user = \App\User::first();
+        $this->get('/')->assertRedirect('/groups/' . $user->primarygroup);
+    }
 }

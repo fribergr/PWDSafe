@@ -6,7 +6,7 @@ cache:
   paths:
     - vendor/
 test:
-  image: $DOCKERHOST/devpeak-php-ubuntu
+  image: $DOCKERHOST/devpeak-php-ubuntu:focal
   before_script:
     - apt-get update && apt-get install -y php-sqlite3 php-ast
     - composer global require pdepend/pdepend squizlabs/php_codesniffer phpmd/phpmd phploc/phploc sebastian/phpcpd phan/phan

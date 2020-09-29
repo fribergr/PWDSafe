@@ -6,7 +6,8 @@ cache:
   paths:
     - vendor/
 test:
-  image: $DOCKERHOST/devpeak-php-ubuntu:focal
+  image: $BUILDIMAGE
+
   before_script:
     - apt-get update && apt-get install -y php-sqlite3 php-ast
     - composer global require pdepend/pdepend squizlabs/php_codesniffer phpmd/phpmd phploc/phploc sebastian/phpcpd phan/phan
@@ -46,7 +47,7 @@ sonarqube:
     - /usr/bin/sonar-scanner-run.sh
 
 security-check:
-  image: $DOCKERHOST/devpeak-php-ubuntu
+  image: $BUILDIMAGE
   stage: analysis
   script:
     - composer global require sensiolabs/security-checker
@@ -54,7 +55,7 @@ security-check:
 
 
 phpmetrics:
-  image: $DOCKERHOST/devpeak-php-ubuntu
+  image: $BUILDIMAGE
   stage: analysis
   dependencies:
     - test

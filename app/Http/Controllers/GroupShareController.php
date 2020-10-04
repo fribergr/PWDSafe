@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Encryptedcredential;
 use App\Group;
 use App\Helpers\Encryption;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,30 +13,43 @@ class GroupShareController extends Controller
 {
     public function index(Request $request, Group $group)
     {
-        $this->authorize('update', $group);
+        $this->authorize('updateExceptPrimary', $group);
 
         return view('group.share', compact('group'));
     }
 
+    public function destroy(Request $request, Group $group)
+    {
+        $this->authorize('updateExceptPrimary', $group);
+        $data = $request->validate([
+            'userid' => ['required', 'exists:users,id']
+        ]);
+
+        \App\Encryptedcredential::whereIn('credentialid', $group->credentials()->pluck('id'))->where('userid', $data['userid'])->delete();
+        User::find($data['userid'])->groups()->detach($group);
+
+        return redirect()->back();
+    }
+
     public function store(Request $request, Group $group)
     {
-        $this->authorize('update', $group);
-        $params = $this->validate($request, ['email' => 'required']);
+        $this->authorize('updateExceptPrimary', $group);
+        $params = $this->validate($request, ['username' => 'required']);
 
-        $user = \App\User::where('email', $params['email'])->first();
+        $user = User::where('email', $params['username'])->first();
         if (is_null($user)) {
-            return response(['status' => 'Fail', 'reason' => 'User does not exist'], 404);
+            return redirect()->back()->withErrors('User does not exist')->withInput($request->all());
         }
 
         if ($user->groups->contains('id', $group->id)) {
-            return response(['status' => 'Fail', 'reason' => 'User already in group'], 202);
+            return redirect()->back();
         }
 
         $user->groups()->attach($group);
 
         $sql = "SELECT encryptedcredentials.data, encryptedcredentials.credentialid FROM encryptedcredentials
                         INNER JOIN credentials ON credentials.id = encryptedcredentials.credentialid
-                        INNER JOIN groups ON credentials.groupid = groups.id
+                        INNER JOIN `groups` ON credentials.groupid = groups.id
                         INNER JOIN usergroups ON usergroups.groupid = groups.id
                         WHERE usergroups.groupid = :groupid AND usergroups.userid = :userid
                         AND encryptedcredentials.userid = :userid2";
@@ -58,6 +72,6 @@ class GroupShareController extends Controller
             $encryptedcred->save();
         }
 
-        return response(['status' => 'OK']);
+        return redirect()->back();
     }
 }

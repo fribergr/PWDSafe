@@ -55,4 +55,9 @@ class Credential extends Eloquent
         Encryptedcredential::where('credentialid', $this->id)->delete();
         $this->delete();
     }
+
+    public function encryptedcredentials()
+    {
+        return $this->hasMany(Encryptedcredential::class, 'credentialid');
+    }
 }

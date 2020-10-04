@@ -7,10 +7,16 @@ use Illuminate\Http\Request;
 
 class GroupChangeNameController extends Controller
 {
+    public function index(Request $request, Group $group)
+    {
+        $this->authorize('updateExceptPrimary', $group);
+
+        return view('group.name', compact('group'));
+    }
 
     public function store(Request $request, Group $group)
     {
-        $this->authorize('update', $group);
+        $this->authorize('updateExceptPrimary', $group);
         $params = $this->validate($request, [
             'groupname' => 'required|max:100'
         ]);
@@ -22,6 +28,6 @@ class GroupChangeNameController extends Controller
         $group->name = $groupname;
         $group->save();
 
-        return response(['status' => 'OK']);
+        return $request->wantsJson() ? response(['status' => 'OK']) : redirect(route('group', $group->id));
     }
 }

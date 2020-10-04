@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class Group extends Eloquent
 {
-    protected $with = ['credentials'];
     public $timestamps = false;
 
     public function credentials()

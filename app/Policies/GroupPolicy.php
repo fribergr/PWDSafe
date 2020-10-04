@@ -31,6 +31,18 @@ class GroupPolicy
      */
     public function update(User $user, Group $group)
     {
+        return $user->groups->contains('id', $group->id);
+    }
+
+    /**
+     * Determine whether the user can update the group.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Group  $group
+     * @return mixed
+     */
+    public function updateExceptPrimary(User $user, Group $group)
+    {
         return $user->groups->contains('id', $group->id) && $group->id !== $user->primarygroup;
     }
 

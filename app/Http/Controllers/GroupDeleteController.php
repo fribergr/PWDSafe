@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use Illuminate\Http\Request;
 
 class GroupDeleteController extends Controller
 {
@@ -13,11 +14,11 @@ class GroupDeleteController extends Controller
         return view('group.delete', compact('group'));
     }
 
-    public function delete(Group $group)
+    public function delete(Request $request, Group $group)
     {
         $this->authorize('delete', $group);
         $group->deleteGroup();
 
-        return response(['status' => 'OK']);
+        return $request->wantsJson() ? response(['status' => 'OK']) : redirect('/');
     }
 }

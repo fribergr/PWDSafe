@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Helpers\Encryption;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 
 class SearchTest extends TestCase
@@ -15,8 +16,13 @@ class SearchTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->json('POST', '/reg', ['user' => 'some@email.com', 'pass' => 'password']);
-        $this->json('POST', '/login', ['email' => 'some@email.com', 'password' => 'password']);
+        $this->post('/register', [
+            'email' => 'some@email.com',
+            'password' => 'password',
+            'password_confirmation' => 'password'
+        ]);
+        $this->actingAs(\App\User::first());
+        session()->put('password', 'password');
         $this->user = \App\User::first();
     }
 
@@ -25,22 +31,25 @@ class SearchTest extends TestCase
         $this->get('/search/something')->assertStatus(200)->assertSee('No credentials found');
     }
 
+    public function testSearchByPost()
+    {
+        $this->post('/search', ['search' => 'Something'])->assertRedirect('/search/Something');
+    }
+
     public function testSearchingOneItem()
     {
-        $this->json('POST', '/cred/add', [
-            'creds' => 'Site1',
-            'credu' => 'The username',
-            'credp' => 'The super secret password',
-            'credn' => 'Some notes here',
-            'currentgroupid' => $this->user->primarygroup,
+        $this->post("/groups/{$this->user->primarygroup}/add", [
+            'site' => 'Site1',
+            'user' => 'The username',
+            'pass' => 'The super secret password',
+            'notes' => 'Some notes here',
         ]);
 
-        $this->json('POST', '/cred/add', [
-            'creds' => 'Site2',
-            'credu' => 'The username',
-            'credp' => 'The super secret password',
-            'credn' => 'No notes here',
-            'currentgroupid' => $this->user->primarygroup,
+        $this->post("/groups/{$this->user->primarygroup}/add", [
+            'site' => 'Site2',
+            'user' => 'The username',
+            'pass' => 'The super secret password',
+            'notes' => 'No notes here',
         ]);
 
         $this->get('/search/Site2')->assertStatus(200)->assertSee('Site2')->assertDontSee('Site1');

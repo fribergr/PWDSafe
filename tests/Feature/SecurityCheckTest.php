@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Helpers\Encryption;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 
 class SecurityCheckTest extends TestCase
@@ -15,8 +16,13 @@ class SecurityCheckTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->json('POST', '/reg', ['user' => 'some@email.com', 'pass' => 'password']);
-        $this->json('POST', '/login', ['email' => 'some@email.com', 'password' => 'password']);
+        $this->post('/register', [
+            'email' => 'some@email.com',
+            'password' => 'password',
+            'password_confirmation' => 'password'
+        ]);
+        $this->actingAs(\App\User::first());
+        session()->put('password', 'password');
         $this->user = \App\User::first();
     }
 
@@ -48,20 +54,18 @@ class SecurityCheckTest extends TestCase
 
     public function testTwoSamePasswords()
     {
-        $this->json('POST', '/cred/add', [
-            'creds' => 'Site2',
-            'credu' => 'The username',
-            'credp' => 'The super secret password',
-            'credn' => 'No notes here',
-            'currentgroupid' => $this->user->primarygroup,
+        $this->post("/groups/{$this->user->primarygroup}/add", [
+            'site' => 'Site2',
+            'user' => 'The username',
+            'pass' => 'The super secret password',
+            'notes' => 'No notes here',
         ]);
 
-        $this->json('POST', '/cred/add', [
-            'creds' => 'Site2',
-            'credu' => 'The username',
-            'credp' => 'The super secret password',
-            'credn' => 'No notes here',
-            'currentgroupid' => $this->user->primarygroup,
+        $this->post("/groups/{$this->user->primarygroup}/add", [
+            'site' => 'Site2',
+            'user' => 'The username',
+            'pass' => 'The super secret password',
+            'notes' => 'No notes here',
         ]);
 
         $this->get('/securitycheck')->assertStatus(200)->assertSee('Password group');

@@ -26,6 +26,6 @@ class ChangePasswordController extends Controller
 
         auth()->user()->changePassword($validated['password']);
 
-        return redirect()->back()->with('success');
+        return redirect()->back()->with('success', 'Your password has been changed successfully');
     }
 }

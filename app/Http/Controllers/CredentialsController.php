@@ -9,39 +9,10 @@ use Illuminate\Validation\ValidationException;
 
 class CredentialsController extends Controller
 {
-    public function store(Request $request)
-    {
-        $params = $this->validate($request, [
-            'creds' => 'required',
-            'credu' => 'required',
-            'credp' => 'required',
-            'credn' => 'nullable',
-            'currentgroupid' => 'required',
-        ]);
+    public function index(Request $request, Credential $credential) {
+        $this->authorize('delete', $credential);
 
-        if (!auth()->user()->groups->contains('id', $params['currentgroupid'])) {
-            $params['currentgroupid'] = auth()->user()->primarygroup;
-        }
-
-        $credential = new Credential;
-        $credential->groupid = $params['currentgroupid'];
-        $credential->site = $params['creds'];
-        $credential->username = $params['credu'];
-        $credential->notes = $params['credn'];
-        $credential->save();
-
-        $group = \App\Group::where('id', $params['currentgroupid'])->first();
-        $users = $group->users()->get()->pluck('pubkey', 'id');
-
-        foreach ($users as $userid => $pubkey) {
-            $encrypted = new Encryptedcredential;
-            $encrypted->credentialid = $credential->id;
-            $encrypted->userid = $userid;
-            $encrypted->data = base64_encode(app(Encryption::class)->encWithPub($params['credp'], $pubkey));
-            $encrypted->save();
-        }
-
-        return response(['status' => 'OK']);
+        return view('credential.index', compact('credential'));
     }
 
     public function update(Request $request, Credential $credential)
@@ -62,14 +33,19 @@ class CredentialsController extends Controller
             Credential::updateCredentials($credential, $params);
         }
 
-        return response(['status' => 'OK']);
+        if ($request->wantsJson()) {
+            return response(['status' => 'OK']);
+        } else {
+            return redirect(route('group', $params['currentgroupid']));
+        }
     }
 
     public function delete(Request $request, Credential $credential)
     {
         $this->authorize('delete', $credential);
+        $group = $credential->groupid;
         $credential->deleteCredential();
 
-        return response(['status' => 'OK']);
+        return redirect(route('group', $group));
     }
 }

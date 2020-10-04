@@ -2,10 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Credential;
-use App\Helpers\Encryption;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class CredentialsTest extends TestCase
@@ -17,30 +14,20 @@ class CredentialsTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->json('POST', '/reg', ['user' => 'some@email.com', 'pass' => 'password']);
-        $this->json('POST', '/login', ['email' => 'some@email.com', 'password' => 'password']);
+        $this->post('/register', [
+            'email' => 'some@email.com',
+            'password' => 'password',
+            'password_confirmation' => 'password'
+        ]);
+        $this->post('logout');
+        $this->from('/login')->post('/login', ['email' => 'some@email.com', 'password' => 'password']);
         $this->user = \App\User::first();
     }
 
     public function testAddingCredentials()
     {
+        $this->get("/groups/{$this->user->primarygroup}/add")->assertSee('Add credential');
         $this->addTestCredential();
-        $this->assertDatabaseHas('credentials', ['site' => 'Some site']);
-        $credential = \App\Credential::first();
-        $this->assertDatabaseHas('encryptedcredentials', ['credentialid' => $credential->id, 'userid' => $this->user->id]);
-
-        $this->get('/groups/' . $this->user->primarygroup)->assertSee('Some site');
-    }
-
-    public function testAddingCredentialsToAGroupYouDoNotHaveAccessToWhichEndsUpInYourPrimaryGroup()
-    {
-        $this->json('POST', '/cred/add', [
-            'creds' => 'Some site',
-            'credu' => 'The username',
-            'credp' => 'The super secret password',
-            'credn' => 'Notes',
-            'currentgroupid' => 9317,
-        ]);
         $this->assertDatabaseHas('credentials', ['site' => 'Some site']);
         $credential = \App\Credential::first();
         $this->assertDatabaseHas('encryptedcredentials', ['credentialid' => $credential->id, 'userid' => $this->user->id]);
@@ -55,7 +42,7 @@ class CredentialsTest extends TestCase
         $credential = \App\Credential::first();
         $this->assertDatabaseHas('encryptedcredentials', ['credentialid' => $credential->id, 'userid' => $this->user->id]);
 
-        $this->json('POST', '/cred/' . $credential->id, [
+        $this->put('/credential/' . $credential->id, [
             'creds' => 'New site',
             'credu' => $credential->username,
             'credp' => $this->getPassword($credential, $this->user),
@@ -68,7 +55,7 @@ class CredentialsTest extends TestCase
 
         $newpassword = 'Some other password';
 
-        $this->json('POST', '/cred/' . $credential->id, [
+        $this->put('/credential/' . $credential->id, [
             'creds' => 'New site',
             'credu' => $credential->username,
             'credp' => $newpassword,
@@ -84,7 +71,7 @@ class CredentialsTest extends TestCase
 
         $group = \App\Group::where('name', 'testgroup')->first();
 
-        $result = $this->json('POST', '/cred/' . $credential->id, [
+        $this->json('PUT', '/credential/' . $credential->id, [
             'creds' => 'New site',
             'credu' => $credential->username,
             'credp' => $newpassword,
@@ -98,18 +85,19 @@ class CredentialsTest extends TestCase
 
     public function testRemovingCredentials()
     {
-        $this->json('POST', '/cred/add', [
-            'creds' => 'Some site',
-            'credu' => 'The username',
-            'credp' => 'The super secret password',
-            'credn' => 'Notes',
-            'currentgroupid' => $this->user->primarygroup,
+        $this->json('POST', "/groups/{$this->user->primarygroup}/add", [
+            'site' => 'Some site',
+            'user' => 'The username',
+            'pass' => 'The super secret password',
+            'notes' => 'Notes'
         ]);
 
         $this->assertDatabaseHas('credentials', ['site' => 'Some site']);
         $credential = \App\Credential::first();
 
-        $this->json('GET', '/cred/' . $credential->id . '/remove');
+        $this->get('/credential/' . $credential->id)->assertSee('Are you sure');
+
+        $this->delete('/credential/' . $credential->id);
         $this->assertDatabaseMissing('credentials', ['site' => 'Some site']);
     }
 
@@ -133,12 +121,11 @@ class CredentialsTest extends TestCase
 
     private function addTestCredential()
     {
-        $this->json('POST', '/cred/add', [
-            'creds' => 'Some site',
-            'credu' => 'The username',
-            'credp' => 'The super secret password',
-            'credn' => 'Notes',
-            'currentgroupid' => $this->user->primarygroup,
+        $this->post('/groups/' . $this->user->primarygroup . '/add', [
+            'site' => 'Some site',
+            'user' => 'The username',
+            'pass' => 'The super secret password',
+            'notes' => 'Notes',
         ]);
     }
 }

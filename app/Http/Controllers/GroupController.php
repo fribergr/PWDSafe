@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Credential;
+use App\Encryptedcredential;
 use App\Group;
+use App\Helpers\Encryption;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -21,6 +24,47 @@ class GroupController extends Controller
         return view('group.create');
     }
 
+    public function addCredential(Group $group)
+    {
+        $this->authorize('update', $group);
+        return view('credential.add', compact('group'));
+    }
+
+    public function storeCredential(Request $request, Group $group)
+    {
+        $this->authorize('update', $group);
+
+        $params = $request->validate([
+            'site' => 'required',
+            'user' => 'required',
+            'pass' => 'required',
+            'notes' => 'nullable'
+        ]);
+
+        $credential = new Credential;
+        $credential->groupid = $group->id;
+        $credential->site = $params['site'];
+        $credential->username = $params['user'];
+        $credential->notes = $params['notes'];
+        $credential->save();
+
+        $users = $group->users()->get()->pluck('pubkey', 'id');
+
+        foreach ($users as $userid => $pubkey) {
+            $encrypted = new Encryptedcredential;
+            $encrypted->credentialid = $credential->id;
+            $encrypted->userid = $userid;
+            $encrypted->data = base64_encode(app(Encryption::class)->encWithPub($params['pass'], $pubkey));
+            $encrypted->save();
+        }
+
+        if ($request->wantsJson()) {
+            return response(['status' => 'OK']);
+        } else {
+            return redirect(route('group', $group->id));
+        }
+    }
+
     public function store(Request $request)
     {
         $params = $this->validate($request, ['groupname' => 'required']);
@@ -29,9 +73,13 @@ class GroupController extends Controller
         $group->save();
         auth()->user()->groups()->attach($group);
 
-        return response([
-            'status' => "OK",
-            "groupid" => $group->id
-        ]);
+        if ($request->wantsJson()) {
+            return response([
+                'status' => "OK",
+                "groupid" => $group->id
+            ]);
+        } else {
+            return redirect(route('group', $group->id));
+        }
     }
 }

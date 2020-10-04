@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Helpers\Encryption;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 
 class GroupTest extends TestCase
@@ -15,15 +16,20 @@ class GroupTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->json('POST', '/reg', ['user' => 'some@email.com', 'pass' => 'password']);
-        $this->json('POST', '/login', ['email' => 'some@email.com', 'password' => 'password']);
+        $this->post('/register', [
+            'email' => 'some@email.com',
+            'password' => 'password',
+            'password_confirmation' => 'password'
+        ]);
+        $this->actingAs(\App\User::first());
+        session()->put('password', 'password');
         $this->user = \App\User::first();
     }
 
     public function testAddingGroup()
     {
         $this->assertCount(1, $this->user->groups);
-        $this->json('POST', '/groups/create', [
+        $this->post('/groups/create', [
             'groupname' => 'testgroup',
         ]);
         $this->assertCount(2, $this->user->fresh()->groups);
@@ -37,7 +43,7 @@ class GroupTest extends TestCase
 
     public function testDeletingGroup()
     {
-        $this->json('POST', '/groups/create', [
+        $this->post('/groups/create', [
             'groupname' => 'testgroup',
         ]);
         $group = \App\Group::orderBy('id', 'desc')->first();
@@ -47,7 +53,7 @@ class GroupTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Are you sure');
 
-        $this->json('POST', '/groups/' . $group->id . '/delete', []);
+        $this->delete('/groups/' . $group->id);
         $this->assertDatabaseMissing('groups', ['name' => 'testgroup']);
         $this->assertCount(1, $this->user->fresh()->groups);
     }
@@ -59,7 +65,7 @@ class GroupTest extends TestCase
         $response = $this->get('/groups/' . $group->id . '/delete');
         $response->assertStatus(403);
 
-        $this->json('POST', '/groups/' . $group->id . '/delete', []);
+        $this->post('/groups/' . $group->id . '/delete', []);
         $this->assertDatabaseHas('groups', ['id' => $group->id]);
         $this->assertCount(1, $this->user->fresh()->groups);
     }
@@ -67,7 +73,7 @@ class GroupTest extends TestCase
     public function testRenamingGroup()
     {
         $this->assertCount(1, $this->user->groups);
-        $this->json('POST', '/groups/create', [
+        $this->post('/groups/create', [
             'groupname' => 'testgroup',
         ]);
         $this->assertCount(2, $this->user->fresh()->groups);
@@ -75,9 +81,10 @@ class GroupTest extends TestCase
 
         $group = \App\Group::orderBy('id', 'desc')->first();
 
-        $this->json('POST', '/groups/' . $group->id . '/changename', [
+        $this->get("/groups/{$group->id}/name")->assertSee('Group name');
+        $this->post('/groups/' . $group->id . '/name', [
             'groupname' => 'new name',
-        ]);
+        ])->assertRedirect('/groups/' . $group->id);
 
         $this->assertDatabaseMissing('groups', ['name' => 'testgroup']);
         $this->assertDatabaseHas('groups', ['name' => 'new name']);
@@ -85,7 +92,7 @@ class GroupTest extends TestCase
 
     public function testVisitingShareGroup()
     {
-        $this->json('POST', '/groups/create', [
+        $this->post('/groups/create', [
             'groupname' => 'testgroup',
         ]);
 
@@ -95,27 +102,35 @@ class GroupTest extends TestCase
 
     public function testSharingGroup()
     {
-        $this->json('POST', '/groups/create', [
+        $this->post('/groups/create', [
             'groupname' => 'testgroup',
         ]);
 
         $group = \App\Group::orderBy('id', 'desc')->first();
 
-        $this->json('POST', '/cred/add', [
-            'creds' => 'Some site',
-            'credu' => 'The username',
-            'credp' => 'The super secret password',
-            'credn' => 'Notes',
-            'currentgroupid' => $group->id,
+        $this->post("/groups/{$group->id}/add", [
+            'site' => 'Some site',
+            'user' => 'The username',
+            'pass' => 'The super secret password',
+            'notes' => 'Notes',
         ]);
 
-        $this->json('POST', '/reg', ['user' => 'second@email.com', 'pass' => 'abitlongersecret']);
-        $this->json('POST', '/groups/' . $group->id . '/share', ['email' => 'second@email.com']);
+        $this->post('/logout');
+
+        $this->post('/register', [
+            'email' => 'second@email.com',
+            'password' => 'abitlongersecret',
+            'password_confirmation' => 'abitlongersecret'
+        ]);
+        $this->post('logout');
+        $this->from('/login')->post('/login', ['email' => 'some@email.com', 'password' => 'password']);
+        $this->post('/groups/' . $group->id . '/share', ['username' => 'second@email.com']);
 
         $this->assertCount(2, $group->fresh()->users);
 
+        $this->post('logout');
+        $this->from('/login')->post('/login', ['email' => 'second@email.com', 'password' => 'abitlongersecret']);
         $seconduser = \App\User::where('email', 'second@email.com')->first();
-        $this->actingAs($seconduser);
 
         $credential = \App\Credential::first();
 
@@ -132,19 +147,19 @@ class GroupTest extends TestCase
         $this->assertEquals('The super secret password', $decryptedcredential);
         $this->assertCount(2, \App\Encryptedcredential::all());
 
-        $this->json('POST', '/groups/' . $group->id . '/share', ['email' => 'does@not.exist'])->assertStatus(404);
-        $this->json('POST', '/groups/' . $group->id . '/share', ['email' => 'second@email.com'])->assertStatus(202);
+        $this->post('/groups/' . $group->id . '/share', ['username' => 'does@not.exist'])->assertRedirect()->assertSessionHasErrors();
+        $this->post('/groups/' . $group->id . '/share', ['username' => 'second@email.com'])->assertRedirect()->assertSessionDoesntHaveErrors();
     }
 
     public function testUnsharingGroup()
     {
-        $this->json('POST', '/groups/create', [
+        $this->post('/groups/create', [
             'groupname' => 'testgroup',
         ]);
 
         $group = \App\Group::orderBy('id', 'desc')->first();
 
-        $this->json('POST', '/cred/add', [
+        $this->post('/cred/add', [
             'creds' => 'Some site',
             'credu' => 'The username',
             'credp' => 'The super secret password',
@@ -152,12 +167,20 @@ class GroupTest extends TestCase
             'currentgroupid' => $group->id,
         ]);
 
-        $this->json('POST', '/reg', ['user' => 'second@email.com', 'pass' => 'abitlongersecret']);
+        $this->post('/logout');
+        $this->post('/register', [
+            'email' => 'second@email.com',
+            'password' => 'abitlongersecret',
+            'password_confirmation' => 'abitlongersecret'
+        ]);
         $user2 = \App\User::where('email', 'second@email.com')->first();
-        $this->json('POST', '/groups/' . $group->id . '/share', ['email' => $user2->email]);
+        $this->actingAs(\App\User::first());
+        session()->put('password', 'password');
+
+        $this->post('/groups/' . $group->id . '/share', ['username' => $user2->email]);
         $this->assertCount(2, $user2->fresh()->groups);
 
-        $res = $this->json('POST', '/groups/' . $group->id . '/unshare/' . $user2->id, []);
+        $this->delete('/groups/' . $group->id . '/share', ['userid' => $user2->id]);
         $this->assertCount(1, $user2->fresh()->groups);
     }
 }

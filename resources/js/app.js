@@ -42,4 +42,9 @@ Vue.component('pwdsafe-modal', require('./components/Modal.vue').default);
 
 const app = new Vue({
     el: '#app',
+    data() {
+        return {
+            mobileMenuOpen: false
+        }
+    }
 });

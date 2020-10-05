@@ -37,7 +37,7 @@
                                             {{ $group->name }}
                                         @endif
                                     <span
-                                        class="bg-indigo-300  text-indigo-800 p-1 ml-2 rounded-md">{{ $group->credentials_count }}</span>
+                                        class="bg-gray-200 text-indigo-500 p-1 px-2 ml-2 rounded-md">{{ $group->credentials_count }}</span>
                                     </span>
                                 </dropdown-link>
                             @endforeach
@@ -72,32 +72,20 @@
                     <div class="flex items-center lg:hidden">
                         <!-- Mobile menu button -->
                         <button
+                            @click="mobileMenuOpen = !mobileMenuOpen"
                             class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
                             aria-label="Main menu" aria-expanded="false">
-                            <!-- Icon when menu is closed. -->
-                            <!--
-                              Heroicon name: menu
-
-                              Menu open: "hidden", Menu closed: "block"
-                            -->
-                            <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg :class="{'block': !mobileMenuOpen, 'hidden': mobileMenuOpen}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M4 6h16M4 12h16M4 18h16"/>
                             </svg>
-                            <!-- Icon when menu is open. -->
-                            <!--
-                              Heroicon name: x
-
-                              Menu open: "block", Menu closed: "hidden"
-                            -->
-                            <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg :class="{'block': mobileMenuOpen, 'hidden': !mobileMenuOpen}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M6 18L18 6M6 6l12 12"/>
                             </svg>
                         </button>
                     </div>
                     <div class="hidden lg:ml-4 lg:flex lg:items-center">
-
                         <!-- Profile dropdown -->
                         <dropdown-menu>
                             <template v-slot:trigger="{ open }">
@@ -122,47 +110,40 @@
                 </div>
             </div>
 
-            <!--
-              Mobile menu, toggle classes based on menu state.
-
-              Menu open: "block", Menu closed: "hidden"
-            -->
-            <div class="hidden lg:hidden">
+            <div class="lg:hidden" :class="{'block': mobileMenuOpen, 'hidden': !mobileMenuOpen}">
                 <div class="pt-2 pb-3">
-                    <a href="#"
-                       class="block pl-3 pr-4 py-2 border-l-4 border-indigo-500 text-base font-medium text-indigo-700 bg-indigo-50 focus:outline-none focus:text-indigo-800 focus:bg-indigo-100 focus:border-indigo-700 transition duration-150 ease-in-out">Dashboard</a>
-                    <a href="#"
-                       class="mt-1 block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">Team</a>
-                    <a href="#"
-                       class="mt-1 block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">Projects</a>
-                    <a href="#"
-                       class="mt-1 block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">Calendar</a>
+                    @foreach (auth()->user()->groups()->withCount('credentials')->get() as $group)
+                        <a href="{{ route('group', $group->id) }}"
+                           class="mt-1 block pl-3 pr-4 py-2 border-l-4 items-center px-1 pt-1 text-base font-medium leading-5 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out hover:bg-gray-100 {{ request()->is('groups/' . $group->id) ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300' }}">
+                            <span class="flex items-center justify-between">
+                                @if ($group->id === auth()->user()->primarygroup)
+                                    Private
+                                @else
+                                    {{ $group->name }}
+                                @endif
+                                    <span
+                                        class="bg-gray-200 text-indigo-500 p-1 px-2 ml-2 rounded-md">{{ $group->credentials_count }}</span>
+                                </span>
+                        </a>
+                    @endforeach
                 </div>
                 <div class="pt-4 pb-3 border-t border-gray-200">
-                    <div class="flex items-center px-4">
-                        <div class="flex-shrink-0">
-                            <img class="h-10 w-10 rounded-full"
-                                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                 alt="">
-                        </div>
-                        <div class="ml-3">
-                            <div class="text-base font-medium leading-6 text-gray-800">Tom Cook</div>
-                            <div class="text-sm font-medium leading-5 text-gray-500">tom@example.com</div>
-                        </div>
-                    </div>
                     <div class="mt-3">
-                        <a href="#"
-                           class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 focus:outline-none focus:text-gray-800 focus:bg-gray-100 transition duration-150 ease-in-out">
-                            Your Profile
+                        <a href="{{ route('groupCreate') }}"
+                           class="mt-1 block pl-3 pr-4 py-2 border-l-4 items-center px-1 pt-1 {{ (request()->is('groups/create')) ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300' }} text-base font-medium leading-5 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out hover:bg-gray-100">
+                            Create group
                         </a>
-                        <a href="#"
-                           class="mt-1 block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 focus:outline-none focus:text-gray-800 focus:bg-gray-100 transition duration-150 ease-in-out">
-                            Settings
+                        <a href="{{ route('securitycheck') }}"
+                           class="mt-1 block pl-3 pr-4 py-2 border-l-4 items-center px-1 pt-1 {{ (request()->is('securitycheck')) ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300' }} text-base font-medium leading-5 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out hover:bg-gray-100">
+                            Security check
                         </a>
-                        <a href="#"
-                           class="mt-1 block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 focus:outline-none focus:text-gray-800 focus:bg-gray-100 transition duration-150 ease-in-out">
-                            Sign out
-                        </a>
+                        <form method="post" action="{{ route('logout') }}" class="w-full">
+                            @csrf
+                            <button type="submit"
+                                    class="w-full text-left  mt-1 block pl-3 pr-4 py-2 border-l-4 items-center px-1 pt-1 border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300 text-base font-medium leading-5 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out hover:bg-gray-100">
+                                Logout
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

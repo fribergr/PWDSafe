@@ -52,7 +52,7 @@
     @if ($credentials->count() > 0)
     <div class="flex flex-wrap -mx-2">
         @foreach($credentials as $credential)
-            <credential-card :credential="{{ $credential }}" :groups="{{ auth()->user()->groups }}"></credential-card>
+            <credential-card :credential="{{ $credential }}" :groups="{{ auth()->user()->groups->map->only('id', 'name') }}"></credential-card>
         @endforeach
     </div>
     @else

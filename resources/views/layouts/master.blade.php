@@ -28,17 +28,17 @@
                             </template>
                             <dropdown-link href="{{ route('groupCreate') }}">Create group</dropdown-link>
                             <div class="my-1 border-b"></div>
-                            @foreach (auth()->user()->groups as $group)
+                            @foreach (auth()->user()->groups()->withCount('credentials')->get() as $group)
                                 <dropdown-link href="{{ route('group', $group->id) }}">
                                     <span class="flex items-center justify-between">
-                                    @if ($group->id === auth()->user()->primarygroup)
+                                        @if ($group->id === auth()->user()->primarygroup)
                                             Private
                                         @else
                                             {{ $group->name }}
                                         @endif
                                     <span
-                                        class="bg-indigo-300  text-indigo-800 p-1 ml-2 rounded-md">{{ $group->credentials->count() }}</span>
-                                        </span>
+                                        class="bg-indigo-300  text-indigo-800 p-1 ml-2 rounded-md">{{ $group->credentials_count }}</span>
+                                    </span>
                                 </dropdown-link>
                             @endforeach
                         </dropdown-menu>

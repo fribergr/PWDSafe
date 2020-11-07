@@ -11,16 +11,16 @@
   },
   "dependencies": {
     "clipboard": "^2.0.6",
-    "tailwindcss": "^1.8.10",
+    "tailwindcss": "^1.9.6",
     "v-clipboard": "^2.2.3",
     "vue": "^2.6.0"
   },
   "devDependencies": {
     "axios": "^0.19",
     "cross-env": "^7.0.2",
-    "laravel-mix": "^5.0.5",
+    "laravel-mix": "^5.0.9",
     "resolve-url-loader": "^2.3.1",
-    "sass": "^1.20.1",
+    "sass": "^1.29.0",
     "sass-loader": "^8.0.0",
     "vue-template-compiler": "^2.6.12"
   }

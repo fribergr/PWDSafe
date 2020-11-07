@@ -26,21 +26,23 @@
                             <template v-slot:trigger>
                                 Groups
                             </template>
-                            <dropdown-link href="{{ route('groupCreate') }}">Create group</dropdown-link>
-                            <div class="my-1 border-b"></div>
-                            @foreach (auth()->user()->groups()->withCount('credentials')->get() as $group)
-                                <dropdown-link href="{{ route('group', $group->id) }}">
-                                    <span class="flex items-center justify-between">
-                                        @if ($group->id === auth()->user()->primarygroup)
-                                            Private
-                                        @else
-                                            {{ $group->name }}
-                                        @endif
-                                    <span
-                                        class="bg-gray-200 text-indigo-500 p-1 px-2 ml-2 rounded-md">{{ $group->credentials_count }}</span>
-                                    </span>
-                                </dropdown-link>
-                            @endforeach
+                            <template v-slot:default>
+                                <dropdown-link href="{{ route('groupCreate') }}">Create group</dropdown-link>
+                                <div class="my-1 border-b"></div>
+                                @foreach (auth()->user()->groups()->withCount('credentials')->get() as $group)
+                                    <dropdown-link href="{{ route('group', $group->id) }}">
+                                        <span class="flex items-center justify-between">
+                                            @if ($group->id === auth()->user()->primarygroup)
+                                                Private
+                                            @else
+                                                {{ $group->name }}
+                                            @endif
+                                        <span
+                                            class="bg-gray-200 text-indigo-500 p-1 px-2 ml-2 rounded-md">{{ $group->credentials_count }}</span>
+                                        </span>
+                                    </dropdown-link>
+                                @endforeach
+                            </template>
                         </dropdown-menu>
                             </span>
                             <a href="{{ route('securitycheck') }}"
@@ -75,11 +77,13 @@
                             @click="mobileMenuOpen = !mobileMenuOpen"
                             class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
                             aria-label="Main menu" aria-expanded="false">
-                            <svg :class="{'block': !mobileMenuOpen, 'hidden': mobileMenuOpen}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg :class="{'block': !mobileMenuOpen, 'hidden': mobileMenuOpen}" class="h-6 w-6"
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M4 6h16M4 12h16M4 18h16"/>
                             </svg>
-                            <svg :class="{'block': mobileMenuOpen, 'hidden': !mobileMenuOpen}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg :class="{'block': mobileMenuOpen, 'hidden': !mobileMenuOpen}" class="h-6 w-6"
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M6 18L18 6M6 6l12 12"/>
                             </svg>
@@ -94,17 +98,19 @@
                                     <span class="far fa-user mr-1"></span> {{ auth()->user()->email }}
                                 </span>
                             </template>
-                            @if (!config('ldap.enabled'))
-                                <dropdown-link href="{{ route('changepassword') }}">Change password</dropdown-link>
-                                <div class="my-1 border-b"></div>
-                            @endif
-                            <form method="post" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit"
-                                        class="w-full text-left block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
-                                    Logout
-                                </button>
-                            </form>
+                            <template v-slot:default>
+                                @if (!config('ldap.enabled'))
+                                    <dropdown-link href="{{ route('changepassword') }}">Change password</dropdown-link>
+                                    <div class="my-1 border-b"></div>
+                                @endif
+                                <form method="post" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit"
+                                            class="w-full text-left block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
+                                        Logout
+                                    </button>
+                                </form>
+                            </template>
                         </dropdown-menu>
                     </div>
                 </div>

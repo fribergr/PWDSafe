@@ -16,20 +16,22 @@
                     <template v-slot:trigger>
                         <pwdsafe-button theme="secondary"><i class="fa fa-file-import"></i> Import</pwdsafe-button>
                     </template>
-                    <h3 class="text-2xl mb-4">Import credentials</h3>
-                    <p>Import a csv file with the following format:</p>
-                    <pre class="my-2">site,username,password,notes</pre>
-                    <p class="text-red-500 mb-4">Warning: Malformed rows will be skipped.</p>
-                    <form method="post" action="/import" id="creduploadform" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="group" value="{{ $group->id }}">
-                        <div class="form-group">
-                            <input type="file" name="csvfile" id="csvfile" required>
-                        </div>
-                        <div class="flex justify-end mt-8">
-                            <pwdsafe-button type="submit" classes="w-full">Import</pwdsafe-button>
-                        </div>
-                    </form>
+                    <template v-slot:default>
+                        <h3 class="text-2xl mb-4">Import credentials</h3>
+                        <p>Import a csv file with the following format:</p>
+                        <pre class="my-2">site,username,password,notes</pre>
+                        <p class="text-red-500 mb-4">Warning: Malformed rows will be skipped.</p>
+                        <form method="post" action="/import" id="creduploadform" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="group" value="{{ $group->id }}">
+                            <div class="form-group">
+                                <input type="file" name="csvfile" id="csvfile" required>
+                            </div>
+                            <div class="flex justify-end mt-8">
+                                <pwdsafe-button type="submit" classes="w-full">Import</pwdsafe-button>
+                            </div>
+                        </form>
+                    </template>
                 </pwdsafe-modal>
                 @if (auth()->user()->primarygroup != $group->id)
                     <dropdown-menu>
@@ -38,12 +40,14 @@
                                 <i class="fas fa-cog"></i>
                             </span>
                         </template>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <dropdown-link href="/groups/{{ $group->id }}/name">Change name</dropdown-link>
-                    <dropdown-link href="/groups/{{ $group->id }}/share">Share</dropdown-link>
-                    <div class="my-1 border-b"></div>
-                    <dropdown-link href="/groups/{{ $group->id }}/delete"><i class="far fa-trash-alt"></i> Delete</dropdown-link>
-                </div>
+                        <template v-slot:default>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <dropdown-link href="/groups/{{ $group->id }}/name">Change name</dropdown-link>
+                                <dropdown-link href="/groups/{{ $group->id }}/share">Share</dropdown-link>
+                                <div class="my-1 border-b"></div>
+                                <dropdown-link href="/groups/{{ $group->id }}/delete"><i class="far fa-trash-alt"></i> Delete</dropdown-link>
+                            </div>
+                        </template>
                     </dropdown-menu>
                 @endif
             </div>
